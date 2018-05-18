@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper
+	namespace="com.cenpro.siscu.mapper.IReporteDetalleMapper">
+	
+	<select id="buscarResultadoExamenMedicoRegular" resultType="ReporteDetalleResultadoAlumnoRegular">
+		SELECT 	
+			alumno.vCodigoAlumno 								AS codigoAlumno,
+			alumno.vTipoAlumno									AS tipoAlumno,
+			tipoAlumno.vDescripcionItem							AS descripcionTipoAlumno,
+			alumno.vNombres										AS nombres,
+			alumno.vApellidoMaterno								AS apellidoPaterno,
+			alumno.vApellidoMaterno								AS apellidoMaterno,
+			alumno.vIdSexo										AS idSexo,
+			sexo.vDescripcionItem								AS descripcionSexo,
+			(YEAR(CURDATE()) - YEAR(alumno.dFechaNacimiento))	AS edad,
+			facultad.nCodigoFacultad							AS codigoFacultad,
+			facultad.vDescripcion 								AS descripcionFacultad,
+			escuela.nCodigoEscuela								AS codigoEscuela,
+			escuela.vDescripcion								AS descripcionEscuela,
+			laboratorio.dFechaGeneracionNumeroRegistro 			AS fechaAtencionExamenLaboratorio,
+			psicologico.dFechaAdicion							AS fechaAtencionExamenPsicologico,
+			radiologico.dFechaGeneracionNumeroRegistro			AS fechaAtencionExamenRadiologico,
+			laboratorio.nHemoglobina							AS hemoglobina,
+			IF(laboratorio.nHemoglobina IS NULL
+				, NULL
+				, IF(alumno.vIdSexo = 'M', 
+					IF(laboratorio.nHemoglobina &lt; 12
+						,'OBSERVADO'
+						,'NORMAL')
+					,IF(laboratorio.nHemoglobina &lt; 11
+						,'OBSERVADO'
+						,'NORMAL')
+			))													AS descripcionResultadoHemoglobina,
+			laboratorio.vIdRPR									AS idRPR,
+			rpr.vDescripcionItem								AS descripcionRPR,
+			IF(laboratorio.vIdRPR = 'R'
+				, CONCAT('1 : ',laboratorio.nDilucion)
+				, NULL)											AS dilucion,
+			laboratorio.vIdHemograma							AS idHemograma,
+			hemograma.vDescripcionItem							AS descripcionHemograma,
+			radiologico.vIdResultadoRadiologico					AS idResultadoRadiologico,
+			resultadoRadiologico.vDescripcionItem				AS descripcionResultadoRadiologico,
+			psicologico.vIdResultadoPsicologico					AS idResultadoPsicologico,
+			resultadoPsicologico.vDescripcionItem				AS descripcionResultadoPsicologico
+		FROM	maealumno alumno
+			LEFT JOIN	movexamenmedicolaboratorio laboratorio 	ON 	(alumno.vCodigoAlumno = laboratorio.vCodigoAlumno
+																AND alumno.vTipoAlumno = laboratorio.vTipoAlumno
+																AND laboratorio.nIdCampania		= #{idCampania})
+			LEFT JOIN movexamenmedicoradiologico radiologico 	ON 	(alumno.vCodigoAlumno = radiologico.vCodigoAlumno
+																AND alumno.vTipoAlumno = radiologico.vTipoAlumno
+		                                                        AND laboratorio.nIdCampania		= #{idCampania})
+			LEFT JOIN movexamenmedicopsicologico psicologico	ON 	(alumno.vCodigoAlumno = psicologico.vCodigoAlumno
+																AND alumno.vTipoAlumno = psicologico.vTipoAlumno
+		                                                        AND laboratorio.nIdCampania		= #{idCampania})
+			INNER JOIN maemultitabladet sexo					ON 	(alumno.vIdSexo = sexo.vIdItem AND sexo.nIdTabla = 3)
+		    INNER JOIN maemultitabladet tipoAlumno				ON	(alumno.vTipoAlumno = tipoAlumno.vIdItem AND tipoAlumno.nIdTabla = 10)
+		    INNER JOIN maeescuela escuela 						ON 	(alumno.nCodigoEscuela = escuela.nCodigoEscuela
+																AND alumno.nCodigoFacultad = escuela.nCodigoFacultad)
+			INNER JOIN maefacultad facultad						ON 	(escuela.nCodigoFacultad = facultad.nCodigoFacultad)
+		    LEFT JOIN maemultitabladet rpr						ON	(laboratorio.vIdRPR = rpr.vIdItem AND rpr.nIdTabla = 6)
+			LEFT JOIN maemultitabladet hemograma				ON	(laboratorio.vIdHemograma = hemograma.vIdItem AND hemograma.nIdTabla = 7)
+			LEFT JOIN maemultitabladet resultadoRadiologico		ON	(radiologico.vIdResultadoRadiologico = resultadoRadiologico.vIdItem 
+																AND resultadoRadiologico.nIdTabla = 4)								
+			LEFT JOIN maemultitabladet resultadoPsicologico		ON	(psicologico.vIdResultadoPsicologico = resultadoPsicologico.vIdItem 
+																AND resultadoPsicologico.nIdTabla = 5)
+		WHERE	COALESCE(laboratorio.dFechaGeneracionNumeroRegistro
+						,psicologico.dFechaAdicion
+						,radiologico.dFechaGeneracionNumeroRegistro) IS NOT NULL
+				<if test="codigoAlumno != null and codigoAlumno != ''">
+					AND alumno.vCodigoAlumno 	= #{codigoAlumno}
+					AND alumno.vTipoAlumno 		= 'R'
+				</if>
+				<if test="codigoFacultad != null and codigoFacultad != -1">
+					AND facultad.nCodigoFacultad 	= #{codigoFacultad}
+				</if>
+				<if test="codigoEscuela != null and codigoEscuela != -1">
+					AND escuela.nCodigoEscuela 		= #{codigoEscuela}
+				</if>
+				<if test="fechaInicio != null and fechaFin != null">
+					AND (
+						   DATE(laboratorio.dFechaGeneracionNumeroRegistro) BETwEEN #{fechaInicio} AND #{fechaFin} 
+						OR DATE(radiologico.dFechaGeneracionNumeroRegistro) BETwEEN #{fechaInicio} AND #{fechaFin}
+						OR DATE(psicologico.dFechaAdicion) BETwEEN #{fechaInicio} AND #{fechaFin}
+					) 
+				</if>
+	</select>
+</mapper>

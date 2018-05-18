@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" lang="es" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+</head>
+<body>
+	<ul class="x-navigation x-navigation-horizontal x-navigation-panel">
+		<li class="xn-icon-button"><a href="#" class="x-navigation-minimize">
+				<span class="fa fa-dedent"></span>
+			</a></li>
+		<li><a class="navbar-brand" style="font-size: 20px; color: black;">
+				<span>SISCU</span>
+			</a></li>
+		<li class="pull-right"><a class="dropdown-toggle" data-toggle="dropdown">
+				<i class="fa fa-user"></i> <span th:text="|Usuario : ${#httpSession.getAttribute('nombreUsuario')}|" style="color: black;"></span>
+				<span class=" fa fa-angle-down"></span>
+			</a>
+			<ul class="dropdown-menu">
+				<li><a th:href="@{/logout}">
+						<i class="fa fa-sign-out pull-right"></i> Salir
+					</a></li>
+			</ul></li>
+	</ul>
+</body>
+</html>

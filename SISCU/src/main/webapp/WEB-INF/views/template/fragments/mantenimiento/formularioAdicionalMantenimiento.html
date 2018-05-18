@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+</head>
+<body>
+	<div th:fragment="medicinaGeneral">
+		<fieldset class="well">
+			<legend class="well-legend">
+				<i class="fa fa-history"></i> Antecedentes y Alergias
+			</legend>
+			<div id="div-antecedente" class="col-xs-12 tabs">
+				<ul class="nav nav-tabs">
+					<li class="active" data-tooltip="tooltip" title="Antecedentes Personales"><a data-toggle="tab"
+							href="#antecedentesPersonales">A. Personales</a></li>
+					<li data-tooltip="tooltip" title="Antecedentes Familiares"><a data-toggle="tab" href="#antecedentesFamiliares">A.
+							Familiares</a></li>
+					<li><a data-toggle="tab" href="#alergias">Alergias</a></li>
+				</ul>
+				<div class="tab-content">
+					<br />
+					<div id="antecedentesPersonales" class="tab-pane fade in active">
+						<div class="col-md-7">
+							<table id="tablaAntecedentesPersonales" class="table table-bordered table-condensed nowrap display table-hover"></table>
+						</div>
+						<div class="col-md-5">
+							<div class="form-group">
+								<div class="row">
+									<div class="col-xs-12">
+										<form id="formAntecedentePersonal" class="form-horizontal" role="form">
+											<div class="form-group">
+												<label class="col-xs-2 control-label">CIE 10</label>
+												<div class="col-xs-10">
+													<select id="idsCie10AntecedentePersonal" class="form-control select2" name="idCie10">
+														<option></option>
+													</select>
+												</div>
+											</div>
+											<div class="form-group">
+												<label class="col-xs-2 control-label">Descripcion</label>
+												<div class="col-xs-10">
+													<textarea cols="30" class="form-control upperCase" name="descripcion"></textarea>
+												</div>
+											</div>
+											<div class="form-group">
+												<div class="col-xs-offset-2 col-xs-10">
+													<button id="aniadirAntecedentePersonal" type="button" class="btn btn-primary">
+														<i class="fa fa-plus"></i> Añadir
+													</button>
+												</div>
+											</div>
+										</form>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div id="antecedentesFamiliares" class="tab-pane fade in">
+						<div class="col-md-7">
+							<table id="tablaAntecedentesFamiliares" class="table table-bordered table-condensed nowrap display table-hover"></table>
+						</div>
+						<div class="col-md-5">
+							<div class="form-group">
+								<div class="row">
+									<div class="col-xs-12">
+										<form id="formAntecedenteFamiliar" class="form-horizontal" role="form">
+											<div class="form-group">
+												<label class="col-xs-2 control-label">CIE 10</label>
+												<div class="col-xs-10">
+													<select id="idsCie10AntecedenteFamiliar" class="form-control select2" name="idCie10">
+														<option></option>
+													</select>
+												</div>
+											</div>
+											<div class="form-group">
+												<label class="col-xs-2 control-label">Parentesco</label>
+												<div class="col-xs-10">
+													<select id="parentescos" class="form-control select2" name="idTipoAntecedente">
+														<option value="" disabled="disabled" selected="selected">Seleccione un Parentesco</option>
+														<option th:each="parentesco : ${parentescos}" th:value="${parentesco.idItem}"
+															th:attr="data-descripcion-parentesco=${parentesco.descripcionItem}"
+															th:text="|${parentesco.idItem} - ${parentesco.descripcionItem}|"></option>
+													</select>
+												</div>
+											</div>
+											<div class="form-group">
+												<label class="col-xs-2 control-label">Descripcion</label>
+												<div class="col-xs-10">
+													<textarea cols="30" class="form-control upperCase" name="descripcion"></textarea>
+												</div>
+											</div>
+											<div class="form-group">
+												<div class="col-xs-offset-2 col-xs-10">
+													<button id="aniadirAntecedenteFamiliar" type="button" class="btn btn-primary">
+														<i class="fa fa-plus"></i> Añadir
+													</button>
+												</div>
+											</div>
+										</form>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div id="alergias" class="tab-pane fade in">
+						<div class="col-md-7">
+							<table id="tablaAlergias" class="table table-bordered table-condensed nowrap display table-hover"></table>
+						</div>
+						<div class="col-md-5">
+							<div class="form-group">
+								<div class="row">
+									<div class="col-xs-12">
+										<form id="formAlergia" class="form-horizontal" role="form">
+											<div class="form-group">
+												<label class="col-xs-2 control-label">CIE 10</label>
+												<div class="col-xs-10">
+													<select id="idsCie10Alergia" class="form-control select2" name="idCie10">
+														<option></option>
+													</select>
+												</div>
+											</div>
+											<div class="form-group">
+												<label class="col-xs-2 control-label">Descripcion</label>
+												<div class="col-xs-10">
+													<textarea cols="30" class="form-control upperCase" name="descripcion"></textarea>
+												</div>
+											</div>
+											<div class="form-group">
+												<div class="col-xs-offset-2 col-xs-10">
+													<button id="aniadirAlergia" type="button" class="btn btn-primary">
+														<i class="fa fa-plus"></i> Añadir
+													</button>
+												</div>
+											</div>
+										</form>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</fieldset>
+		<fieldset class="well hidden">
+			<legend class="well-legend">
+				<i class="fa fa-comments"></i> Interconsultas
+			</legend>
+			<div class="col-md-7">
+				<table id="tablaInterconsultas" class="table table-bordered table-condensed nowrap display table-hover"></table>
+			</div>
+			<div class="col-md-5">
+				<form id="formInterconsulta" class="form-horizontal" role="form">
+					<div class="form-group">
+						<label class="col-xs-2 control-label">Especialidad</label>
+						<div class="col-xs-10">
+							<select id="especialidades" class="form-control select2" name="idEspecialidad">
+								<option value="" disabled="disabled" selected="selected">Seleccione una Especialidad</option>
+								<option th:each="especialidad : ${especialidades}" th:value="${especialidad.idEspecialidad}"
+									th:attr="data-descripcion-especialidad=${especialidad.descripcionCorta}"
+									th:text="|${especialidad.idEspecialidad} - ${especialidad.descripcionCorta}|"></option>
+							</select>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-xs-2 control-label">Motivo</label>
+						<div class="col-xs-10">
+							<textarea cols="30" class="form-control upperCase" name="motivo"></textarea>
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-xs-offset-2 col-xs-10">
+							<button id="aniadirInterconsulta" type="button" class="btn btn-primary">
+								<i class="fa fa-plus"></i> Añadir
+							</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</fieldset>
+		<div id="div-botonesForm-medicinaGeneral" class="form-group">
+			<div class="col-lg-12 text-center">
+				<button id="registrarResultado" type="button" class="btn btn-success">
+					<i class="fa fa-floppy-o"></i> Registrar
+				</button>
+			</div>
+			<br />
+			<br />
+		</div>
+	</div>
+</body>
+</html>

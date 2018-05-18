@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+</head>
+<body>
+	<div id="criterioBusquedaConsulta" class="row" th:fragment="criterioBusquedaConsultaAtencionInicial" th:with="tipo=${tipo}">
+		<fieldset class="well">
+			<legend class="well-legend">Búsqueda</legend>
+			<form id="formCriterioBusquedaConsulta" class="form-horizontal" role="form">
+				<th:block th:replace="~{template/fragments/consulta/criterioBusquedaConsultaAtencionInicial :: ${tipo}}?:~{}">
+				</th:block>
+				<div class="form-group">
+					<div class="col-lg-12 text-center">
+						<button id="buscar" type="button" class="btn btn-primary">
+							<i class="fa fa-search"></i> Buscar
+						</button>
+					</div>
+				</div>
+			</form>
+		</fieldset>
+	</div>
+
+	<th:block th:fragment="radiologia">
+		<div class="form-group">
+			<div class="group">
+				<label class="control-label col-lg-1 col-md-1">Código</label>
+				<div class="col-lg-3 col-md-3">
+					<input id="codigoAlumno" type="text" name="codigoAlumno" class="form-control" autofocus="autofocus" maxlength="8"
+						autocomplete="off" />
+				</div>
+			</div>
+			<div class="group">
+				<label class="control-label col-lg-1 col-md-1">Campaña</label>
+				<div class="col-lg-3 col-md-3">
+					<select id="campanias" name="idCampania" class="form-control select2">
+						<option th:each="campania,iter : ${campanias}" th:value="${campania.idCampania}" th:selected="${iter.index == 0}"
+							th:text="|${campania.idCampania} - ${campania.descripcion}|"></option>
+					</select>
+				</div>
+			</div>
+			<div class="group">
+				<label class="control-label col-lg-1 col-md-1">Facultad</label>
+				<div class="col-lg-3 col-md-3">
+					<select id="facultades" name="codigoFacultad" class="form-control select2">
+						<option value="-1">TODAS</option>
+						<option th:each="facultad : ${facultades}" th:value="${facultad.codigoFacultad}"
+							th:text="|${facultad.codigoFacultad} - ${facultad.descripcion}|"></option>
+					</select>
+				</div>
+			</div>
+		</div>
+	</th:block>
+
+	<th:block th:fragment="laboratorio">
+		<div class="form-group">
+			<div class="group">
+				<label class="control-label col-lg-1 col-md-1">Código</label>
+				<div class="col-lg-3 col-md-3">
+					<input id="codigoAlumno" type="text" name="codigoAlumno" class="form-control" maxlength="8" autofocus="autofocus"
+						autocomplete="off" />
+				</div>
+			</div>
+			<div class="group">
+				<label class="control-label col-lg-1 col-md-1">Campaña</label>
+				<div class="col-lg-3 col-md-3">
+					<select id="campanias" name="idCampania" class="form-control select2">
+						<option th:each="campania,iter : ${campanias}" th:value="${campania.idCampania}" th:selected="${iter.index == 0}"
+							th:text="|${campania.idCampania} - ${campania.descripcion}|"></option>
+					</select>
+				</div>
+			</div>
+			<div class="group">
+				<label class="control-label col-lg-1 col-md-1">Facultad</label>
+				<div class="col-lg-3 col-md-3">
+					<select id="facultades" name="codigoFacultad" class="form-control select2">
+						<option value="-1">TODAS</option>
+						<option th:each="facultad : ${facultades}" th:value="${facultad.codigoFacultad}"
+							th:text="|${facultad.codigoFacultad} - ${facultad.descripcion}|"></option>
+					</select>
+				</div>
+			</div>
+		</div>
+	</th:block>
+
+	<th:block th:fragment="triaje">
+		<div class="form-group">
+			<div class="group">
+				<label class="control-label col-lg-1 col-md-1">Código</label>
+				<div class="col-lg-3 col-md-3">
+					<input id="codigoAlumno" type="text" name="codigoAlumno" class="form-control" maxlength="8" autofocus="autofocus"
+						autocomplete="off" />
+				</div>
+			</div>
+			<div class="group">
+				<label class="control-label col-lg-1 col-md-1">Campaña</label>
+				<div class="col-lg-3 col-md-3">
+					<select id="campanias" name="idCampania" class="form-control select2">
+						<option th:each="campania,iter : ${campanias}" th:value="${campania.idCampania}" th:selected="${iter.index == 0}"
+							th:text="|${campania.idCampania} - ${campania.descripcion}|"></option>
+					</select>
+				</div>
+			</div>
+			<div class="group">
+				<label class="control-label col-lg-1 col-md-1">Facultad</label>
+				<div class="col-lg-3 col-md-3">
+					<select id="facultades" name="codigoFacultad" class="form-control select2">
+						<option value="-1">TODAS</option>
+						<option th:each="facultad : ${facultades}" th:value="${facultad.codigoFacultad}"
+							th:text="|${facultad.codigoFacultad} - ${facultad.descripcion}|"></option>
+					</select>
+				</div>
+			</div>
+		</div>
+	</th:block>
+
+	<th:block th:fragment="odontologia">
+		<div class="form-group">
+			<div class="group">
+				<label class="control-label col-lg-1 col-md-1">Código</label>
+				<div class="col-lg-3 col-md-3">
+					<input id="codigoAlumno" type="text" name="codigoAlumno" class="form-control" maxlength="8" autofocus="autofocus"
+						autocomplete="off" />
+				</div>
+			</div>
+			<div class="group">
+				<label class="control-label col-lg-1 col-md-1">Campaña</label>
+				<div class="col-lg-3 col-md-3">
+					<select id="campanias" name="idCampania" class="form-control select2">
+						<option th:each="campania,iter : ${campanias}" th:value="${campania.idCampania}" th:selected="${iter.index == 0}"
+							th:text="|${campania.idCampania} - ${campania.descripcion}|"></option>
+					</select>
+				</div>
+			</div>
+			<div class="group">
+				<label class="control-label col-lg-1 col-md-1">Facultad</label>
+				<div class="col-lg-3 col-md-3">
+					<select id="facultades" name="codigoFacultad" class="form-control select2">
+						<option value="-1">TODAS</option>
+						<option th:each="facultad : ${facultades}" th:value="${facultad.codigoFacultad}"
+							th:text="|${facultad.codigoFacultad} - ${facultad.descripcion}|"></option>
+					</select>
+				</div>
+			</div>
+		</div>
+	</th:block>
+
+	<th:block th:fragment="psicologia">
+		<div class="form-group">
+			<div class="group">
+				<label class="control-label col-lg-1 col-md-1">Código</label>
+				<div class="col-lg-3 col-md-3">
+					<input id="codigoAlumno" type="text" name="codigoAlumno" class="form-control" maxlength="8" autofocus="autofocus"
+						autocomplete="off" />
+				</div>
+			</div>
+			<div class="group">
+				<label class="control-label col-lg-1 col-md-1">Campaña</label>
+				<div class="col-lg-3 col-md-3">
+					<select id="campanias" name="idCampania" class="form-control select2">
+						<option th:each="campania,iter : ${campanias}" th:value="${campania.idCampania}" th:selected="${iter.index == 0}"
+							th:text="|${campania.idCampania} - ${campania.descripcion}|"></option>
+					</select>
+				</div>
+			</div>
+			<div class="group">
+				<label class="control-label col-lg-1 col-md-1">Facultad</label>
+				<div class="col-lg-3 col-md-3">
+					<select id="facultades" name="codigoFacultad" class="form-control select2">
+						<option value="-1">TODAS</option>
+						<option th:each="facultad : ${facultades}" th:value="${facultad.codigoFacultad}"
+							th:text="|${facultad.codigoFacultad} - ${facultad.descripcion}|"></option>
+					</select>
+				</div>
+			</div>
+		</div>
+	</th:block>
+
+	<th:block th:fragment="digitador">
+		<div class="form-group">
+			<div class="group">
+				<label class="control-label col-lg-1 col-md-1">Código</label>
+				<div class="col-lg-3 col-md-3">
+					<input id="codigoAlumno" type="text" name="codigoAlumno" class="form-control" maxlength="8" autofocus="autofocus"
+						autocomplete="off" />
+				</div>
+			</div>
+			<div class="group">
+				<label class="control-label col-lg-1 col-md-1">Campaña</label>
+				<div class="col-lg-3 col-md-3">
+					<select id="campanias" name="idCampania" class="form-control select2">
+						<option th:each="campania,iter : ${campanias}" th:value="${campania.idCampania}" th:selected="${iter.index == 0}"
+							th:text="|${campania.idCampania} - ${campania.descripcion}|"
+							th:attr="data-id-tipo-certificado=${campania.idTipoCertificado},data-descripcion-tipo-certificado=${campania.descripcionTipoCertificado}"></option>
+					</select>
+				</div>
+			</div>
+			<div class="group">
+				<label class="control-label col-lg-1 col-md-1">Facultad</label>
+				<div class="col-lg-3 col-md-3">
+					<select id="facultades" name="codigoFacultad" class="form-control select2">
+						<option value="-1">TODAS</option>
+						<option th:each="facultad : ${facultades}" th:value="${facultad.codigoFacultad}"
+							th:text="|${facultad.codigoFacultad} - ${facultad.descripcion}|"></option>
+					</select>
+				</div>
+			</div>
+		</div>
+	</th:block>
+	
+	<th:block th:fragment="medicinaGeneral">
+		<div class="form-group">
+			<div class="group">
+				<label class="control-label col-lg-1 col-md-1">Código</label>
+				<div class="col-lg-3 col-md-3">
+					<input id="codigoAlumno" type="text" name="codigoAlumno" class="form-control" maxlength="8" autofocus="autofocus"
+						autocomplete="off" />
+				</div>
+			</div>
+			<div class="group">
+				<label class="control-label col-lg-1 col-md-1">Campaña</label>
+				<div class="col-lg-3 col-md-3">
+					<select id="campanias" name="idCampania" class="form-control select2">
+						<option th:each="campania,iter : ${campanias}" th:value="${campania.idCampania}" th:selected="${iter.index == 0}"
+							th:text="|${campania.idCampania} - ${campania.descripcion}|"></option>
+					</select>
+				</div>
+			</div>
+			<div class="group">
+				<label class="control-label col-lg-1 col-md-1">Facultad</label>
+				<div class="col-lg-3 col-md-3">
+					<select id="facultades" name="codigoFacultad" class="form-control select2">
+						<option value="-1">TODAS</option>
+						<option th:each="facultad : ${facultades}" th:value="${facultad.codigoFacultad}"
+							th:text="|${facultad.codigoFacultad} - ${facultad.descripcion}|"></option>
+					</select>
+				</div>
+			</div>
+		</div>
+	</th:block>
+</body>
+</html>

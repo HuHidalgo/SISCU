@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper
+	namespace="com.cenpro.siscu.mapper.IConsultaExamenMedicoPsicologicoMapper">
+	
+	<select id="buscarPorCriterioBusquedaAdministrativa" resultType="ConsultaPsicologicoAdministrativo">
+		SELECT 	* 
+		FROM 	consultapsicologicoadministrativa consultaPsicologico
+		<where>
+			<if test="codigoAlumno != null and codigoAlumno != ''">
+				    consultaPsicologico.codigoAlumno = #{codigoAlumno}
+			</if>
+			<if test="tipoAlumno != null and tipoAlumno != ''">
+				AND consultaPsicologico.tipoAlumno = #{tipoAlumno}
+			</if>
+			<if test="idCampania != null and idCampania > -1">
+				AND consultaPsicologico.idCampania = #{idCampania}
+			</if>
+			<if test="codigoFacultad != null and codigoFacultad > -1">
+				AND consultaPsicologico.codigoFacultad = #{codigoFacultad}
+			</if>
+			<if test="codigoEscuela != null and codigoEscuela > -1">
+				AND consultaPsicologico.codigoEscuela = #{codigoEscuela}
+			</if>
+			<if test="fechaInicio != null and fechaFin != null">
+				AND consultaPsicologico.soloFechaRegistro BETWEEN #{fechaInicio} AND #{fechaFin}
+			</if>
+			<if test="idResultadoPsicologico != null and idResultadoPsicologico != '-1'">
+				AND consultaPsicologico.idResultadoPsicologico = #{idResultadoPsicologico}
+			</if>
+		</where>
+		ORDER BY fechaRegistro DESC
+	</select>
+	
+</mapper>

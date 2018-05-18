@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+</head>
+<body>
+	<div id="modalMantenimiento" class="row" th:fragment="modalMantenimiento" th:with="tipo=${tipo}">
+		<fieldset class="well">
+			<legend class="well-legend">Formulario de Mantenimiento</legend>
+			<form id="formMantenimiento" class="form-horizontal" role="form">
+				<th:block th:replace="~{template/fragments/mantenimiento/modalMantenimiento :: ${tipo}}?:~{}">
+				</th:block>
+				<div id="botonesForm" class="form-group">
+					<div class="col-lg-12 text-center">
+						<button id="registrarMantenimiento" type="button" class="btn btn-success">
+							<i class="fa fa-floppy-o"></i> Registrar
+						</button>
+						<button id="actualizarMantenimiento" type="button" class="btn btn-primary hidden">
+							<i class="fa fa-pencil-square"></i> Actualizar
+						</button>
+					</div>
+				</div>
+			</form>
+		</fieldset>
+	</div>
+
+	<th:block th:fragment="persona">
+		<div class="form-group">
+			<label class="col-lg-2 control-label">Tipo de Documento</label>
+			<div class="col-lg-10">
+				<select id="tiposDocumento" class="form-control select2 elemento-desactivable" name="idTipoDocumento">
+					<option value="" disabled="disabled" selected="selected">Seleccione un Tipo de Documento</option>
+					<option th:each="tipoDocumento : ${tiposDocumento}" th:value="${tipoDocumento.idItem}"
+						th:text="|${tipoDocumento.idItem} - ${tipoDocumento.abreviatura}|"></option>
+				</select>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-lg-2 control-label">Número de Documento</label>
+			<div class="col-lg-10">
+				<input class="form-control elemento-desactivable" name="numeroDocumento">
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-lg-2 control-label">Nombres</label>
+			<div class="col-lg-10">
+				<input class="form-control upperCase" name="nombres">
+			</div>
+		</div>
+		<div class="form-group">
+			<div class="group">
+				<label class="col-lg-2 control-label">Apellido Paterno</label>
+				<div class="col-lg-4">
+					<input class="form-control upperCase" name="apellidoPaterno">
+				</div>
+			</div>
+			<div class="group">
+				<label class="col-lg-2 control-label">Apellido Materno</label>
+				<div class="col-lg-4">
+					<input class="form-control upperCase" name="apellidoMaterno">
+				</div>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-lg-2 control-label">Sexo</label>
+			<div class="col-lg-10">
+				<select id="sexos" class="form-control select2" name="idSexo">
+					<option value="" disabled="disabled" selected="selected">Seleccione un Sexo</option>
+					<option th:each="sexo : ${sexos}" th:value="${sexo.idItem}" th:text="|${sexo.idItem} - ${sexo.descripcionItem}|"></option>
+				</select>
+			</div>
+		</div>
+	</th:block>
+
+	<th:block th:fragment="medico">
+		<div class="form-group">
+			<label class="col-lg-2 control-label">Persona</label>
+			<div class="col-lg-10">
+				<select id="personas" class="form-control select2 elemento-desactivable" name="idPersona">
+					<option value="" disabled="disabled" selected="selected">Seleccione una Persona</option>
+					<option th:each="persona : ${personas}" th:value="|${persona.idTipoDocumento}/${persona.numeroDocumento}|"
+						th:text="|${persona.numeroDocumento} - ${persona.apellidoPaterno} ${persona.apellidoMaterno}, ${persona.nombres}|"></option>
+				</select>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-lg-2 control-label">Colegio Médico</label>
+			<div class="col-lg-10">
+				<input class="form-control numbersOnly" maxlength="6" name="colegioMedico">
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-lg-2 control-label">Registro Nac. de Esp.</label>
+			<div class="col-lg-10">
+				<input class="form-control numbersOnly" maxlength="6" name="registroNacionalEspecialidad">
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-lg-2 control-label">Director</label>
+			<div class="col-lg-10">
+				<div class="checkbox">
+					<label>
+						<input type="checkbox" value="true" data-unchecked-value="false" name="director" />
+					</label>
+				</div>
+			</div>
+		</div>
+	</th:block>
+
+	<th:block th:fragment="alumno">
+		<div class="col-xs-12">
+			<fieldset class="well">
+				<legend class="well-legend">Datos Personales</legend>
+				<div class="form-group">
+					<div class="group">
+						<label class="col-lg-2 control-label">Tipo de Documento</label>
+						<div class="col-lg-4">
+							<select id="tiposDocumento" class="form-control select2" name="idTipoDocumento">
+								<option value="" disabled="disabled" selected="selected">Seleccione un Tipo de Documento</option>
+								<option th:each="tipoDocumento : ${tiposDocumento}" th:value="${tipoDocumento.idItem}"
+									th:text="|${tipoDocumento.idItem} - ${tipoDocumento.abreviatura}|"></option>
+							</select>
+						</div>
+					</div>
+					<div class="group">
+						<label class="col-lg-2 control-label">Número de Documento</label>
+						<div class="col-lg-4">
+							<input class="form-control upperCase" maxlength="12" name="numeroDocumento" data-skip-falsy="true" data-value-type="string">
+						</div>
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="group">
+						<label class="col-lg-2 control-label">Apellido Paterno</label>
+						<div class="col-lg-4">
+							<input class="form-control upperCase" name="apellidoPaterno" data-skip-falsy="true" data-value-type="string">
+						</div>
+					</div>
+					<div class="group">
+						<label class="col-lg-2 control-label">Apellido Materno</label>
+						<div class="col-lg-4">
+							<input class="form-control upperCase" name="apellidoMaterno" data-skip-falsy="true" data-value-type="string">
+						</div>
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="group">
+						<label class="col-lg-2 control-label">Nombres</label>
+						<div class="col-lg-4">
+							<input class="form-control upperCase" name="nombres" data-skip-falsy="true" data-value-type="string">
+						</div>
+					</div>
+					<div class="group">
+						<label class="col-lg-2 control-label">Sexo</label>
+						<div class="col-lg-4">
+							<select id="sexos" class="form-control select2" name="idSexo">
+								<option value="" disabled="disabled" selected="selected">Seleccione un Sexo</option>
+								<option th:each="sexo : ${sexos}" th:value="${sexo.idItem}" th:text="|${sexo.idItem} - ${sexo.descripcionItem}|"></option>
+							</select>
+						</div>
+					</div>
+				</div>
+			</fieldset>
+		</div>
+		<div class="col-xs-12">
+			<fieldset class="well">
+				<legend class="well-legend">Datos del Alumno</legend>
+				<div class="form-group">
+					<div class="group">
+						<label class="col-lg-2 control-label">Tipo</label>
+						<div class="col-lg-4">
+							<select id="tiposAlumno" class="form-control select2 elemento-desactivable" name="tipoAlumno">
+								<option value="" disabled="disabled" selected="selected">Seleccione un Tipo</option>
+								<option th:each="tipoAlumno : ${tiposAlumno}" th:value="${tipoAlumno.idItem}"
+									th:text="|${tipoAlumno.idItem} - ${tipoAlumno.descripcionItem}|"></option>
+							</select>
+						</div>
+					</div>
+					<div class="group">
+						<label class="col-lg-2 control-label">Código de Alumno</label>
+						<div class="col-lg-4">
+							<input class="form-control upperCase elemento-desactivable" maxlength="8" name="codigoAlumno" data-skip-falsy="true"
+								data-value-type="string">
+						</div>
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="group">
+						<label class="col-lg-2 control-label">Facultad</label>
+						<div class="col-lg-4">
+							<select id="facultades" class="form-control select2" name="codigoFacultad">
+								<option value="" disabled="disabled" selected="selected">Seleccione una Facultad</option>
+								<option th:each="facultad : ${facultades}" th:value="${facultad.codigoFacultad}"
+									th:text="|${facultad.codigoFacultad} - ${facultad.descripcion}|"></option>
+							</select>
+						</div>
+					</div>
+					<div class="group">
+						<label class="col-lg-2 control-label">Escuela</label>
+						<div class="col-lg-4">
+							<select id="escuelas" class="form-control select2" name="codigoEscuela">
+								<option value="" selected="selected" disabled="disabled">Seleccione una Escuela</option>
+							</select>
+						</div>
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="group">
+						<label class="col-lg-2 control-label">Discapacidad</label>
+						<div class="col-lg-4">
+							<select id="discapacidades" class="form-control select2" name="idDiscapacidad">
+								<option value="" disabled="disabled" selected="selected">Seleccione una Discapacidad</option>
+								<option th:each="discapacidad : ${discapacidades}" th:value="${discapacidad.idItem}"
+									th:text="|${discapacidad.idItem} - ${discapacidad.descripcionItem}|"></option>
+							</select>
+						</div>
+					</div>
+					<div class="group">
+						<label class="col-lg-2 control-label">Fecha de Nacimiento</label>
+						<div class="col-lg-4">
+							<div class="input-group">
+								<span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+								<input id="fechaNacimiento" type="text" class="form-control" readonly="readonly" name="fechaNacimiento" />
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="group">
+						<label class="col-lg-2 control-label">Correo Inst.</label>
+						<div class="col-lg-4">
+							<input class="form-control" maxlength="50" name="correoInstitucional" data-skip-falsy="true" data-value-type="string">
+						</div>
+					</div>
+					<div class="group">
+						<label class="col-lg-2 control-label">Correo Pers.</label>
+						<div class="col-lg-4">
+							<input class="form-control" maxlength="50" name="correoPersonal" data-skip-falsy="true" data-value-type="string">
+						</div>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-lg-2 control-label">Dirección</label>
+					<div class="col-lg-4">
+						<input class="form-control upperCase" name="direccion" data-skip-falsy="true" data-value-type="string">
+					</div>
+				</div>
+
+				<div class="form-group">
+					<div class="group">
+						<label class="col-lg-2 control-label">Tel. Fijo</label>
+						<div class="col-lg-4">
+							<input class="form-control numbersOnly" maxlength="13" name="telefonoFijo" data-skip-falsy="true" data-value-type="string">
+						</div>
+					</div>
+					<div class="group">
+						<label class="col-lg-2 control-label">Tel. Móvil</label>
+						<div class="col-lg-4">
+							<input class="form-control numbersOnly" maxlength="13" name="telefonoMovil" data-skip-falsy="true" data-value-type="string">
+						</div>
+					</div>
+				</div>
+			</fieldset>
+		</div>
+	</th:block>
+
+	<th:block th:fragment="campania">
+		<div class="form-group">
+			<label class="col-lg-2 control-label">Descripción</label>
+			<div class="col-lg-10">
+				<input class="form-control upperCase" name="descripcion">
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-lg-2 control-label">Descripción Corta</label>
+			<div class="col-lg-10">
+				<input class="form-control upperCase" name="descripcionCorta">
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-lg-2 control-label">Tipo de Certificado</label>
+			<div class="col-lg-10">
+				<select id="tiposCertificado" class="form-control select2" name="idTipoCertificado">
+					<option value="" selected="selected" disabled="disabled">Seleccione un Tipo de Certificado</option>
+					<option th:each="tipoCertificado : ${tiposCertificado}" th:value="${tipoCertificado.idItem}"
+						th:text="|${tipoCertificado.idItem} - ${tipoCertificado.descripcionItem}|"></option>
+				</select>
+			</div>
+		</div>
+		<div class="form-group">
+			<div class="group">
+				<label class="col-lg-2 control-label">Fecha de Ejecución</label>
+				<div class="col-lg-4">
+					<div class="input-group">
+						<span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+						<input id="fechaEjecucion" type="text" class="form-control" readonly="readonly" />
+					</div>
+				</div>
+			</div>
+			<div class="group">
+				<label class="col-lg-2 control-label">Activo</label>
+				<div class="col-lg-4">
+					<div class="checkbox">
+						<label>
+							<input type="checkbox" value="true" data-unchecked-value="false" name="activo" />
+						</label>
+					</div>
+				</div>
+			</div>
+		</div>
+	</th:block>
+
+	<th:block th:fragment="multiTabCab">
+		<div class="form-group">
+			<label class="col-lg-2 control-label">Descripción</label>
+			<div class="col-lg-10">
+				<input class="form-control upperCase" name="descripcion">
+			</div>
+		</div>
+	</th:block>
+
+	<th:block th:fragment="usuario">
+		<div class="form-group">
+			<label class="col-lg-2 control-label">Persona</label>
+			<div class="col-lg-10">
+				<select id="personas" class="form-control select2" name="idPersona">
+					<option value="" disabled="disabled" selected="selected">Seleccione una Persona</option>
+					<option th:each="persona : ${personas}" th:value="|${persona.idTipoDocumento}/${persona.numeroDocumento}|"
+						th:text="|${persona.numeroDocumento} - ${persona.apellidoPaterno} ${persona.apellidoMaterno}, ${persona.nombres}|"></option>
+				</select>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-lg-2 control-label">Usuario</label>
+			<div class="col-lg-10">
+				<input class="form-control elemento-desactivable" maxlength="20" name="idUsuario">
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-lg-2 control-label">Contraseña</label>
+			<div class="col-lg-10">
+				<input class="form-control elemento-desactivable" maxlength="20" name="contrasenia">
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-lg-2 control-label">Perfiles</label>
+			<div class="col-lg-10">
+				<select id="perfiles" class="form-control select2" name="idPerfil">
+					<option value="" disabled="disabled" selected="selected">Seleccione un Perfil</option>
+					<option th:each="perfil : ${perfiles}" th:value="${perfil.idPerfil}" th:text="|${perfil.idPerfil} - ${perfil.descripcion}|"></option>
+				</select>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-lg-2 control-label">Activo</label>
+			<div class="col-lg-4">
+				<div class="checkbox">
+					<label>
+						<input type="checkbox" value="true" data-unchecked-value="false" name="activo" />
+					</label>
+				</div>
+			</div>
+		</div>
+	</th:block>
+
+	<th:block th:fragment="especialidad">
+		<div class="form-group">
+			<label class="col-lg-2 control-label">Descripción Corta</label>
+			<div class="col-lg-10">
+				<input class="form-control upperCase" name="descripcionCorta" />
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-lg-2 control-label">Descripción Larga</label>
+			<div class="col-lg-10">
+				<textarea name="descripcion" cols="30" rows="4" class="form-control upperCase"></textarea>
+			</div>
+		</div>
+	</th:block>
+
+	<th:block th:fragment="facultad">
+		<div class="form-group">
+			<label class="col-lg-2 control-label">Código de Facultad</label>
+			<div class="col-lg-10">
+				<input class="form-control numbersOnly elemento-desactivable" name="codigoFacultad">
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-lg-2 control-label">Descripción</label>
+			<div class="col-lg-10">
+				<input class="form-control upperCase" name="descripcion" maxlength="250">
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-lg-2 control-label">Correo Asistenta</label>
+			<div class="col-lg-10">
+				<input class="form-control" name="correoAsistenta" maxlength="50">
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-lg-2 control-label">Correo Decano</label>
+			<div class="col-lg-10">
+				<input class="form-control" name="correoFacultad" maxlength="50">
+			</div>
+		</div>
+	</th:block>
+
+	<th:block th:fragment="escuela">
+		<div class="form-group">
+			<label class="col-lg-2 control-label">Código de Escuela</label>
+			<div class="col-lg-10">
+				<input class="form-control numbersOnly elemento-desactivable" name="codigoEscuela">
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-lg-2 control-label">Facultad</label>
+			<div class="col-lg-10">
+				<select id="facultades" class="form-control select2 elemento-desactivable" name="codigoFacultad">
+					<option value="" disabled="disabled" selected="selected">Seleccione una Facultad</option>
+					<option th:each="facultad : ${facultades}" th:value="${facultad.codigoFacultad}"
+						th:text="|${facultad.codigoFacultad} - ${facultad.descripcion}|"></option>
+				</select>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-lg-2 control-label">Descripción</label>
+			<div class="col-lg-10">
+				<input class="form-control upperCase" name="descripcion" maxlength="250">
+			</div>
+		</div>
+	</th:block>
+
+	<th:block th:fragment="parametroGeneral">
+		<div class="form-group">
+			<label class="col-lg-2 control-label">Tiempo de Reprogramación</label>
+			<div class="col-lg-10">
+				<input class="form-control numbersOnly " name="tiempoReprogramacion">
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-lg-2 control-label">Correo SUM</label>
+			<div class="col-lg-10">
+				<input class="form-control upperCase" name="correoSUM">
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-lg-2 control-label">Correo Clinica</label>
+			<div class="col-lg-10">
+				<input class="form-control upperCase" name="correoClinica">
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-lg-2 control-label">Año Inicial</label>
+			<div class="col-lg-10">
+				<input class="form-control numbersOnly " name="anioInicial">
+			</div>
+		</div>
+	</th:block>
+
+	<th:block th:fragment="procesoAutomatico">
+		<div class="form-group">
+			<label class="col-lg-2 control-label" title="Código de Proceso Automático" data-tooltip="Código de Proceso Automático">Código
+				de Proc. Autom.</label>
+			<div class="col-lg-10">
+				<input class="form-control elemento-desactivable" name="idProcesoAutomatico">
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-lg-2 control-label">Descripción</label>
+			<div class="col-lg-10">
+				<input class="form-control upperCase" name="descripcion">
+			</div>
+		</div>
+		<div class="form-group">
+			<div class="group">
+				<label class="col-lg-2 control-label">Orden de Ejecución</label>
+				<div class="col-lg-4">
+					<input class="form-control numbersOnly" name="ordenEjecucion">
+				</div>
+			</div>
+			<div class="group">
+				<label class="col-lg-2 control-label">Hora Programada</label>
+				<div class="col-lg-4">
+					<div id="horaProcesoAutomatico" class="input-group date">
+						<span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+						<input class="form-control" name="horaProgramada">
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-lg-2 control-label">Campaña Envío</label>
+			<div class="col-lg-10">
+				<select id="campanias" class="form-control select2" name="idCampaniaEnvio">
+					<option value="" disabled="disabled" selected="selected">Seleccione una Campaña</option>
+					<option th:each="campania : ${campanias}" th:value="${campania.idCampania}"
+						th:text="|${campania.idCampania} - ${campania.descripcionCorta}|"></option>
+				</select>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-lg-2 control-label">Facultad Envío</label>
+			<div class="col-lg-10">
+				<select id="facultades" class="form-control select2" name="codigoFacultades[]" multiple="multiple"
+					data-placeholder="Seleccione las Facultades">
+					<option th:each="facultad : ${facultades}" th:value="|[${facultad.codigoFacultad}]|"
+						th:text="|${facultad.codigoFacultad} - ${facultad.descripcion}|"></option>
+				</select>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-lg-2 control-label">Destino Envío</label>
+			<div class="col-lg-10">
+				<select id="destinosEnvio" class="form-control select2" name="idDestinoEnvio">
+					<option value="" disabled="disabled" selected="selected">Seleccione un Destino</option>
+					<option th:each="destinoEnvio : ${destinosEnvio}" th:value="${destinoEnvio.idItem}"
+						th:text="|${destinoEnvio.idItem} - ${destinoEnvio.descripcionItem}|"></option>
+				</select>
+			</div>
+		</div>
+		<div class="form-group">
+			<div class="group">
+				<label class="col-lg-2 control-label">Plantilla</label>
+				<div class="col-lg-4">
+					<input class="form-control" name="nombrePlantilla">
+				</div>
+			</div>
+			<div class="group">
+				<label class="col-lg-2 control-label">Fechas</label>
+				<div class="col-lg-4"
+					title="Se enviará los resultados de alumnos que presenten al menos un registro de Examen Médico entre el Rango de Fechas seleccionado"
+					data-tooltip="tooltip">
+					<div class="input-group">
+						<span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+						<input id="rangoFechaBusqueda" class="form-control filtro" readonly="readonly" name="rangoFechasEnvio" />
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="form-group">
+			<div class="group">
+				<label class="col-lg-2 control-label">Activo</label>
+				<div class="col-lg-4">
+					<div class="checkbox">
+						<label>
+							<input type="checkbox" value="true" data-unchecked-value="false" name="activo" />
+						</label>
+					</div>
+				</div>
+			</div>
+			<div class="group">
+				<label class="col-lg-2 control-label">Diario</label>
+				<div class="col-lg-4">
+					<div class="checkbox">
+						<label>
+							<input type="checkbox" value="true" data-unchecked-value="false" name="diario" />
+						</label>
+					</div>
+				</div>
+			</div>
+		</div>
+		<fieldset class="well">
+			<legend class="well-legend">Formulario de Correo</legend>
+			<div class="form-group">
+				<div class="group">
+					<label class="col-lg-2 control-label">Encabezado</label>
+					<div class="col-lg-4" title="Ingrese el texto del Encabezado del Correo" data-tooltip="tooltip">
+						<input name="textoEncabezado" class="form-control upperCase" data-skip-falsy="true" />
+					</div>
+				</div>
+				<div class="group">
+					<label class="col-lg-2 control-label">Cuerpo</label>
+					<div class="col-lg-4" title="Ingrese el texto del Cuerpo del Correo" data-tooltip="tooltip">
+						<textarea class="form-control upperCase" name="textoCuerpo" cols="30" rows="5" data-skip-falsy="true"></textarea>
+					</div>
+				</div>
+			</div>
+		</fieldset>
+	</th:block>
+</body>
+</html>

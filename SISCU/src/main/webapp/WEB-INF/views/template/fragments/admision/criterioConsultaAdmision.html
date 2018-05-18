@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+</head>
+<body>
+	<div id="criterioConsultaAdmision" class="row" th:fragment="criterioConsultaAdmision" th:with="tipo=${tipo}">
+		<fieldset class="well">
+			<legend class="well-legend">Búsqueda</legend>
+			<form id="formCriterioConsultaAdmision" class="form-horizontal" role="form">
+				<th:block th:replace="~{template/fragments/admision/criterioConsultaAdmision :: ${tipo}}?:~{}">
+				</th:block>
+				<div class="form-group">
+					<div class="col-lg-12 text-center">
+						<button id="buscar" type="button" class="btn btn-primary">
+							<i class="fa fa-search"></i> Buscar
+						</button>
+					</div>
+				</div>
+			</form>
+		</fieldset>
+	</div>
+
+	<th:block th:fragment="admision">
+		<div class="group">
+			<label class="control-label col-lg-1 col-md-1">Estamento</label>
+			<div class="col-lg-2 col-md-2">
+				<select id="estamentos" class="form-control select2" name="idEstamento">
+					<option th:each="estamento : ${estamentos}" th:value="${estamento.idItem}" th:selected="${estamento.idItem == '1'}"
+						th:text="|${estamento.idItem} - ${estamento.descripcionItem}|"></option>
+				</select>
+			</div>
+		</div>
+		<div id="divCodigoAlumno" class="form-group hidden">
+			<div class="group">
+				<label class="control-label col-lg-1 col-md-1">Código</label>
+				<div class="col-lg-2 col-md-2">
+					<input id="codigoAlumno" type="text" name="codigoAlumno" class="form-control" maxlength="8" autofocus="autofocus"
+						autocomplete="off" />
+				</div>
+			</div>
+		</div>
+	</th:block>
+
+</body>
+</html>

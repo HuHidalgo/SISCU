@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper
+	namespace="com.cenpro.siscu.mapper.IConsultaTriajeMapper">
+	
+	<select id="buscarPorCriterioBusquedaAdministrativa" resultType="ConsultaTriajeAdministrativo">
+		SELECT 	* 
+		FROM 	consultatriajeadministrativa consultaTriaje
+		<where>
+			<if test="codigoAlumno != null and codigoAlumno != ''">
+				    consultaTriaje.codigoAlumno = #{codigoAlumno}
+			</if>
+			<if test="tipoAlumno != null and tipoAlumno != ''">
+				AND consultaTriaje.tipoAlumno = #{tipoAlumno}
+			</if>
+			<if test="idCampania != null and idCampania > -1">
+				AND consultaTriaje.idCampania = #{idCampania}
+			</if>
+			<if test="codigoFacultad != null and codigoFacultad > -1">
+				AND consultaTriaje.codigoFacultad = #{codigoFacultad}
+			</if>
+			<if test="codigoEscuela != null and codigoEscuela > -1">
+				AND consultaTriaje.codigoEscuela = #{codigoEscuela}
+			</if>
+			<if test="fechaInicio != null and fechaFin != null">
+				AND consultaTriaje.soloFechaRegistro BETWEEN #{fechaInicio} AND #{fechaFin}
+			</if>
+			<if test="idRangoPeso != null and idRangoPeso > -1">
+				<if test="idRangoPeso == 1">
+					<![CDATA[AND consultaTriaje.peso < 50]]>
+				</if>
+				<if test="idRangoPeso == 2">
+					<![CDATA[AND consultaTriaje.peso BETWEEN 50 AND 70]]>
+				</if>
+				<if test="idRangoPeso == 3">
+					<![CDATA[AND consultaTriaje.peso BETWEEN 70 AND 90]]>
+				</if>
+				<if test="idRangoPeso == 4">
+					<![CDATA[AND consultaTriaje.peso > 90]]>
+				</if>
+			</if>
+			<if test="idRangoTalla != null and idRangoTalla > -1">
+				<if test="idRangoPeso == 1">
+					<![CDATA[AND consultaTriaje.talla < 150.00]]>
+				</if>
+				<if test="idRangoPeso == 2">
+					<![CDATA[AND consultaTriaje.talla BETWEEN 150.00 AND 170.00]]>
+				</if>
+				<if test="idRangoPeso == 3">
+					<![CDATA[AND consultaTriaje.talla BETWEEN 170.00 AND 190.00]]>
+				</if>
+				<if test="idRangoPeso == 4">
+					<![CDATA[AND consultaTriaje.talla > 190.00]]>
+				</if>
+			</if>
+			<if test="idRangoPulso != null and idRangoPulso > -1">
+				AND consultaTriaje.idRangoPulso = #{idRangoPulso}
+			</if>
+			<if test="idPresionSistolica != null and idPresionSistolica > -1">
+				AND consultaTriaje.idPresionSistolica = #{idPresionSistolica}
+			</if>
+			<if test="idPresionDiastolica != null and idPresionDiastolica > -1">
+				AND consultaTriaje.idPresionDiastolica = #{idPresionDiastolica}
+			</if>
+		</where>
+		ORDER BY numeroRegistro DESC
+	</select>
+	
+</mapper>

@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper
+	namespace="com.cenpro.siscu.mapper.IConsultaAtencionInicialMapper">
+	
+	<sql id="consultaAtencionInicialFragmento">
+		SELECT 
+			alumno.vCodigoAlumno 									AS codigoAlumno,
+		    alumno.vTipoAlumno										AS tipoAlumno,
+		    tipoAlumno.vDescripcionItem								AS descripcionTipoAlumno,
+		    alumno.vApellidoPaterno									AS apellidoPaterno,
+		    alumno.vApellidoMaterno									AS apellidoMaterno,
+		    alumno.vNombres											AS nombres,
+		    (YEAR(CURDATE()) - YEAR(alumno.dFechaNacimiento))		AS edad,
+			alumno.vIdSexo											AS idSexo,
+		    sexo.vDescripcionItem									AS descripcionSexo,
+		    facultad.vDescripcion 									AS descripcionFacultad,
+		    escuela.vDescripcion									AS descripcionEscuela,
+		    nNumeroRegistro											AS numeroRegistro
+		FROM maealumno alumno
+			INNER JOIN maeescuela escuela 						ON (alumno.nCodigoEscuela = escuela.nCodigoEscuela
+																	AND alumno.nCodigoFacultad = escuela.nCodigoFacultad)
+			INNER JOIN maefacultad facultad						ON (escuela.nCodigoFacultad = facultad.nCodigoFacultad)
+			INNER JOIN maemultitabladet sexo					ON	(alumno.vIdSexo = sexo.vIdItem 
+																	AND sexo.nIdTabla = 3)
+			INNER JOIN maemultitabladet tipoAlumno				ON	(alumno.vTipoAlumno = tipoAlumno.vIdItem 
+																	AND tipoAlumno.nIdTabla = 10)
+	</sql>
+	
+	<select id="buscarConsultaAtencionInicialLaboratorioPorCriterioBusqueda" resultType="ConsultaAtencionInicial">
+		<include refid="consultaAtencionInicialFragmento"></include>
+		LEFT JOIN movexamenmedicolaboratorio laboratorio 	ON (alumno.vCodigoAlumno = laboratorio.vCodigoAlumno
+															AND alumno.vTipoAlumno = laboratorio.vTipoAlumno
+                                                            AND laboratorio.nIdCampania = #{idCampania})
+        <where>
+        	<if test="codigoAlumno != null and codigoAlumno != ''">
+        		alumno.vCodigoAlumno = #{codigoAlumno}
+        	</if>
+        	<if test="codigoFacultad != null and codigoFacultad != -1">
+        		AND facultad.nCodigoFacultad = #{codigoFacultad}
+        	</if>
+        </where>
+        ORDER BY facultad.nCodigoFacultad, escuela.nCodigoEscuela
+	</select>
+	
+	<select id="buscarConsultaAtencionInicialPsicologiaPorCriterioBusqueda" resultType="ConsultaAtencionInicial">
+		<include refid="consultaAtencionInicialFragmento"></include>
+		LEFT JOIN movexamenmedicopsicologico psicologico 	ON (alumno.vCodigoAlumno = psicologico.vCodigoAlumno
+															AND alumno.vTipoAlumno = psicologico.vTipoAlumno
+                                                            AND psicologico.nIdCampania = #{idCampania})
+        <where>
+        	<if test="codigoAlumno != null and codigoAlumno != ''">
+        		alumno.vCodigoAlumno = #{codigoAlumno}
+        	</if>
+        	<if test="codigoFacultad != null and codigoFacultad != -1">
+        		AND facultad.nCodigoFacultad = #{codigoFacultad}
+        	</if>
+        </where>
+        ORDER BY facultad.nCodigoFacultad, escuela.nCodigoEscuela
+	</select>
+	
+	<select id="buscarConsultaAtencionInicialRadiologiaPorCriterioBusqueda" resultType="ConsultaAtencionInicial">
+		<include refid="consultaAtencionInicialFragmento"></include>
+		LEFT JOIN movexamenmedicoradiologico radiologia 	ON (alumno.vCodigoAlumno = radiologia.vCodigoAlumno
+															AND alumno.vTipoAlumno = radiologia.vTipoAlumno
+                                                            AND radiologia.nIdCampania = #{idCampania})
+        <where>
+        	<if test="codigoAlumno != null and codigoAlumno != ''">
+        		alumno.vCodigoAlumno = #{codigoAlumno}
+        	</if>
+        	<if test="codigoFacultad != null and codigoFacultad != -1">
+        		AND facultad.nCodigoFacultad = #{codigoFacultad}
+        	</if>
+        </where>
+        ORDER BY facultad.nCodigoFacultad, escuela.nCodigoEscuela
+	</select>
+	 
+	<select id="buscarConsultaAtencionInicialTriajePorCriterioBusqueda" resultType="ConsultaAtencionInicial">		
+		<include refid="consultaAtencionInicialFragmento"></include>
+		LEFT JOIN movexamenmedicotriaje triaje	ON (alumno.vCodigoAlumno = triaje.vCodigoAlumno
+															AND alumno.vTipoAlumno = triaje.vTipoAlumno
+                                                            AND triaje.nIdCampania = #{idCampania})
+        <where>
+        	<if test="codigoAlumno != null and codigoAlumno != ''">
+        		alumno.vCodigoAlumno = #{codigoAlumno}
+        	</if>
+        	<if test="codigoFacultad != null and codigoFacultad != -1">
+        		AND facultad.nCodigoFacultad = #{codigoFacultad}
+        	</if>
+        </where>
+        ORDER BY facultad.nCodigoFacultad, escuela.nCodigoEscuela
+	</select>
+	 
+	<select id="buscarConsultaAtencionInicialOdontologiaPorCriterioBusqueda" resultType="ConsultaAtencionInicial">		
+		<include refid="consultaAtencionInicialFragmento"></include>
+		LEFT JOIN movexamenmedicoodontologia odontologia	ON (alumno.vCodigoAlumno = odontologia.vCodigoAlumno
+															AND alumno.vTipoAlumno = odontologia.vTipoAlumno
+                                                            AND odontologia.nIdCampania = #{idCampania})
+        <where>
+        	<if test="codigoAlumno != null and codigoAlumno != ''">
+        		alumno.vCodigoAlumno = #{codigoAlumno}
+        	</if>
+        	<if test="codigoFacultad != null and codigoFacultad != -1">
+        		AND facultad.nCodigoFacultad = #{codigoFacultad}
+        	</if>
+        </where>
+        ORDER BY facultad.nCodigoFacultad, escuela.nCodigoEscuela
+	</select>
+	
+	<select id="buscarConsultaAtencionInicialMedicinaGeneralPorCriterioBusqueda" resultType="ConsultaAtencionInicial">		
+		<include refid="consultaAtencionInicialFragmento"></include>
+		LEFT JOIN movexamenmedicomedicinageneral medicinageneral	ON (alumno.vCodigoAlumno = medicinageneral.vCodigoAlumno
+																		AND alumno.vTipoAlumno = medicinageneral.vTipoAlumno
+                                                            			AND medicinageneral.nIdCampania = #{idCampania})
+        <where>
+        	<if test="codigoAlumno != null and codigoAlumno != ''">
+        		alumno.vCodigoAlumno = #{codigoAlumno}
+        	</if>
+        	<if test="codigoFacultad != null and codigoFacultad != -1">
+        		AND facultad.nCodigoFacultad = #{codigoFacultad}
+        	</if>
+        </where>
+        ORDER BY facultad.nCodigoFacultad, escuela.nCodigoEscuela
+	</select>
+
+</mapper>

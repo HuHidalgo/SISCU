@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+</head>
+<body>
+	<div id="criterioBusquedaAdministrativaDetallada" class="row" th:fragment="criterioBusquedaAdministrativaDetallada" th:with="tipo=${tipo}">
+		<fieldset class="well">
+			<legend class="well-legend">Búsqueda</legend>
+			<form id="formCriterioBusquedaAdministrativaDetallada" class="form-horizontal" role="form">
+				<th:block th:replace="~{template/fragments/consulta/criterioBusquedaAdministrativaDetallada :: ${tipo}}?:~{}">
+				</th:block>
+				<div class="form-group">
+					<div class="col-lg-12 text-center">
+						<button id="buscar1" type="button" class="btn btn-primary">
+							<i class="fa fa-search"></i> Buscar
+						</button>
+					</div>
+				</div>
+			</form>
+		</fieldset>
+	</div>
+
+	<th:block th:fragment="laboratorio">
+		<div class="form-group">
+			<div class="group">
+				<label class="col-lg-1 control-label">RPR</label>
+				<div class="col-lg-3">
+					<select id="indicadoresRPR" class="form-control select2" name="idRPR">
+						<option value="-1" selected="selected">Seleccione un RPR</option>
+						<option th:each="indicadorRPR : ${indicadoresRPR}" th:value="${indicadorRPR.idItem}"
+							th:text="|${indicadorRPR.idItem} - ${indicadorRPR.descripcionItem}|"></option>
+					</select>
+				</div>
+			</div>
+			<div class="group">
+				<label class="col-lg-1 control-label">Hemograma</label>
+				<div class="col-lg-3">
+					<select id="indicadoresHemograma" class="form-control select2" name="idHemograma">
+						<option value="-1" selected="selected">Seleccione un Hemograma</option>
+						<option th:each="indicadorHemograma : ${indicadoresHemograma}" th:value="${indicadorHemograma.idItem}"
+							th:text="|${indicadorHemograma.idItem} - ${indicadorHemograma.descripcionItem}|"></option>
+					</select>
+				</div>
+			</div>
+			<div class="group">
+				<label class="col-lg-1 control-label">Gpo. Sanguíneo</label>
+				<div class="col-lg-3">
+					<select id="gruposSanguineo" class="form-control select2" name="idGrupoSanguineo">
+						<option value="-1" selected="selected">Seleccione un Gpo. Sanguíneo</option>
+						<option th:each="grupoSanguineo : ${gruposSanguineo}" th:value="${grupoSanguineo.idItem}"
+							th:text="|${grupoSanguineo.idItem} - ${grupoSanguineo.descripcionItem}|"></option>
+					</select>
+				</div>
+			</div>
+		</div>
+		<div class="form-group">
+			<div class="group" id="divDilucion">
+				<label class="col-lg-1 control-label">Dilución</label>
+				<div class="col-lg-3">
+					<select id="diluciones" class="form-control select2" name="dilucion" disabled="disabled">
+						<option value="-1" selected="selected">Seleccione una Dilución</option>
+						<option th:each="dilucion : ${diluciones}" th:value="${dilucion.idItem}" th:text="|1 : ${dilucion.descripcionItem}|"></option>
+					</select>
+				</div>
+			</div>
+			<div class="group">
+				<label class="col-lg-1 control-label">Hemoglobina</label>
+				<div class="col-lg-3">
+					<div class="input-group">
+						<input id="hemoglobina" type="text" class="form-control" name="hemoglobina" maxlength="5" />
+						<span id="estadoHemoglobina" class="input-group-addon">NINGUNO</span>
+					</div>
+				</div>
+			</div>
+			<div class="group">
+				<label class="col-lg-1 control-label">Factor RH</label>
+				<div class="col-lg-3">
+					<select id="factoresRh" class="form-control select2" name="idFactorRh">
+						<option value="-1" selected="selected">Seleccione un Factor RH</option>
+						<option th:each="factorRh : ${factoresRh}" th:value="${factorRh.idItem}"
+							th:text="|${factorRh.idItem} - ${factorRh.descripcionItem}|"></option>
+					</select>
+				</div>
+			</div>
+		</div>
+	</th:block>
+
+	<th:block th:fragment="radiologico">
+		<div class="form-group">
+			<label class="col-lg-4 control-label">Resultado</label>
+			<div class="col-lg-4">
+				<select id="resultadosRadiologico" class="form-control select2" name="idResultadoRadiologico">
+					<option value="" disabled="disabled" selected="selected">Seleccione un Resultado</option>
+					<option th:each="resultadoRadiologico : ${resultadosRadiologico}" th:if="${resultadoRadiologico.idItem != 'G'}"
+						th:value="${resultadoRadiologico.idItem}"
+						th:text="|${resultadoRadiologico.idItem} - ${resultadoRadiologico.descripcionItem}|"></option>
+				</select>
+			</div>
+		</div>
+	</th:block>
+
+	<th:block th:fragment="psicologia">
+		<div class="form-group">
+			<label class="col-lg-5 control-label">Resultado</label>
+			<div class="col-lg-4">
+				<label th:each="resultadoPsicologico : ${resultadosPsicologico}" class="radio-inline">
+					<input type="radio" class="resultadoPsicologico" th:checked="${resultadoPsicologico.idItem == 'N'}"
+						name="idResultadoPsicologico" th:value="${resultadoPsicologico.idItem}">
+					[[${resultadoPsicologico.idItem}]] - [[${resultadoPsicologico.descripcionItem}]]
+				</label>
+			</div>
+		</div>
+	</th:block>
+	
+	<th:block th:fragment="triaje">
+		<div class="form-group">
+			<div class="group">
+				<label class="col-lg-1 control-label">Peso</label>
+				<div class="col-lg-3">
+					<select id="rangoPesos" class="form-control select2" name="idRangoPeso">
+						<option value="-1" selected="selected">Seleccione un Rango de Peso</option>
+						<option th:each="rangoPeso : ${rangoPesos}" th:value="${rangoPeso.idItem}"
+							th:text="|${rangoPeso.idItem} - ${rangoPeso.descripcionItem}|"></option>
+					</select>
+				</div>
+			</div>
+			<div class="group">
+				<label class="col-lg-1 control-label">Talla</label>
+				<div class="col-lg-3">
+					<select id="rangoTallas" class="form-control select2" name="idRangoTalla">
+						<option value="-1" selected="selected">Seleccione un Rango de Talla</option>
+						<option th:each="rangoTalla : ${rangoTallas}" th:value="${rangoTalla.idItem}"
+							th:text="|${rangoTalla.idItem} - ${rangoTalla.descripcionItem}|"></option>
+					</select>
+				</div>
+			</div>
+			<div class="group">
+				<label class="col-lg-1 control-label">Pulso</label>
+				<div class="col-lg-3">
+					<select id="rangoPulsos" class="form-control select2" name="idRangoPulso">
+						<option value="-1" selected="selected">Seleccione un Rango de Pulso</option>
+						<option th:each="rangoPulso : ${rangoPulsos}" th:value="${rangoPulso.idItem}"
+							th:text="|${rangoPulso.descripcionItem} - ${rangoPulso.abreviatura}|"></option>
+					</select>
+				</div>
+			</div>
+		</div>
+		<div class="form-group">
+			<div class="group">
+				<label class="col-lg-1 control-label">Presión Sistólica</label>
+				<div class="col-lg-3">
+					<select id="presionesSistolicas" class="form-control select2" name="idPresionSistolica">
+						<option value="-1" selected="selected">Seleccione Presión Sistólica</option>
+						<option th:each="presionSistolica : ${presionesSistolicas}" th:value="${presionSistolica.idItem}" 
+							th:text="|${presionSistolica.descripcionItem} - ${presionSistolica.abreviatura}|"></option>
+					</select>
+				</div>
+			</div>
+			<div class="group">
+				<label class="col-lg-1 control-label">Presión Diastólica</label>
+				<div class="col-lg-3">
+					<select id="presionesDiastolicas" class="form-control select2" name="idPresionDiastolica">
+						<option value="-1" selected="selected">Seleccione Presión Diastólica</option>
+						<option th:each="presionDiastolica : ${presionesDiastolicas}" th:value="${presionDiastolica.idItem}" 
+							th:text="|${presionDiastolica.descripcionItem} - ${presionDiastolica.abreviatura}|"></option>
+					</select>
+				</div>
+			</div>
+		</div>
+	</th:block>
+</body>
+</html>

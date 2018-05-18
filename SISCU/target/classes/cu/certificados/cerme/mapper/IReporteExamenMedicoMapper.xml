@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper
+	namespace="com.cenpro.siscu.mapper.IReporteExamenMedicoMapper">
+	
+	<select id="buscarReporteExamenMedicoRegular" resultType="ReporteExamenMedicoRegular">
+		SELECT 	 regular.codigoAlumno
+				,regular.apellidoPaterno
+				,regular.apellidoMaterno
+				,regular.nombres
+				,regular.descripcionEscuela
+				,regular.idRPR
+				,regular.descripcionRPR
+				,regular.hemoglobina
+				,regular.descripcionResultadoHemoglobina
+				,regular.idHemograma
+				,regular.descripcionHemograma
+				,regular.idResultadoRadiologico
+				,regular.descripcionResultadoRadiologico
+				,regular.idResultadoPsicologico
+				,regular.descripcionResultadoPsicologico
+		FROM 	reportecertificadoexamenmedicoregular regular
+		WHERE   	regular.idCampaniaLaboratorio = #{idCampania}
+				AND regular.idCampaniaRadiologico = #{idCampania}
+				AND regular.idCampaniaPsicologico = #{idCampania}
+				AND regular.codigoAlumno 		  = #{codigoAlumno}
+	</select>
+	
+</mapper>

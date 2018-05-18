@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper
+	namespace="com.cenpro.siscu.mapper.IConsultaExamenMedicoLaboratorioMapper">
+	
+	<select id="buscarPorCriterioBusquedaAdministrativa" resultType="ConsultaLaboratorioAdministrativo">
+		SELECT 	* 
+		FROM 	consultalaboratorioadministrativa consultaLaboratorio
+		<where>
+			<if test="numeroRegistro != null and numeroRegistro > 0">
+				consultaLaboratorio.numeroRegistro = #{numeroRegistro}
+			</if>
+			<if test="anio != null and anio != ''">
+				AND consultaLaboratorio.anio = #{anio}
+			</if>
+			<if test="codigoAlumno != null and codigoAlumno != ''">
+				AND consultaLaboratorio.codigoAlumno = #{codigoAlumno}
+			</if>
+			<if test="tipoAlumno != null and tipoAlumno != ''">
+				AND consultaLaboratorio.tipoAlumno = #{tipoAlumno}
+			</if>
+			<if test="idEstadoExamenMedico != null and idEstadoExamenMedico != ''">
+				AND consultaLaboratorio.idEstadoExamenMedico = #{idEstadoExamenMedico}
+			</if>
+			<if test="idCampania != null and idCampania > -1">
+				AND consultaLaboratorio.idCampania = #{idCampania}
+			</if>
+			<if test="codigoFacultad != null and codigoFacultad > -1">
+				AND consultaLaboratorio.codigoFacultad = #{codigoFacultad}
+			</if>
+			<if test="codigoEscuela != null and codigoEscuela > -1">
+				AND consultaLaboratorio.codigoEscuela = #{codigoEscuela}
+			</if>
+			<if test="fechaInicio != null and fechaFin != null">
+				AND consultaLaboratorio.soloFechaGeneracionNumeroRegistro BETWEEN #{fechaInicio} AND #{fechaFin}
+			</if>
+			<if test="idRPR != null and idRPR > '' and idRPR != '-1'">
+				AND consultaLaboratorio.idRPR = #{idRPR}
+			</if>
+			<if test="dilucion != null and dilucion > -1">
+				AND consultaLaboratorio.dilucion = #{dilucion}
+			</if>
+			<if test="idHemograma != null and idHemograma > '' and idHemograma != '-1'">
+				AND consultaLaboratorio.idHemograma = #{idHemograma}
+			</if>
+			<if test="idGrupoSanguineo != null and idGrupoSanguineo > '' and idGrupoSanguineo != '-1'">
+				AND consultaLaboratorio.idGrupoSanguineo = #{idGrupoSanguineo}
+			</if>
+			<if test="idFactorRh != null and idFactorRh > '' and idFactorRh != '-1'">
+				AND consultaLaboratorio.idFactorRh = #{idFactorRh}
+			</if>
+		</where>
+		ORDER BY numeroRegistro DESC
+	</select>
+	
+</mapper>

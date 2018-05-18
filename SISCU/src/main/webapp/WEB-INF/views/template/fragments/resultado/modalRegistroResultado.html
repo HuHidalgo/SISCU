@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+</head>
+<body>
+	<div id="modalResultado" class="row" th:fragment="modalRegistroResultado" th:with="tipo=${tipo}">
+		<fieldset class="well">
+			<legend class="well-legend">Formulario de Resultado</legend>
+			<fieldset class="well">
+				<legend class="well-legend">
+					<i class="fa fa-user-o" aria-hidden="true"></i> Datos
+				</legend>
+				<div class="form-horizontal">
+					<div class="form-group">
+						<div class="group">
+							<label class="col-lg-2 control-label">Código</label>
+							<div class="col-lg-4">
+								<input id="codigo" class="form-control" name="codigo" data-tooltip="tooltip" disabled="disabled" />
+							</div>
+						</div>
+						<div class="group">
+							<label class="col-lg-2 control-label">Apellidos y Nombres</label>
+							<div class="col-lg-4">
+								<input id="apellidosNombres" class="form-control" data-tooltip="tooltip" disabled="disabled" />
+							</div>
+						</div>
+					</div>
+				</div>
+			</fieldset>
+			<fieldset class="well">
+				<legend class="well-legend">
+					<i class="fa fa-pencil-square-o" aria-hidden="true"></i> Resultado
+				</legend>
+				<form id="formResultadoExamenMedico" class="form-horizontal" role="form">
+					<th:block th:replace="~{template/fragments/resultado/modalRegistroResultado :: ${tipo}}?:~{}">
+					</th:block>
+					<div id="botonesForm" class="form-group">
+						<div class="col-lg-12 text-center">
+							<button id="registrarResultado" type="button" class="btn btn-success">
+								<i class="fa fa-floppy-o"></i> Registrar
+							</button>
+						</div>
+					</div>
+				</form>
+				<th:block th:replace="~{template/fragments/mantenimiento/formularioAdicionalMantenimiento :: ${tipo}}?:~{}">
+				</th:block>
+			</fieldset>
+		</fieldset>
+	</div>
+
+	<th:block th:fragment="psicologia">
+		<div class="form-group">
+			<label class="col-lg-2 control-label">Resultado</label>
+			<div class="col-lg-10">
+				<label th:each="resultadoPsicologico : ${resultadosPsicologico}" class="radio-inline">
+					<input type="radio" class="resultadoPsicologico" th:checked="${resultadoPsicologico.idItem == 'N'}"
+						name="idResultadoPsicologico" th:value="${resultadoPsicologico.idItem}">
+					[[${resultadoPsicologico.idItem}]] - [[${resultadoPsicologico.descripcionItem}]]
+				</label>
+			</div>
+		</div>
+		<div id="divObservacion" class="form-group hidden">
+			<label class="col-lg-2 control-label">Observación</label>
+			<div class="col-lg-10">
+				<div class="input-group">
+					<input id="observacion" class="form-control upperCase" disabled="disabled" name="observacion">
+					<span class="input-group-btn">
+						<button id="editarObservacion" class="btn btn-primary" title="Editar" data-tooltip="tooltip" type="button">
+							<i class="fa fa-pencil-square"></i>
+						</button>
+					</span>
+				</div>
+			</div>
+		</div>
+	</th:block>
+
+	<th:block th:fragment="laboratorio">
+		<!-- Formulario de Laboratorio de Ingresantes y Regulares -->
+		<div class="form-group">
+			<div class="group">
+				<label class="col-lg-2 control-label">RPR</label>
+				<div class="col-lg-4">
+					<select id="indicadoresRPR" class="form-control select2" name="idRPR">
+						<option value="" disabled="disabled" selected="selected">Seleccione un RPR</option>
+						<option th:each="indicadorRPR : ${indicadoresRPR}" th:value="${indicadorRPR.idItem}"
+							th:text="|${indicadorRPR.idItem} - ${indicadorRPR.descripcionItem}|"></option>
+					</select>
+				</div>
+			</div>
+			<div id="divDilucion" class="group">
+				<label class="col-lg-2 control-label">Dilución</label>
+				<div class="col-lg-4">
+					<select id="diluciones" class="form-control select2" name="dilucion" disabled="disabled">
+						<option value="" disabled="disabled" selected="selected">Seleccione una Dilución</option>
+						<option th:each="dilucion : ${diluciones}" th:value="${dilucion.idItem}" th:text="|1 : ${dilucion.descripcionItem}|"></option>
+					</select>
+				</div>
+			</div>
+		</div>
+		<!-- Fin Formulario de Laboratorio de Ingresantes y Regulares -->
+
+		<!-- Formulario de Laboratorio de Ingresantes -->
+		<div id="I" class="div-formulario hidden">
+			<div class="form-group">
+				<div class="group">
+					<label class="col-lg-2 control-label">Gpo. Sanguíneo</label>
+					<div class="col-lg-4">
+						<select id="gruposSanguineo" class="form-control select2" name="idGrupoSanguineo">
+							<option value="" disabled="disabled" selected="selected">Seleccione un Gpo. Sanguíneo</option>
+							<option th:each="grupoSanguineo : ${gruposSanguineo}" th:value="${grupoSanguineo.idItem}"
+								th:text="|${grupoSanguineo.idItem} - ${grupoSanguineo.descripcionItem}|"></option>
+						</select>
+					</div>
+				</div>
+				<div class="group">
+					<label class="col-lg-2 control-label">Factor RH</label>
+					<div class="col-lg-4">
+						<select id="factoresRh" class="form-control select2" name="idFactorRh">
+							<option value="" disabled="disabled" selected="selected">Seleccione un Factor RH</option>
+							<option th:each="factorRh : ${factoresRh}" th:value="${factorRh.idItem}"
+								th:text="|${factorRh.idItem} - ${factorRh.descripcionItem}|"></option>
+						</select>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- Fin Formulario de Laboratorio de Ingresantes -->
+
+		<!-- Formulario de Laboratorio de Regulares -->
+		<div id="R" class="div-formulario hidden">
+			<div class="form-group">
+				<div class="group">
+					<label class="col-lg-2 control-label">Hemograma</label>
+					<div class="col-lg-4">
+						<select id="indicadoresHemograma" class="form-control select2" name="idHemograma">
+							<option value="" disabled="disabled" selected="selected">Seleccione un Hemograma</option>
+							<option th:each="indicadorHemograma : ${indicadoresHemograma}" th:value="${indicadorHemograma.idItem}"
+								th:text="|${indicadorHemograma.idItem} - ${indicadorHemograma.descripcionItem}|"></option>
+						</select>
+					</div>
+				</div>
+				<div class="group">
+					<label class="col-lg-2 control-label">Hemoglobina</label>
+					<div class="col-lg-4">
+						<div class="input-group">
+							<input id="hemoglobina" type="text" class="form-control" name="hemoglobina" maxlength="5" />
+							<span id="estadoHemoglobina" class="input-group-addon">NINGUNO</span>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div id="divObservacion" class="form-group">
+				<label class="col-lg-2 control-label">Observación</label>
+				<div class="col-lg-10">
+					<textarea id="observacion" cols="30" rows="4" class="form-control upperCase" name="observacion"></textarea>
+				</div>
+			</div>
+		</div>
+	</th:block>
+
+	<th:block th:fragment="triaje">
+		<div class="form-group">
+			<div class="group">
+				<div class="col-lg-4">
+					<label class="control-label">Peso</label>
+					<div class="input-group">
+						<input id="input-peso" class="form-control" name="peso" autofocus>
+						<span class="input-group-addon">Kg</span>
+					</div>
+				</div>
+			</div>
+			<div class="group">
+				<div class="col-lg-4">
+					<label class="control-label">Talla</label>
+					<div class="input-group">
+						<input id="input-talla" class="form-control" name="talla">
+						<span class="input-group-addon">cm</span>
+					</div>
+				</div>
+			</div>
+			<div class="group">
+				<div class="col-lg-4" data-tooltip="tooltip" th:title="#{ayuda-imc}">
+					<label>IMC</label>
+					<div class="input-group">
+						<input id="input-imc" class="form-control" disabled="disabled">
+						<span class="input-group-addon" id="resultadoImc"></span>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="form-group">
+			<div class="group">
+				<div class="col-lg-4">
+					<label class="control-label">Pulso</label>
+					<div class="input-group">
+						<input id="input-pulso" class="form-control" name="pulso" maxlength="3">
+						<span class="input-group-addon">x min</span> <span class="input-group-addon" id="pulso"></span>
+					</div>
+				</div>
+			</div>
+			<div class="group">
+				<div class="col-lg-4">
+					<label class="control-label">Presión sistólica</label>
+					<div class="input-group">
+						<input id="input-presionS" class="form-control" name="presionSistolica" maxlength="3">
+						<span class="input-group-addon" id="presionS">mm HG</span>
+					</div>
+				</div>
+			</div>
+			<div class="group">
+				<div class="col-lg-4">
+					<label class="control-label">Presión diastólica</label>
+					<div class="input-group">
+						<input id="input-presionD" class="form-control" name="presionDiastolica" maxlength="3">
+						<span class="input-group-addon" id="presionD">mm HG</span>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="form-group">
+			<div class="group">
+				<div class="col-lg-4" id="fumGroup">
+					<label>FUM</label>
+					<div class="input-group">
+						<span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+						<input id="rangoFechaBusqueda" type="text" class="form-control filtro" readonly="readonly" name="fum" />
+					</div>
+				</div>
+			</div>
+		</div>
+	</th:block>
+
+	<th:block th:fragment="odontologia">
+		<div class="form-group">
+			<div class="group">
+				<div class="col-lg-2" data-tooltip="tooltip" th:title="#{ayuda-piezaFaltante}">
+					<label class="control-label">P. Faltantes</label>
+					<input id="input-pFaltantes" type="text" class="form-control col-sm-4 col-md-4 col-lg-4 numbersOnly" autofocus="autofocus"
+						name="piezasFaltantes" maxlength="2">
+				</div>
+			</div>
+			<div class="group">
+				<div class="col-lg-2" data-tooltip="tooltip" th:title="#{ayuda-piezaObturada}">
+					<label class="control-label">P. Obturadas</label>
+					<input id="input-pObturadas" type="text" class="form-control col-sm-4 col-md-4 col-lg-4 numbersOnly" autofocus="autofocus"
+						name="piezasObturadas" maxlength="2">
+				</div>
+			</div>
+			<div class="group">
+				<div class="col-lg-2" data-tooltip="tooltip" th:title="#{ayuda-piezaAObturar}">
+					<label class="control-label">P. a Obturar</label>
+					<input id="input-AObturar" type="text" class="form-control col-sm-4 col-md-4 col-lg-4 " autofocus="autofocus"
+						name="piezasPorObturar" maxlength="2">
+				</div>
+			</div>
+			<div class="group">
+				<div class="col-lg-2" data-tooltip="tooltip" th:title="#{ayuda-piezaAExtraer}">
+					<label class="control-label">P. a Extraer</label>
+					<input id="input-AExtraer" type="text" class="form-control col-sm-4 col-md-4 col-lg-4 " autofocus="autofocus"
+						name="piezasPorExtraer" maxlength="2">
+				</div>
+			</div>
+			<div class="group">
+				<div class="col-lg-3" data-tooltip="tooltip" th:title="#{ayuda-indiceMasticacion}">
+					<label class="control-label">Ind. de Mast.</label>
+					<div class="input-group">
+						<input id="input-indiceMasticacion" type="text" class="form-control" autofocus="autofocus" name="indiceMasticacion"
+							maxlength="3">
+						<span class="input-group-addon">%</span>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="form-group">
+			<div class="group">
+				<div class="col-lg-4">
+					<label class="control-label">Prótesis</label>
+					<select class="form-control select2" name="idProtesis" id="select-protesis">
+						<option value="" disabled="disabled" selected="selected">Seleccione un Estado de Prótesis</option>
+						<option th:each="protesi : ${protesis}" th:value="${protesi.idItem}"
+							th:text="|${protesi.idItem} - ${protesi.descripcionItem}|"></option>
+					</select>
+				</div>
+			</div>
+			<div class="group">
+				<div class="col-lg-4">
+					<label class="control-label">Maloclusión</label>
+					<select id="select-maloclusion" class="form-control select2" name="idMaloclusion">
+						<option value="" disabled="disabled" selected="selected">Seleccione una Maloclusión</option>
+						<option th:each="maloclusion : ${maloclusiones}" th:value="${maloclusion.idItem}"
+							th:text="|${maloclusion.idItem} - ${maloclusion.descripcionItem}|"></option>
+					</select>
+				</div>
+			</div>
+			<div class="group">
+				<div class="col-lg-4">
+					<label class="control-label">Higiene</label>
+					<select id="select-higiene" class="form-control select2" name="idHigiene">
+						<option value="" disabled="disabled" selected="selected">Seleccione un Estado de Higiene</option>
+						<option th:each="higiene : ${higienes}" th:value="${higiene.idItem}"
+							th:text="|${higiene.idItem} - ${higiene.descripcionItem}|"></option>
+					</select>
+				</div>
+			</div>
+		</div>
+		<div class="form-group">
+			<div class="col-lg-12">
+				<label class="control-label">Observación</label>
+				<textarea id="observacion" class="form-control upperCase" rows="3" name="observacion"></textarea>
+			</div>
+		</div>
+	</th:block>
+
+	<th:block th:fragment="radiologico">
+		<div class="form-group">
+			<label class="col-lg-2 control-label">Resultado</label>
+			<div class="col-lg-10">
+				<select id="resultadosRadiologico" class="form-control select2" name="idResultadoRadiologico">
+					<option value="" disabled="disabled" selected="selected">Seleccione un Resultado</option>
+					<option th:each="resultadoRadiologico : ${resultadosRadiologico}" th:if="${resultadoRadiologico.idItem != 'G'}"
+						th:value="${resultadoRadiologico.idItem}"
+						th:text="|${resultadoRadiologico.idItem} - ${resultadoRadiologico.descripcionItem}|"></option>
+				</select>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-lg-2 control-label">Observación</label>
+			<div class="col-lg-10">
+				<textarea id="observacion" cols="30" class="form-control upperCase" name="observacion" disabled="disabled"></textarea>
+			</div>
+		</div>
+	</th:block>
+
+	<th:block th:fragment="medicinaGeneral">
+		<div class="alert alert-info">
+			<p>
+				El botón
+				<label class="label label-info font-13">
+					<i class="fa fa-plus"></i> Añadir</label>, registra temporalmente los <b>antecedentes, alergias e interconsultas</b> en su correspondiente tabla. 
+			</p>
+			<p>
+				Para guardar todos los registros temporales realizados de <b>antecedentes, alergias e interconsultas</b> de manera permanente, haga click en el boton
+				<label class="label label-success font-13">
+					<i class="fa fa-floppy-o"></i> Registrar
+				</label>
+			</p>
+		</div>
+		<fieldset id="fieldset-embarazo" class="well hidden">
+			<legend class="well-legend">
+				<i class="fa fa-female"></i> Embarazo
+			</legend>
+			<div class="form-group">
+				<div class="group">
+					<label class="col-md-2 control-label">Embarazo</label>
+					<div class="col-md-2">
+						<div class="checkbox">
+							<label>
+								<input type="checkbox" value="true" data-unchecked-value="false" name="embarazo" />
+							</label>
+						</div>
+					</div>
+				</div>
+				<div class="group">
+					<label class="col-md-2 control-label">Comentario</label>
+					<div class="col-md-4">
+						<textarea id="observacion" cols="30" class="form-control upperCase" name="comentario"></textarea>
+					</div>
+				</div>
+			</div>
+		</fieldset>
+	</th:block>
+
+</body>
+</html>

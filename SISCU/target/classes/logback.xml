@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+	<property name="LOG_DIR" value="../logs"></property>
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<layout class="ch.qos.logback.classic.PatternLayout">
+			<Pattern>
+				%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n
+			</Pattern>
+		</layout>
+	</appender>
+	<appender name="file-trace"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<File>${LOG_DIR}/trace.log</File>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<FileNamePattern>${LOG_DIR}/trace_%d{yyyy-MM-dd}.log
+			</FileNamePattern>
+			<maxHistory>30</maxHistory>
+		</rollingPolicy>
+		<encoder>
+			<Pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg %n</Pattern>
+		</encoder>
+	</appender>
+	<appender name="file-error"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<File>${LOG_DIR}/error.log</File>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<FileNamePattern>${LOG_DIR}/error_%d{yyyy-MM-dd}.log
+			</FileNamePattern>
+			<maxHistory>30</maxHistory>
+		</rollingPolicy>
+		<encoder>
+			<Pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg %n</Pattern>
+		</encoder>
+	</appender>	
+	<logger name="org.springframework" level="error" additivity="false">
+		<appender-ref ref="STDOUT" />
+	</logger>
+	<logger name="com.cenpro.siscu.controller" level="error" additivity="false">
+		<appender-ref ref="STDOUT" />
+		<appender-ref ref="file-error" />
+	</logger>
+	<root level="error">
+		<appender-ref ref="STDOUT" />
+		<appender-ref ref="file-error" />
+	</root>
+</configuration>
