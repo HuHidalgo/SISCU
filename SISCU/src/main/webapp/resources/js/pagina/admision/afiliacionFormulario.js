@@ -1,6 +1,6 @@
 $(document).ready(function() {
 
-	$formResultadoExamenMedico.validate({
+	$formAfiliacion.validate({
 		focusCleanup : true,
 		rules : {
 			idResultadoRadiologico : {

@@ -40,6 +40,13 @@ public class MultiTabDetService extends MantenibleService<MultiTabDet>
         MultiTabDet multiTabDet = MultiTabDet.builder().idTabla(idTabla).build();
         return this.buscar(multiTabDet, Verbo.GET);
     }
+    
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public List<MultiTabDet> buscarPorIdItem(String idItem)
+    {
+        MultiTabDet multiTabDet = MultiTabDet.builder().idItem(idItem).build();
+        return this.buscar(multiTabDet, Verbo.GET_ITEM);
+    }
 
     @Transactional(propagation = Propagation.REQUIRED)
     public List<MultiTabDet> buscarPorIdTablaIdItem(int idTabla, String idItem)

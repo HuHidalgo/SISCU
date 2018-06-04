@@ -1,15 +1,12 @@
 package utilTest;
 
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.validation.constraints.Digits;
 
 import org.apache.commons.lang3.Validate;
 import org.junit.Test;
 
-import com.cenpro.siscu.model.mantenimiento.Alumno;
 import com.cenpro.siscu.utilitario.ConstantesExcepciones;
 import com.cenpro.siscu.utilitario.Regex;
 
@@ -83,12 +80,4 @@ public class ExpresionRegularTest
         System.out.println(esValido);
     }
 
-    @Test
-    public void verificarIndex()
-    {
-        String.format("FF");
-        List<Alumno> alumnos = new ArrayList<>();
-        //Validate.notEmpty(alumnos, ConstantesExcepciones.ERROR_REGISTRO);
-        Validate.notEmpty(alumnos, ConstantesExcepciones.ERROR_REGISTRO);
-    }
 }

@@ -14,11 +14,11 @@ public @Controller class CargaController
 {
     private @Autowired IMultiTabDetService multiTabDetService;
 
-    @GetMapping("/carga/alumno")
+    @GetMapping("/carga/inicial")
     public String irPaginaCargaAlumno(ModelMap model)
     {
-        model.addAttribute("tiposAlumno",
-                multiTabDetService.buscarPorIdTabla(MultiTablaUtil.TABLA_TIPO_ALUMNO));
-        return "seguras/carga/alumno";
+        //model.addAttribute("tiposAlumno", multiTabDetService.buscarPorIdTabla(MultiTablaUtil.TABLA_TIPO_ALUMNO));
+    	model.addAttribute("estamentos", multiTabDetService.buscarPorIdTabla(MultiTablaUtil.TABLA_ESTAMENTOS));
+        return "seguras/carga/inicial";
     }
 }

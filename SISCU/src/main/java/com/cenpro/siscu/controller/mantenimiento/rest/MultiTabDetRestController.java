@@ -50,6 +50,13 @@ public @RestController class MultiTabDetRestController
     {
         return multiTabDetService.buscarPorIdTabla(idTabla);
     }
+    
+    @Audit(accion = Accion.Consulta, comentario = Comentario.Consulta)
+    @GetMapping("/multiTabCab2/{idItem}")
+    public List<MultiTabDet> buscarPorIdItem(@IdTabla(existe = true) @PathVariable String idItem)
+    {
+        return multiTabDetService.buscarPorIdItem(idItem);
+    }
 
     @Audit(accion = Accion.Registro, comentario = Comentario.Registro)
     @PostMapping

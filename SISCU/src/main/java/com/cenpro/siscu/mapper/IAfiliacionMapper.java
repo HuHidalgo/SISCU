@@ -14,6 +14,7 @@ public interface IAfiliacionMapper extends IMantenibleMapper<Afiliacion>
 {
     @Select(value = { "{call MANT_AFILIACION ( "
             + "#{verbo, jdbcType = VARCHAR, mode = IN},"
+            + "#{objeto.idEstamento, jdbcType = INTEGER, mode = IN},"
             + "#{objeto.apellidoPaterno, jdbcType = VARCHAR, mode = IN},"
             + "#{objeto.apellidoMaterno, jdbcType = VARCHAR, mode = IN},"
             + "#{objeto.nombres, jdbcType = VARCHAR, mode = IN},"

@@ -45,8 +45,7 @@ public @Controller class SeguridadController
     {
         model.addAttribute("usuarios", usuarioService.buscarTodos());
         model.addAttribute("tiposAuditoria", tipoAuditoriaService.buscarTodos());
-        model.addAttribute("accionesAuditoria",
-                multiTabDetService.buscarPorIdTabla(MultiTablaUtil.TABLA_ACCION_AUDITORIA));
+        //model.addAttribute("accionesAuditoria", multiTabDetService.buscarPorIdTabla(MultiTablaUtil.TABLA_ACCION_AUDITORIA));
         return "seguras/auditoria/auditoria";
     }
 }

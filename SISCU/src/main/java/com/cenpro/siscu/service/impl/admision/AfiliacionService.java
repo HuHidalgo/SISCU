@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.cenpro.siscu.mapper.IAfiliacionMapper;
 import com.cenpro.siscu.mapper.base.IMantenibleMapper;
 import com.cenpro.siscu.model.admision.Afiliacion;
+import com.cenpro.siscu.model.criterio.CriterioBusquedaEstamento;
 import com.cenpro.siscu.service.IAfiliacionService;
 import com.cenpro.siscu.service.impl.MantenibleService;
 import com.cenpro.siscu.utilitario.Verbo;
@@ -33,9 +34,13 @@ public class AfiliacionService extends MantenibleService<Afiliacion> implements 
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public List<Afiliacion> buscarPorId()
+    public List<Afiliacion> buscarPorNroDocumento(CriterioBusquedaEstamento criterioBusquedaEstamento)
     {
-        return this.buscar(new Afiliacion(), Verbo.GET);
+    	Afiliacion afiliar = Afiliacion.builder().idEstamento(criterioBusquedaEstamento.getIdEstamento()).
+    											tipoDocumento(criterioBusquedaEstamento.getTipoDocumento()).
+    											nroDocumento(criterioBusquedaEstamento.getNroDocumento()).build();
+    			
+        return this.buscar(afiliar, Verbo.GET);
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)

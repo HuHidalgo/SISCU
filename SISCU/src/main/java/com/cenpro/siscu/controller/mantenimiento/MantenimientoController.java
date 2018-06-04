@@ -51,31 +51,6 @@ public @Controller class MantenimientoController
         return PAGINA_MANTENIMIENTO;
     }
 
-    @Audit(tipo = Tipo.Alumno)
-    @GetMapping("/{mantenimiento:alumno}")
-    public String irPaginaMantenimientoAlumno(@PathVariable String mantenimiento, ModelMap model)
-    {
-        model.addAttribute(P_MANTENIMIENTO, mantenimiento);
-        model.addAttribute("tiposDocumento",
-                multiTabDetService.buscarPorIdTabla(MultiTablaUtil.TABLA_TIPO_DOCUMENTO));
-        model.addAttribute("sexos", multiTabDetService.buscarPorIdTabla(MultiTablaUtil.TABLA_SEXO));
-        model.addAttribute("tiposAlumno",
-                multiTabDetService.buscarPorIdTabla(MultiTablaUtil.TABLA_TIPO_ALUMNO));
-        model.addAttribute("discapacidades",
-                multiTabDetService.buscarPorIdTabla(MultiTablaUtil.TABLA_DISCAPACIDAD));
-        model.addAttribute("facultades", facultadService.buscarTodos());
-        return PAGINA_MANTENIMIENTO;
-    }
-
-    @Audit(tipo = Tipo.Campania)
-    @GetMapping("/{mantenimiento:campania}")
-    public String irPaginaMantenimientoCampania(@PathVariable String mantenimiento, ModelMap model)
-    {
-        model.addAttribute(P_MANTENIMIENTO, mantenimiento);
-        model.addAttribute("tiposCertificado",
-                multiTabDetService.buscarPorIdTabla(MultiTablaUtil.TABLA_TIPO_CERTIFICADO));
-        return PAGINA_MANTENIMIENTO;
-    }
 
     @GetMapping("/{mantenimiento:especialidad}")
     public String irPaginaMantenimientoEspecialidad(@PathVariable String mantenimiento,

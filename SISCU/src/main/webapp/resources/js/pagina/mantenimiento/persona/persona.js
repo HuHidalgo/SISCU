@@ -36,7 +36,7 @@ $(document).ready(function() {
 			"dataSrc" : ""
 		},
 		"language" : {
-			"emptyTable" : "No hay Persona registrados"
+			"emptyTable" : "No hay Personas registradas"
 		},
 		"initComplete" : function() {
 			$local.$tablaMantenimiento.wrap("<div class='table-responsive'></div>");

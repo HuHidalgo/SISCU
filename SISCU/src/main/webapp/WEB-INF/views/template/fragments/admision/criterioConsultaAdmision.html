@@ -23,18 +23,41 @@
 	<th:block th:fragment="admision">
 		<div class="group">
 			<label class="control-label col-lg-1 col-md-1">Estamento</label>
-			<div class="col-lg-2 col-md-2">
-				<select id="estamentos" class="form-control select2" name="idEstamento">
-					<option th:each="estamento : ${estamentos}" th:value="${estamento.idItem}" th:selected="${estamento.idItem == '1'}"
+			<div class="col-lg-3 col-md-3">
+				<select id="estamentos" class="form-control select2" name="idEstamento" autofocus="autofocus">
+					<option value="" disabled="disabled" selected="selected">Seleccione un Estamento</option>
+					<option th:each="estamento : ${estamentos}" th:value="${estamento.idItem}" 
 						th:text="|${estamento.idItem} - ${estamento.descripcionItem}|"></option>
 				</select>
 			</div>
 		</div>
+		<!--  
 		<div id="divCodigoAlumno" class="form-group hidden">
 			<div class="group">
-				<label class="control-label col-lg-1 col-md-1">Código</label>
+				<label class="control-label col-lg-2 col-md-2">Código de alumno</label>
 				<div class="col-lg-2 col-md-2">
 					<input id="codigoAlumno" type="text" name="codigoAlumno" class="form-control" maxlength="8" autofocus="autofocus"
+						autocomplete="off" />
+				</div>
+			</div>
+		</div>
+		-->
+		<div class="group">
+			<label class="control-label col-lg-1 col-md-1">Tipo de Documento</label>
+			<div class="col-lg-2 col-md-2">
+				<select id="tiposDocumento" class="form-control select2 elemento-desactivable" name="tipoDocumento">
+					<option value="" disabled="disabled" selected="selected">Seleccione un Tipo de Documento</option>
+					<option th:each="tipoDocumento : ${tiposDocumento}" th:value="${tipoDocumento.idItem}"
+						th:text="|${tipoDocumento.idItem} - ${tipoDocumento.abreviatura}|"></option>
+				</select>
+			</div>
+		</div>
+		
+		<div id="divNroDocumento" class="form-group">
+			<div class="group">
+				<label class="control-label col-lg-1 col-md-1">Nro. Documento</label>
+				<div class="col-lg-2 col-md-2">
+					<input id="nroDocumento" type="text" name="nroDocumento" class="form-control" maxlength="8"
 						autocomplete="off" />
 				</div>
 			</div>

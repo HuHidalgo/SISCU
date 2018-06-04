@@ -10,21 +10,19 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.cenpro.siscu.service.ICargaService;
 
-@RequestMapping("/carga/alumno")
+@RequestMapping("/carga/inicial")
 public @RestController class CargaRestController
 {
     private @Autowired ICargaService cargaService;
 
-    @PostMapping(value = "/uploadfile/{tipoAlumno}", params = "accion=cargar")
-    public void cargarAlumnosRegulares(@RequestParam("uploadfile") MultipartFile file,
-            @PathVariable String tipoAlumno)
-    {
-        if (tipoAlumno.equals("R"))
+    @PostMapping(value = "/uploadfile/{estamento}", params = "accion=cargar")
+    public void cargasIniciales(@RequestParam("uploadfile") MultipartFile file, @PathVariable String estamento){
+        if (estamento.equals("R"))
         {
-            cargaService.cargarAlumnoRegular(file, tipoAlumno);
+            cargaService.cargarAlumnoRegular(file, estamento);
         } else
         {
-            cargaService.cargarAlumnoIngresante(file, tipoAlumno);
+            cargaService.cargarAlumnoIngresante(file, estamento);
         }
     }
 }

@@ -14,7 +14,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 import com.cenpro.siscu.utilitario.MultiTablaUtil;
 import com.cenpro.siscu.utilitario.Regex;
-import com.cenpro.siscu.validacion.CodigoAlumno;
+//import com.cenpro.siscu.validacion.CodigoAlumno;
 import com.cenpro.siscu.validacion.MultitabDet;
 import com.cenpro.siscu.validacion.grupo.ILlave;
 import com.cenpro.siscu.validacion.grupo.accion.IActualizacion;
@@ -28,8 +28,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@CodigoAlumno(existe = true, groups = IActualizacion.class)
-@CodigoAlumno(existe = false, groups = IRegistro.class)
+//@CodigoAlumno(existe = true, groups = IActualizacion.class)
+//@CodigoAlumno(existe = false, groups = IRegistro.class)
 public class Alumno
 {
     // DATO PER
@@ -89,7 +89,7 @@ public class Alumno
     @Pattern(regexp = Regex.SOLO_DIGITOS, message = "{Pattern.Alumno.telefonoMovil}")
     private String telefonoMovil;
 
-    @MultitabDet(campoIdItem = "idDiscapacidad", idTabla = MultiTablaUtil.TABLA_DISCAPACIDAD, min = 1, max = 3)
+    //@MultitabDet(campoIdItem = "idDiscapacidad", idTabla = MultiTablaUtil.TABLA_DISCAPACIDAD, min = 1, max = 3)
     private String idDiscapacidad;
 
     @NotNull(message = "{NotNull.Alumno.codigoFacultad}")

@@ -16,6 +16,8 @@ import lombok.NoArgsConstructor;
 public class Afiliacion
 {
 	//Datos afiliacion
+	private Integer idEstamento;
+	private String descEstamento;
 	private Integer numeroRegistro;
     private String apellidoPaterno;
     private String apellidoMaterno;
@@ -30,9 +32,9 @@ public class Afiliacion
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "EST")
     private Date fechaNacimiento;
     private Integer edad;
-    private Integer idDistritoNac;
+    private String idDistritoNac;
     private String distritoNac;
-    private Integer idDepartamentoNac;
+    private String idDepartamentoNac;
     private String departamentoNac;
     private Integer idGradoInstruccion;
     private String gradoInstruccion;

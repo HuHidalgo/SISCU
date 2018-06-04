@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cenpro.siscu.model.admision.Afiliacion;
+import com.cenpro.siscu.model.criterio.CriterioBusquedaEstamento;
 import com.cenpro.siscu.service.IAfiliacionService;
 import com.cenpro.siscu.utilitario.ConstantesGenerales;
 
@@ -20,10 +21,11 @@ public @RestController class AfiliacionRestController
 {
     private @Autowired IAfiliacionService afiliacionService;
 
-    @GetMapping(params = "accion=buscarTodos")
-    public List<Afiliacion> buscarTodos()
-    {
-        return afiliacionService.buscarTodos();
+    @GetMapping(value = "/consulta", params = "accion=buscarPorEstamento")
+    public List<Afiliacion> buscarPorEstamento(CriterioBusquedaEstamento criterioBusquedaEstamento){
+    	System.out.println(criterioBusquedaEstamento);
+    	//System.out.println(afiliacionService.buscarPorNroDocumento(criterioBusquedaEstamento));
+        return afiliacionService.buscarPorNroDocumento(criterioBusquedaEstamento);
     }
 
     @PostMapping

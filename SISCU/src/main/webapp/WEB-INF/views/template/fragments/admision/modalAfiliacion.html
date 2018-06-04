@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+</head>
+<body>
+	<div id="modalAfiliacion" class="row" th:fragment="modalAfiliacion" th:with="tipo=${tipo}">
+		<fieldset class="well">
+			<legend class="well-legend"></legend>
+			<form id="formAfiliacion" class="form-horizontal" role="form">
+				<th:block th:replace="~{template/fragments/admision/modalAfiliacion :: ${tipo}}?:~{}">
+				</th:block>
+				<div id="botonesForm" class="form-group">
+					<div class="col-lg-12 text-center">
+						<button id="registrarAfiliacion" type="button" class="btn btn-success">
+							<i class="fa fa-floppy-o"></i> Registrar
+						</button>
+						<button id="actualizarAfiliacion" type="button" class="btn btn-primary hidden">
+							<i class="fa fa-pencil-square"></i> Actualizar
+						</button>
+					</div>
+				</div>
+			</form>
+		</fieldset>
+	</div>
+
+	<th:block th:fragment="afiliacion">
+		<fieldset class="well">
+			<legend class="well-legend">Datos de Afiliación</legend>
+				<div class="form-group">
+					<label class="col-lg-2 control-label">Nombres</label>
+					<div class="col-lg-10">
+						<input class="form-control upperCase" name="nombres">
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="group">
+						<label class="col-lg-2 control-label">Apellido Paterno</label>
+						<div class="col-lg-4">
+							<input class="form-control upperCase" name="apellidoPaterno">
+						</div>
+					</div>
+					<div class="group">
+						<label class="col-lg-2 control-label">Apellido Materno</label>
+						<div class="col-lg-4">
+							<input class="form-control upperCase" name="apellidoMaterno">
+						</div>
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="group">
+						<label class="col-lg-2 control-label">Tipo de Documento</label>
+						<div class="col-lg-4">
+							<select id="tiposDocumento2" class="form-control select2 elemento-desactivable" name="idTipoDocumento">
+								<option value="" disabled="disabled" selected="selected">Seleccione un Tipo de Documento</option>
+								<option th:each="tipoDocumento : ${tiposDocumento}" th:value="${tipoDocumento.idItem}"
+									th:text="|${tipoDocumento.idItem} - ${tipoDocumento.abreviatura}|"></option>
+							</select>
+						</div>
+					</div>
+					<div class="group">		
+						<label class="col-lg-2 control-label">Número de Documento</label>
+						<div class="col-lg-4">
+							<input class="form-control elemento-desactivable numbersOnly" name="nroDocumento" maxlength="8" >
+						</div>
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="group">
+						<label class="col-lg-2 control-label">Sexo</label>
+						<div class="col-lg-4">
+							<select id="sexos" class="form-control select2" name="idSexo">
+								<option value="" disabled="disabled" selected="selected">Seleccione un Sexo</option>
+								<option th:each="sexo : ${sexos}" th:value="${sexo.idItem}" 
+										th:text="|${sexo.idItem} - ${sexo.descripcionItem}|"></option>
+							</select>
+						</div>
+					</div>
+					<div class="group">
+						<label class="col-lg-2 control-label">Estado Civil</label>
+						<div class="col-lg-4">
+							<select id="estados" class="form-control select2" name="idEstadoCivil">
+								<option value="" disabled="disabled" selected="selected">Seleccione Estado civil</option>
+								<option th:each="estado : ${estados}" th:value="${estado.idItem}" 
+										th:text="|${estado.idItem} - ${estado.descripcionItem}|"></option>
+							</select>
+						</div>
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="group">
+						<label class="col-lg-2 control-label">Fecha de Nacimiento</label>
+						<div class="col-lg-4">
+							<div class="input-group">
+								<span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+								<input id="fechaNacimiento" type="text" class="form-control" readonly="readonly" name="fechaNacimiento" />
+							</div>
+						</div>
+					</div>
+					<div class="group">
+						<label class="col-lg-2 control-label">Edad</label>
+						<div class="col-lg-4">
+							<input class="form-control elemento-desactivable numbersOnly" name="edad" maxlength="3" >
+						</div>
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="group">
+						<label class="col-lg-2 control-label">Departamento de Nacimiento</label>
+						<div class="col-lg-4">
+							<select id="departamentosNac" class="form-control select2" name="idDepartamentoNac">
+								<option value="" disabled="disabled" selected="selected">Seleccione un Departamento</option>
+								<option th:each="departamentoNac : ${departamentosNac}" th:value="${departamentoNac.idItem}" 
+										th:text="|${departamentoNac.descripcionItem}|"></option>
+							</select>
+						</div>
+					</div>
+					<div class="group">
+						<label class="col-lg-2 control-label">Distrito de Nacimiento</label>
+						<div class="col-lg-4">
+							<select id="distritosNac" class="form-control select2" name="idDistritoNac">
+								<option value="" disabled="disabled" selected="selected">Seleccione un Distrito</option>
+							</select>
+						</div>
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="group">
+						<label class="col-lg-2 control-label">Grado de Instrucción</label>
+						<div class="col-lg-4">
+							<select id="grados" class="form-control select2" name="idGradoInstruccion">
+								<option value="" disabled="disabled" selected="selected">Seleccione un Grado de Instrucción</option>
+								<option th:each="grado : ${grados}" th:value="${grado.idItem}" 
+										th:text="|${grado.idItem} - ${grado.descripcionItem}|"></option>
+							</select>
+						</div>
+					</div>
+					<div class="group">
+						<label class="col-lg-2 control-label">Religión</label>
+						<div class="col-lg-4">
+							<input class="form-control upperCase" name="religion">
+						</div>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-lg-2 control-label">Ocupación Actual</label>
+					<div class="col-lg-10">
+						<input class="form-control upperCase" name="ocupacionActual">
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-lg-2 control-label">Dirección Actual</label>
+					<div class="col-lg-10">
+						<input class="form-control upperCase" name="direccionActual">
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-lg-2 control-label">Distrito de Procedencia</label>
+					<div class="col-lg-10">
+						<input class="form-control upperCase" name="distritoProcedencia">
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="group">
+						<label class="col-lg-2 control-label">Teléfono Fijo</label>
+						<div class="col-lg-4">
+							<input class="form-control numbersOnly" name="telefonoFijo" maxlength="7" >
+						</div>
+					</div>
+					<div class="group">
+						<label class="col-lg-2 control-label">Celular</label>
+						<div class="col-lg-4">
+							<input class="form-control numbersOnly" name="celular" maxlength="9" >
+						</div>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-lg-2 control-label">E-mail</label>
+					<div class="col-lg-10">
+						<input class="form-control" maxlength="50" name="correo" data-skip-falsy="true" data-value-type="string">
+					</div>
+				</div>
+		</fieldset>
+		
+		<fieldset class="well">
+			<legend class="well-legend">Datos de Tipo de Paciente</legend>
+				<div class="form-group">
+					<div class="group">
+						<label class="col-lg-2 control-label">Estamento</label>
+						<div class="col-lg-4">
+							<select id="estamentos2" class="form-control select2" name="idEstamento">
+								<option value="" disabled="disabled" selected="selected">Seleccione un Estamento</option>
+								<option th:each="estamento : ${estamentos2}" th:value="${estamento.idItem}" 
+									th:text="|${estamento.idItem} - ${estamento.descripcionItem}|"></option>
+							</select>
+						</div>
+					</div>
+					<div id="divCodAlumno" class="group hidden">
+						<label class="col-lg-2 control-label">Código de Alumno</label>
+						<div class="col-lg-4">
+							<input id="codAlumno" class="form-control numbersOnly" maxlength="8" name="codigoAlumno" data-skip-falsy="true"
+								data-value-type="string">
+						</div>
+					</div>
+				</div>	
+				<div class="form-group">
+					<div id="divFacultad" class="group hidden">
+						<label class="col-lg-2 control-label">Facultad</label>
+						<div class="col-lg-4">
+							<select id="facultades" class="form-control select2" name="codigoFacultad">
+								<option value="" disabled="disabled" selected="selected">Seleccione una Facultad</option>
+								<option th:each="facultad : ${facultades}" th:value="${facultad.codigoFacultad}"
+									th:text="|${facultad.codigoFacultad} - ${facultad.descripcion}|"></option>
+							</select>
+						</div>
+					</div>
+					<div id="divEscuela" class="group hidden">
+						<label class="col-lg-2 control-label">Escuela</label>
+						<div class="col-lg-4">
+							<select id="escuelas" class="form-control select2" name="codigoEscuela">
+								<option value="" selected="selected" disabled="disabled">Seleccione una Escuela</option>
+							</select>
+						</div>
+					</div>
+					<div id="divAreaTrabajo" class="group hidden">
+						<label class="col-lg-2 control-label">Área de trabajo</label>
+						<div class="col-lg-4">
+							<input id="areaTra" class="form-control upperCase" name="areaTrabajo" data-skip-falsy="true"
+								data-value-type="string">
+						</div>
+					</div>
+				</div>
+		</fieldset>
+		
+		<fieldset class="well">
+			<legend class="well-legend">Familiar o persona a contactar en caso de emergencia</legend>
+				<div class="form-group">
+					<div class="group">
+						<label class="col-lg-2 control-label">Nombre</label>
+						<div class="col-lg-4">
+							<input class="form-control upperCase" name="nombreEmerg" data-skip-falsy="true" data-value-type="string">
+						</div>
+					</div>
+					<div class="group">
+						<label class="col-lg-2 control-label">Teléfono</label>
+						<div class="col-lg-4">
+							<input class="form-control numbersOnly" maxlength="9" name="telefonoEmerg" data-skip-falsy="true"
+								data-value-type="string">
+						</div>
+					</div>
+				</div>	
+				<div class="form-group">
+					<label class="col-lg-2 control-label">Dirección</label>
+						<div class="col-lg-10">
+							<input class="form-control upperCase" name="direccionEmerg" data-skip-falsy="true" data-value-type="string">
+						</div>
+				</div>
+		</fieldset>
+	</th:block>
+</body>
+</html>

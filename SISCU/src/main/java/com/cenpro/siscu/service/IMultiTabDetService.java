@@ -19,4 +19,6 @@ public interface IMultiTabDetService extends IMantenibleService<MultiTabDet>
     public void eliminarMultiTabDet(MultiTabDet multiTabDet);
 
     public List<MultiTabDet> buscarPorIdTabla(int idTabla);
+    
+    public List<MultiTabDet> buscarPorIdItem(String idItem);
 }

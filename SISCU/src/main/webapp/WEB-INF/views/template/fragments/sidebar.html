@@ -28,13 +28,25 @@
 				<li sec:authorize="hasPermission('1','ALL')" class="xn-openable">
 					<a>
 						<span class="fa fa-upload"></span>
-						<span class="xn-text">Cargas</span>
+						<span class="xn-text">Carga de Datos</span>
 					</a>
 					<ul>
 						<li>
-							<a th:href="@{/carga/alumno}">
+							<a th:href="@{/carga/inicial}">
 								<span class="fa fa-user"></span>
-								<span>Carga de Datos</span>
+								<span>Carga Inicial</span>
+							</a>
+						</li>
+						<li>
+							<a th:href="@{/carga/periodica}">
+								<span class="fa fa-user"></span>
+								<span>Carga Periódica</span>
+							</a>
+						</li>
+						<li>
+							<a th:href="@{/carga/actualizacion}">
+								<span class="fa fa-user"></span>
+								<span>Carga de Actualización (SUM)</span>
 							</a>
 						</li>
 					</ul>
@@ -59,7 +71,26 @@
 						<span class="fa fa-wrench"></span><span class="xn-text">Mantenimientos</span>
 					</a>
 					<ul>
-						<li><a th:href="@{/mantenimiento/multitabcab}">
+						<li>
+							<a th:href="@{/mantenimiento/facultad}">
+								<span class="fa fa-wrench">
+								</span>Facultad
+							</a>
+						</li>
+						<li>
+							<a th:href="@{/mantenimiento/escuela}">
+								<span class="fa fa-wrench">
+								</span>Escuela
+							</a>
+						</li>
+						<li>
+							<a th:href="@{/mantenimiento/persona}">
+								<span class="fa fa-wrench">
+								</span>Persona
+							</a>
+						</li>
+						<li>
+							<a th:href="@{/mantenimiento/multitabcab}">
 								<span class="fa fa-wrench">
 								</span>Tabla de Tablas
 							</a>

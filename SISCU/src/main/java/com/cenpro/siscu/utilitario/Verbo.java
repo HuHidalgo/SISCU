@@ -4,6 +4,7 @@ public class Verbo
 {
     // Verbo de Mantenimiento
     public static final String GET = "GET";
+    public static final String GET_ITEM = "GET_ITEM";
     public static final String GET_FECHA = "GET_FECHA";
     public static final String GET_PASS = "GET_PASS";
     public static final String GET_USUARIO_S = "GET_USUARIO_S";
