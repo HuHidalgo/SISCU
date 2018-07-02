@@ -1,15 +1,15 @@
 $(document).ready(function() {
 
 	var $local = {
-		$cargarInicial : $("#cargarInicial"),
+		$cargarPeriodica : $("#cargarPeriodica"),
 		$estamentos : $("#estamentos"),
 		$uploadfile : $("#uploadfile")
 	};
 
-	$formCargaInicial = $("#formCargaInicial");
+	$formCargaPeriodica = $("#formCargaPeriodica");
 	$funcionUtil.crearSelect2($local.$estamentos, "Seleccione un Estamento");
 	
-	$formCargaInicial.validate({
+	$formCargaPeriodica.validate({
 		focusCleanup : true,
 		rules : {
 			idEstamento : {
@@ -33,25 +33,26 @@ $(document).ready(function() {
 		}
 	});
 
-	$local.$cargarInicial.on("click", function(e) {
+	$local.$cargarPeriodica.on("click", function(e) {
+		console.log(".l.");
 		e.preventDefault();
-		if (!$formCargaInicial.valid()) {
+		if (!$formCargaPeriodica.valid()) {
 			return;
 		}
-		var form = $("#formCargaInicial")[0];
+		var form = $("#formCargaPeriodica")[0];
 		var data = new FormData(form);
 		var idEstamento = $local.$estamentos.val();
 		console.log(idEstamento);
 		$.ajax({
 			type : "POST",
 			enctype : 'multipart/form-data',
-			url : $variableUtil.root + "carga/inicial/uploadfile/" + idEstamento + "?accion=cargar",
+			url : $variableUtil.root + "carga/periodica/" + idEstamento + "?accion=cargar",
 			data : data,
 			processData : false,
 			contentType : false,
 			cache : false,
 			beforeSend : function(xhr) {
-				$local.$cargarInicial.attr("disabled", true).find("i").removeClass("fa-floppy-o").addClass("fa-spinner fa-pulse fa-fw");
+				$local.$cargarPeriodica.attr("disabled", true).find("i").removeClass("fa-floppy-o").addClass("fa-spinner fa-pulse fa-fw");
 				xhr.setRequestHeader("X-CSRF-TOKEN", $variableUtil.csrf);
 			},
 			success : function(controlLotes) {
@@ -60,7 +61,7 @@ $(document).ready(function() {
 			error : function(response) {
 			},
 			complete : function(response) {
-				$local.$cargarInicial.attr("disabled", false).find("i").addClass("fa-floppy-o").removeClass("fa-spinner fa-pulse fa-fw");
+				$local.$cargarPeriodica.attr("disabled", false).find("i").addClass("fa-floppy-o").removeClass("fa-spinner fa-pulse fa-fw");
 			}
 		});
 	});

@@ -15,10 +15,26 @@ public @Controller class CargaController
     private @Autowired IMultiTabDetService multiTabDetService;
 
     @GetMapping("/carga/inicial")
-    public String irPaginaCargaAlumno(ModelMap model)
+    public String irPaginaCargaInicial(ModelMap model)
     {
         //model.addAttribute("tiposAlumno", multiTabDetService.buscarPorIdTabla(MultiTablaUtil.TABLA_TIPO_ALUMNO));
     	model.addAttribute("estamentos", multiTabDetService.buscarPorIdTabla(MultiTablaUtil.TABLA_ESTAMENTOS));
         return "seguras/carga/inicial";
+    }
+    
+    @GetMapping("/carga/periodica")
+    public String irPaginaCargaPeriodica(ModelMap model)
+    {
+        //model.addAttribute("tiposAlumno", multiTabDetService.buscarPorIdTabla(MultiTablaUtil.TABLA_TIPO_ALUMNO));
+    	model.addAttribute("estamentos", multiTabDetService.buscarPorIdTabla(MultiTablaUtil.TABLA_ESTAMENTOS));
+        return "seguras/carga/periodica";
+    }
+    
+    @GetMapping("/carga/actualizacion")
+    public String irPaginaCargaActualizacion(ModelMap model)
+    {
+        //model.addAttribute("tiposAlumno", multiTabDetService.buscarPorIdTabla(MultiTablaUtil.TABLA_TIPO_ALUMNO));
+    	model.addAttribute("estamentos", multiTabDetService.buscarPorIdTabla(MultiTablaUtil.TABLA_ESTAMENTOS));
+        return "seguras/carga/actualizacion";
     }
 }

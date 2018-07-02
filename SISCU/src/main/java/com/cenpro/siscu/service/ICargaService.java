@@ -4,7 +4,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 public interface ICargaService
 {
-    public void cargarAlumnoIngresante(MultipartFile archivoAlumnos, String tipoAlumno);
+    public void cargarAlumnos(MultipartFile archivoAlumnos, String estamento);
     
-    public void cargarAlumnoRegular(MultipartFile archivoAlumnos, String tipoAlumno);
+    public void cargarDocentes(MultipartFile archivoDocentes, String estamento);
+    
+    public void cargarNoDocentes(MultipartFile archivoNoDocentes, String estamento);
+    
+    public void cargarParticulares(MultipartFile archivoParticulares, String estamento);
 }
