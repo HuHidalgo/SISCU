@@ -13,14 +13,12 @@ public class ConstantesFormatosExcelRegular
     public static final int COLUMNA_FECHA_NACIMIENTO = 5;
     public static final int COLUMNA_TIPO_DOCUMENTO = 6;
     public static final int COLUMNA_NUMERO_DOCUMENTO = 7;
-    public static final int COLUMNA_CORREO_INSTITUCIONAL = 8;
-    public static final int COLUMNA_CORREO_PERSONAL = 9;
-    public static final int COLUMNA_DIRECCION = 10;
-    public static final int COLUMNA_TELEFONO_FIJO = 11;
-    public static final int COLUMNA_TELEFONO_MOVIL = 12;
-    public static final int COLUMNA_CODIGO_ESCUELA = 13;
-    public static final int COLUMNA_CODIGO_FACULTAD = 14;
-    public static final int COLUMNA_DISCAPACIDAD = 15;
+    public static final int COLUMNA_CORREO_PERSONAL = 8;
+    public static final int COLUMNA_DIRECCION = 9;
+    public static final int COLUMNA_TELEFONO_FIJO = 10;
+    public static final int COLUMNA_TELEFONO_MOVIL = 11;
+    public static final int COLUMNA_CODIGO_ESCUELA = 12;
+    public static final int COLUMNA_CODIGO_FACULTAD = 13;
 
     private ConstantesFormatosExcelRegular()
     {

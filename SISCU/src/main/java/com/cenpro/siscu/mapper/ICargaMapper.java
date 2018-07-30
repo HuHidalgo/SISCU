@@ -7,12 +7,12 @@ import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.mapping.StatementType;
 
 import com.cenpro.siscu.mapper.base.IMantenibleMapper;
-import com.cenpro.siscu.model.mantenimiento.Alumno;
+import com.cenpro.siscu.model.carga.Cliente;
 import com.cenpro.siscu.model.parametro.Parametro;
 
-public interface IAlumnoMapper extends IMantenibleMapper<Alumno>
+public interface ICargaMapper extends IMantenibleMapper<Cliente>
 {
-    @Select(value = { "{call MANT_ALUMNOS ( " 
+    @Select(value = { "{call MANT_CARGAS_CLIENTES ( " 
             + "#{verbo, jdbcType = VARCHAR, mode = IN},"
             + "#{objeto.idTipoDocumento, jdbcType = VARCHAR, mode = IN},"
             + "#{objeto.numeroDocumento, jdbcType = VARCHAR, mode = IN},"
@@ -26,10 +26,10 @@ public interface IAlumnoMapper extends IMantenibleMapper<Alumno>
             + "#{objeto.fechaNacimiento, jdbcType = DATE, mode = IN},"
             + "#{objeto.codigoFacultad, jdbcType = NUMERIC, mode = IN},"
             + "#{objeto.codigoEscuela, jdbcType = NUMERIC, mode = IN},"
-            + "#{objeto.correoPersonal, jdbcType = VARCHAR, mode = IN},"
+            + "#{objeto.correo, jdbcType = VARCHAR, mode = IN},"
             + "#{objeto.telefonoFijo, jdbcType = VARCHAR, mode = IN},"
             + "#{objeto.telefonoMovil, jdbcType = VARCHAR, mode = IN},"
             + "#{userAudit, jdbcType = VARCHAR, mode = IN})}" })
     @Options(statementType = StatementType.CALLABLE)
-    public List<Alumno> mantener(Parametro parametro);
+    public List<Cliente> mantener(Parametro parametro);
 }

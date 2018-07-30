@@ -22,8 +22,6 @@ public class AlumnoService extends MantenibleService<Alumno> implements IAlumnoS
     @SuppressWarnings("unused")
     private IAlumnoMapper alumnoMapper;
 
-    private static final String CARGAR = "CARGAR";
-
     public AlumnoService(@Qualifier("IAlumnoMapper") IMantenibleMapper<Alumno> mapper)
     {
         super(mapper);
@@ -60,13 +58,6 @@ public class AlumnoService extends MantenibleService<Alumno> implements IAlumnoS
     public void registrarAlumno(Alumno alumno)
     {
         this.registrar(alumno);
-    }
-
-    @Override
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public void registrarAlumnos(List<Alumno> alumnos)
-    {
-        alumnos.stream().forEach(alumno -> this.registrar(alumno, CARGAR));
     }
 
     @Override

@@ -13,8 +13,6 @@ public interface IAlumnoService extends IMantenibleService<Alumno>
     public boolean existeAlumno(String codigoAlumno, String tipoAlumno);
 
     public void registrarAlumno(Alumno alumno);
-    
-    public void registrarAlumnos(List<Alumno> alumnos);
 
     public void actualizarAlumno(Alumno alumno);
 

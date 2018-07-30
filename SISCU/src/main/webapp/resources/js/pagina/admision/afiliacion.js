@@ -35,10 +35,14 @@ $(document).ready(function() {
 		$registrarAfiliacion : $("#registrarAfiliacion"),
 		$actualizarAfiliacion : $("#actualizarAfiliacion"),
 		$fechaNacimiento : $("#fechaNacimiento"),
+		
+		tipoDocumento : "",
+		nroDocumento : ""
 	};
 
 	// Para Consulta
-	$formCriterioConsultaAdmision = $("#formCriterioConsultaAdmision");
+	$formCriterioConsultaAdmision = $("#formCriterioConsultaAdmision");	
+	$formAfiliacion = $("#formAfiliacion");
 
 	$funcionUtil.crearDatePickerSimple($local.$fechaNacimiento, "DD/MM/YYYY");
 
@@ -55,6 +59,14 @@ $(document).ready(function() {
 	$funcionUtil.crearSelect2($local.$distritosNac, "Seleccione un Distrito");
 
 	//var esAdmin = $local.$administrador.length > 0;
+	
+	$local.$tablaConsultaAdmision.on('xhr.dt', function(e, settings, json, xhr) {
+		switch (xhr.status) {
+		case 500:
+			$local.tablaConsultaAdmision.clear().draw();
+			break;
+		}
+	});
 
 	$local.tablaConsultaAdmision = $local.$tablaConsultaAdmision.DataTable({
 		"language" : {
@@ -66,23 +78,40 @@ $(document).ready(function() {
 		},
 		"ordering" : false,
 		"columnDefs" : [ {
-			"targets" : [ 1, 2, 3, 4, 5 ],
+			"targets" : [ 2, 3, 4, 5, 6 ],
 			"className" : "all filtrable",
 			"defaultContent" : "-"
 		}, {
 			"targets" : 0,
 			"className" : "all dt-center",
-			"defaultContent" : $variableUtil.botonActualizar + " " + $variableUtil.botonEliminar
+			"render" : function(data, type, row, meta) {
+				if (row.fechaAfiliacion == null)
+					return $variableUtil.botonAfiliar;
+				else
+					return $variableUtil.botonActualizar //+ " " + $variableUtil.botonEliminar;
+			}
+		}, {
+			"targets" : 1,
+			"className" : "all dt-center",
+			"render" : function(data, type, row, meta) {
+				if (row.fechaAfiliacion == null)
+					return "<label class='label label-warning label-size-12'>NO AFILIADO</label>";
+				else
+					return "<label class='label label-success label-size-12'>AFILIADO</label>";
+			}
 		} ],
 		"columns" : [ {
 			"data" : null,
 			"title" : 'Acción'
 		}, {
+			"data" : null,
+			"title" : "Estado"
+		}, {
 			"data" : "descEstamento",
 			"title" : "Tipo Paciente"
 		}, {
 			"data" : function(row) {
-				return $funcionUtil.unirCodigoDescripcion(row.tipoDocumento, row.nroDocumento);
+				return $funcionUtil.unirCodigoDescripcion(row.idTipoDocumento, row.numeroDocumento);
 			},
 			"title" : "Documento"
 		}, {
@@ -113,15 +142,16 @@ $(document).ready(function() {
 	});
 
 	$local.$buscar.on("click", function() {
+		if (!$formCriterioConsultaAdmision.valid()) {
+			return;
+		}
 		var consultarDatos = $formCriterioConsultaAdmision.serializeJSON();
-		console.log(consultarDatos);
 		/*
 		 if ($funcionUtil.camposVacios($formCriterioConsultaAdmision)) {
 			$funcionUtil.notificarException($variableUtil.camposVacios, "fa-exclamation-circle", "Información", "info");
 			return;
-		}
-		 * */
-		 
+		}*/
+				 
 		$.ajax({
 			type : "GET",
 			url : $variableUtil.root + "admision/afiliacion/consulta?accion=buscarPorEstamento",
@@ -131,7 +161,6 @@ $(document).ready(function() {
 				$local.$buscar.attr("disabled", true).find("i").removeClass("fa-search").addClass("fa-spinner fa-pulse fa-fw");
 			},
 			success : function(afiliacion) {
-				console.log(afiliacion[0]);
 				if (afiliacion.length == 0) {
 					$funcionUtil.notificarException($variableUtil.busquedaSinResultados, "fa-exclamation-circle", "Información", "info");
 					return;
@@ -152,8 +181,6 @@ $(document).ready(function() {
 	});
 
 	// Para Actualizacion de Resultado
-	
-	$formAfiliacion = $("#formAfiliacion");
 
 	$local.$modalAfiliacion.PopupWindow({
 		title : "Admisión - Afiliacion",
@@ -219,7 +246,6 @@ $(document).ready(function() {
 			$local.$distritosNac.find("option:not(:eq(0))").remove();
 			return;
 		}
-		console.log(codDepartamento);
 		$.ajax({
 			type : "GET",
 			url : $variableUtil.root + "mantenimiento/multiTabDet/multiTabCab2/" + codDepartamento,
@@ -246,49 +272,83 @@ $(document).ready(function() {
 			}
 		});
 	});
-
-	$local.$tablaConsultaAdmision.children("tbody").on("click", ".actualizar", function() {
+	
+	//para afiliacion
+	$local.$tablaConsultaAdmision.children("tbody").on("click", ".afiliar", function() {
 		$local.$filaSeleccionada = $(this).parents("tr");
-		var examenMedicoPsicologico = $local.tablaConsultaAdmision.row($local.$filaSeleccionada).data();
-		var apellidosNombres = examenMedicoPsicologico.nombres + ", " + examenMedicoPsicologico.apellidoPaterno + " " + examenMedicoPsicologico.apellidoMaterno;
-		$local.numeroRegistroSeleccionado = examenMedicoPsicologico.numeroRegistro;
-		$local.$inputCodigo.val(examenMedicoPsicologico.codigoAlumno);
-		$local.$inputApellidosNombres.val(apellidosNombres);
-		$funcionUtil.aniadirTitleParaTooltip($local.$inputApellidosNombres, apellidosNombres);
-		var criterioBusqueda = {
-			numeroRegistro : $local.numeroRegistroSeleccionado,
-		};
+		var cliente = $local.tablaConsultaAdmision.row($local.$filaSeleccionada).data();
+		var fechaNacimiento = $funcionUtil.convertirDeFormatoAFormato(cliente.fechaNacimiento, "YYYY-MM-DD", "DD/MM/YYYY");
+		$local.$fechaNacimiento.data("daterangepicker").setStartDate(fechaNacimiento);
+		$local.$fechaNacimiento.data("daterangepicker").setEndDate(fechaNacimiento);
+		$local.$tipoDocumento = cliente.idTipoDocumento;
+		$local.$nroDocumento = cliente.numeroDocumento;
+		$funcionUtil.llenarFormulario(cliente, $formAfiliacion);
+		$local.$facultades.trigger("change", [ cliente.codigoEscuela ]);
+		//$local.$departamentosNac.trigger("change", [ cliente.idDistritoNac ]);
+		$local.$estamentos2.trigger("change");
+		//$local.$actualizarAfiliacion.removeClass("hidden");
+		//$local.$registrarAfiliacion.addClass("hidden");
+		$local.$modalAfiliacion.PopupWindow("open");
+	});
+
+	//registrar afiliacion
+	$local.$registrarAfiliacion.on("click", function() {
+		if (!$formAfiliacion.valid()) {
+			return;
+		}
+		var afiliacion = $formAfiliacion.serializeJSON();
+		console.log(afiliacion);
+		afiliacion.fechaNacimiento = $local.$fechaNacimiento.data("daterangepicker").startDate.format('YYYY-MM-DD');
 		$.ajax({
-			type : "GET",
-			url : $variableUtil.root + "consulta/psicologico?accion=buscarResultadoRegularPorNumeroRegistro",
-			data : criterioBusqueda,
-			beforeSend : function() {
-				$(this).attr("disabled", true).find("i").removeClass("fa-floppy-o").addClass("fa-spinner fa-pulse fa-fw");
+			type : "POST",
+			url : $variableUtil.root + "admision/afiliacion",
+			data : JSON.stringify(afiliacion),
+			beforeSend : function(xhr) {
+				$local.tablaConsultaAdmision.clear().draw();
+				$local.$registrarAfiliacion.attr("disabled", true).find("i").removeClass("fa-floppy-o").addClass("fa-spinner fa-pulse fa-fw");
+				xhr.setRequestHeader('Content-Type', 'application/json');
+				xhr.setRequestHeader("X-CSRF-TOKEN", $variableUtil.csrf);
 			},
-			success : function(examenesMedicoPsicologico) {
-				if (examenesMedicoPsicologico.length == 0) {
-					$funcionUtil.notificarException($variableUtil.busquedaSinResultados, "fa-exclamation-circle", "Información", "info");
-					return;
+			statusCode : {
+				400 : function(response) {
+					$funcionUtil.limpiarMensajesDeError($formAfiliacion);
+					$funcionUtil.mostrarMensajeDeError(response.responseJSON, $formAfiliacion);
 				}
-				examenMedicoPsicologico = examenesMedicoPsicologico[0];
-				$funcionUtil.prepararFormularioActualizacion($formResultadoExamenMedico);
-				$funcionUtil.llenarFormulario(examenMedicoPsicologico, $formResultadoExamenMedico);
-				var r = $local.$resultadoPsicologico.filter(":checked").val();
-				if (r == "O") {
-					$local.$divObservacion.removeClass("hidden");
-				} else {
-					$local.$divObservacion.addClass("hidden");
-				}
-				$local.$modalResultado.PopupWindow("open");
 			},
-			complete : function() {
-				$(this).attr("disabled", false).find("i").addClass("fa-floppy-o").removeClass("fa-spinner fa-pulse fa-fw");
+			success : function(afiliaciones) {
+				$funcionUtil.notificarException($variableUtil.registroExitoso, "fa-check", "Aviso", "success");
+				var afiliacion = afiliaciones[0];
+				var row = $local.tablaConsultaAdmision.row.add(afiliacion).draw();
+				row.show().draw(false);
+				$(row.node()).animateHighlight();
+				$local.$modalAfiliacion.PopupWindow("close");
+			},
+			error : function(response) {
+			},
+			complete : function(response) {
+				$local.$registrarAfiliacion.attr("disabled", false).find("i").addClass("fa-floppy-o").removeClass("fa-spinner fa-pulse fa-fw");
 			}
 		});
 	});
-
-	$local.$registrarAfiliacion.on("click", function() {
-		console.log("fdfdfdfdfd");
+	
+	$local.$tablaConsultaAdmision.children("tbody").on("click", ".actualizar", function() {
+		$local.$filaSeleccionada = $(this).parents("tr");
+		var cliente = $local.tablaConsultaAdmision.row($local.$filaSeleccionada).data();
+		var fechaNacimiento = $funcionUtil.convertirDeFormatoAFormato(cliente.fechaNacimiento, "YYYY-MM-DD", "DD/MM/YYYY");
+		$local.$fechaNacimiento.data("daterangepicker").setStartDate(fechaNacimiento);
+		$local.$fechaNacimiento.data("daterangepicker").setEndDate(fechaNacimiento);
+		$local.$tipoDocumento = cliente.idTipoDocumento;
+		$local.$nroDocumento = cliente.numeroDocumento;
+		$funcionUtil.llenarFormulario(cliente, $formAfiliacion);
+		$local.$facultades.trigger("change", [ cliente.codigoEscuela ]);
+		$local.$departamentosNac.trigger("change", [ cliente.idDistritoNac ]);
+		$local.$estamentos2.trigger("change");
+		$local.$actualizarAfiliacion.removeClass("hidden");
+		$local.$registrarAfiliacion.addClass("hidden");
+		$local.$modalAfiliacion.PopupWindow("open");
+	});
+	
+	$local.$actualizarAfiliacion.on("click", function() {
 		if (!$formAfiliacion.valid()) {
 			return;
 		}
@@ -300,7 +360,8 @@ $(document).ready(function() {
 			url : $variableUtil.root + "admision/afiliacion",
 			data : JSON.stringify(afiliacion),
 			beforeSend : function(xhr) {
-				$local.$registrarAfiliacion.attr("disabled", true).find("i").removeClass("fa-floppy-o").addClass("fa-spinner fa-pulse fa-fw");
+				$local.tablaConsultaAdmision.clear().draw();
+				$local.$actualizarAfiliacion.attr("disabled", true).find("i").removeClass("fa-floppy-o").addClass("fa-spinner fa-pulse fa-fw");
 				xhr.setRequestHeader('Content-Type', 'application/json');
 				xhr.setRequestHeader("X-CSRF-TOKEN", $variableUtil.csrf);
 			},
@@ -310,10 +371,10 @@ $(document).ready(function() {
 					$funcionUtil.mostrarMensajeDeError(response.responseJSON, $formAfiliacion);
 				}
 			},
-			success : function(response) {
+			success : function(afiliaciones) {
 				$funcionUtil.notificarException($variableUtil.registroExitoso, "fa-check", "Aviso", "success");
-				var afiliacion = $local.tablaConsultaAdmision.row($local.$filaSeleccionada).data();
-				var row = $local.tablaConsultaAdmision.row($local.$filaSeleccionada).data(afiliacion).draw();
+				var afiliacion = afiliaciones[0];
+				var row = $local.tablaConsultaAdmision.row.add(afiliacion).draw();
 				row.show().draw(false);
 				$(row.node()).animateHighlight();
 				$local.$modalAfiliacion.PopupWindow("close");
@@ -321,7 +382,7 @@ $(document).ready(function() {
 			error : function(response) {
 			},
 			complete : function(response) {
-				$local.$registrarAfiliacion.attr("disabled", false).find("i").addClass("fa-floppy-o").removeClass("fa-spinner fa-pulse fa-fw");
+				$local.$actualizarAfiliacion.attr("disabled", false).find("i").addClass("fa-floppy-o").removeClass("fa-spinner fa-pulse fa-fw");
 			}
 		});
 	});
@@ -361,14 +422,13 @@ $(document).ready(function() {
 	*/
 	$local.$estamentos2.on("change", function() {
 		var opcion = $(this).val();
-		console.log(opcion);
 		switch (opcion) {
 		case "1":
 			$local.$divCodAlumno.removeClass("hidden");
 			$local.$divFacultad.removeClass("hidden");
 			$local.$divEscuela.removeClass("hidden");
 			$local.$divAreaTrabajo.addClass("hidden");
-			$local.$codAlumno.val("");
+			//$local.$codAlumno.val("");
 			break;
 		case "2":
 			$local.$divCodAlumno.addClass("hidden");

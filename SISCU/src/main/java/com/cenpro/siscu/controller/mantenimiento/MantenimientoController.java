@@ -17,7 +17,6 @@ import com.cenpro.siscu.aspecto.enumeracion.Tipo;
 import com.cenpro.siscu.controller.excepcion.anotacion.Vista;
 import com.cenpro.siscu.service.IFacultadService;
 import com.cenpro.siscu.service.IMultiTabDetService;
-import com.cenpro.siscu.service.IParametroGeneralService;
 import com.cenpro.siscu.service.IPersonaService;
 import com.cenpro.siscu.utilitario.MultiTablaUtil;
 
@@ -29,7 +28,6 @@ public @Controller class MantenimientoController
     private @Autowired IPersonaService personaService;
     private @Autowired IFacultadService facultadService;
     private @Autowired IMultiTabDetService multiTabDetService;
-    private @Autowired IParametroGeneralService parametroGeneralService;
 
     @Audit(tipo = Tipo.Persona)
     @GetMapping("/{mantenimiento:persona}")
@@ -82,14 +80,5 @@ public @Controller class MantenimientoController
         model.addAttribute(P_MANTENIMIENTO, mantenimiento);
         model.addAttribute("facultades", facultadService.buscarTodos());
         return PAGINA_MANTENIMIENTO;
-    }
-
-    @GetMapping("/{mantenimiento:parametroGeneral}")
-    public String irPaginaMantenimientoParametroGeneral(@PathVariable String mantenimiento,
-            ModelMap model)
-    {
-        model.addAttribute(P_MANTENIMIENTO, mantenimiento);
-        model.addAttribute("parametroGeneral", parametroGeneralService.buscarTodos());
-        return "seguras/mantenimiento/parametroGeneral";
     }
 }

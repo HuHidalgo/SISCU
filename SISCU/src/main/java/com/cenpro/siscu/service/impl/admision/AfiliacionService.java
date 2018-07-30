@@ -12,7 +12,9 @@ import com.cenpro.siscu.mapper.base.IMantenibleMapper;
 import com.cenpro.siscu.model.admision.Afiliacion;
 import com.cenpro.siscu.model.criterio.CriterioBusquedaEstamento;
 import com.cenpro.siscu.service.IAfiliacionService;
+import com.cenpro.siscu.service.excepcion.MantenimientoException;
 import com.cenpro.siscu.service.impl.MantenibleService;
+import com.cenpro.siscu.utilitario.ConstantesExcepciones;
 import com.cenpro.siscu.utilitario.Verbo;
 
 @Service
@@ -37,16 +39,30 @@ public class AfiliacionService extends MantenibleService<Afiliacion> implements 
     public List<Afiliacion> buscarPorNroDocumento(CriterioBusquedaEstamento criterioBusquedaEstamento)
     {
     	Afiliacion afiliar = Afiliacion.builder().idEstamento(criterioBusquedaEstamento.getIdEstamento()).
-    											tipoDocumento(criterioBusquedaEstamento.getTipoDocumento()).
-    											nroDocumento(criterioBusquedaEstamento.getNroDocumento()).build();
+    											idTipoDocumento(criterioBusquedaEstamento.getTipoDocumento()).
+    											numeroDocumento(criterioBusquedaEstamento.getNroDocumento()).build();
     			
         return this.buscar(afiliar, Verbo.GET);
     }
+    
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public List<Afiliacion> buscarPorId(String nroDocumento, String tipoDocumento)
+    {
+    	Afiliacion afiliacion = Afiliacion.builder().numeroDocumento(nroDocumento).idTipoDocumento(tipoDocumento).build();
+        return this.buscar(afiliacion, Verbo.GET);
+    }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public void registrarAfiliacion(Afiliacion afiliacion)
+    public List<Afiliacion> registrarAfiliacion(Afiliacion afiliacion)
     {
-        this.registrar(afiliacion);
+    	List<Afiliacion> afiliaciones = this.registrarAutoIncrementable(afiliacion);
+        if (!afiliaciones.isEmpty() && afiliaciones.get(0).getIdAfiliacion() != null)
+        {
+            return afiliaciones;
+        } else
+        {
+            throw new MantenimientoException(ConstantesExcepciones.ERROR_REGISTRO);
+        }
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)

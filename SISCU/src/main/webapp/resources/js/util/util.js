@@ -25,6 +25,7 @@ $(document).ready(function() {
 		posIzquierdo : "izquierdo",
 		posDerecho : "derecho",
 		rutaIconoSimp : this.root + "resources/css/icono-simp/",
+		botonAfiliar : "<button class='btn btn-xs btn-success afiliar' title='Afiliar' data-tooltip='tooltip'><i class='fa fa-check'></i></button>",
 		botonEliminar : "<button class='btn btn-xs btn-danger eliminar' title='Eliminar' data-tooltip='tooltip'><i class='fa fa-trash'></i></button>",
 		botonActualizar : "<button class='btn btn-xs btn-primary actualizar' title='Actualizar' data-tooltip='tooltip'><i class='fa fa-pencil-square'></i></button>",
 		botonExportarDocx : "<button class='btn btn-xs btn-primary exportar-docx' title='Exportar .DOCX' data-tooltip='tooltip'><i class='fa fa-file-word-o'></i></button>",

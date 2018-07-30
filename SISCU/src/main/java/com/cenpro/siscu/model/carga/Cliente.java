@@ -1,4 +1,4 @@
-package com.cenpro.siscu.model.mantenimiento;
+package com.cenpro.siscu.model.carga;
 
 import java.util.Date;
 
@@ -14,6 +14,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 import com.cenpro.siscu.utilitario.MultiTablaUtil;
 import com.cenpro.siscu.utilitario.Regex;
+//import com.cenpro.siscu.validacion.CodigoAlumno;
 import com.cenpro.siscu.validacion.MultitabDet;
 import com.cenpro.siscu.validacion.grupo.ILlave;
 import lombok.AllArgsConstructor;
@@ -27,7 +28,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 //@CodigoAlumno(existe = true, groups = IActualizacion.class)
 //@CodigoAlumno(existe = false, groups = IRegistro.class)
-public class Alumno
+public class Cliente
 {
     // DATO PER
     @MultitabDet(campoIdItem = "idTipoDocumento", idTabla = MultiTablaUtil.TABLA_TIPO_DOCUMENTO, min = 1, max = 5)
@@ -56,27 +57,14 @@ public class Alumno
     @MultitabDet(campoIdItem = "idSexo", idTabla = MultiTablaUtil.TABLA_SEXO, min = 1, max = 1)
     private String idSexo;
 
-    // DATO ALUMNO
-    @NotNull(message = "{NotNull.Alumno.codigoAlumno}", groups = ILlave.class)
-    @NotBlank(message = "{NotBlank.Alumno.codigoAlumno}", groups = ILlave.class)
-    @Length(min = 6, max = 8, message = "{Length.Alumno.codigoAlumno}", groups = ILlave.class)
-    private String codigoAlumno;
-
-    @MultitabDet(campoIdItem = "tipoAlumno", idTabla = MultiTablaUtil.TABLA_TIPO_ALUMNO, min = 1, max = 1, groups = ILlave.class)
-    private String tipoAlumno;
-
     @NotNull(message = "{NotNull.Alumno.direccion}")
     @NotBlank(message = "{NotBlank.Alumno.direccion}")
     @Length(min = 3, max = 200, message = "{Length.Alumno.direccion}")
     private String direccion;
 
-    @Length(min = 3, max = 50, message = "{Length.Alumno.correoInstitucional}")
-    @Email(message = "{Email.Alumno.correoInstitucional}")
-    private String correoInstitucional;
-
     @Length(min = 3, max = 50, message = "{Length.Alumno.correoPersonal}")
     @Email(message = "{Email.Alumno.correoPersonal}")
-    private String correoPersonal;
+    private String correo;
 
     @Length(min = 5, max = 20, message = "{Length.Alumno.telefonoFijo}")
     @Pattern(regexp = Regex.SOLO_DIGITOS, message = "{Pattern.Alumno.telefonoFijo}")
@@ -86,9 +74,6 @@ public class Alumno
     @Pattern(regexp = Regex.SOLO_DIGITOS, message = "{Pattern.Alumno.telefonoMovil}")
     private String telefonoMovil;
 
-    //@MultitabDet(campoIdItem = "idDiscapacidad", idTabla = MultiTablaUtil.TABLA_DISCAPACIDAD, min = 1, max = 3)
-    private String idDiscapacidad;
-
     @NotNull(message = "{NotNull.Alumno.codigoFacultad}")
     @Range(min = 1, max = 99, message = "{Range.Alumno.codigoFacultad}")
     private Integer codigoFacultad;
@@ -97,14 +82,21 @@ public class Alumno
     @Range(min = 1, max = 99, message = "{Range.Alumno.codigoEscuela}")
     private Integer codigoEscuela;
 
-    private String codigoUbigeo;
+ // DATO ALUMNO
+    @NotNull(message = "{NotNull.Alumno.codigoAlumno}", groups = ILlave.class)
+    @NotBlank(message = "{NotBlank.Alumno.codigoAlumno}", groups = ILlave.class)
+    @Length(min = 6, max = 8, message = "{Length.Alumno.codigoAlumno}", groups = ILlave.class)
+    private String codigoAlumno;
+
+    @MultitabDet(campoIdItem = "tipoAlumno", idTabla = MultiTablaUtil.TABLA_TIPO_ALUMNO, min = 1, max = 1, groups = ILlave.class)
+    private String tipoAlumno;
+    
     private int edad;
     private String descripcionFacultad;
     private String descripcionSexo;
     private String descripcionTipoDocumento;
     private String descripcionEscuela;
     private String descripcionTipoAlumno;
-    private String descripcionDiscapacidad;
 
     @NotNull(message = "{NotNull.Alumno.fechaNacimiento}")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "EST")

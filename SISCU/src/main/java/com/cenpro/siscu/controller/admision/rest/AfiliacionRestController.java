@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.cenpro.siscu.aspecto.anotacion.Audit;
+import com.cenpro.siscu.aspecto.enumeracion.Accion;
+import com.cenpro.siscu.aspecto.enumeracion.Comentario;
 import com.cenpro.siscu.model.admision.Afiliacion;
 import com.cenpro.siscu.model.criterio.CriterioBusquedaEstamento;
 import com.cenpro.siscu.service.IAfiliacionService;
@@ -23,23 +26,23 @@ public @RestController class AfiliacionRestController
 
     @GetMapping(value = "/consulta", params = "accion=buscarPorEstamento")
     public List<Afiliacion> buscarPorEstamento(CriterioBusquedaEstamento criterioBusquedaEstamento){
-    	System.out.println(criterioBusquedaEstamento);
-    	//System.out.println(afiliacionService.buscarPorNroDocumento(criterioBusquedaEstamento));
         return afiliacionService.buscarPorNroDocumento(criterioBusquedaEstamento);
     }
-
+    
+    @Audit(accion = Accion.Registro, comentario = Comentario.Registro)
     @PostMapping
     public ResponseEntity<?> registrarAfiliacion(@RequestBody Afiliacion afiliacion)
     {
-    	afiliacionService.registrarAfiliacion(afiliacion);
-        return ResponseEntity.ok(ConstantesGenerales.REGISTRO_EXITOSO);
+    	List<Afiliacion> idAfiliacion = afiliacionService.registrarAfiliacion(afiliacion);
+        return ResponseEntity.ok(afiliacionService.buscarPorId(idAfiliacion.get(0).getNumeroDocumento(), idAfiliacion.get(0).getIdTipoDocumento()));
     }
 
+    @Audit(accion = Accion.Actualizacion, comentario = Comentario.Actualizacion)
     @PutMapping
     public ResponseEntity<?> actualizarAfiliacion(@RequestBody Afiliacion afiliacion)
     {
     	afiliacionService.actualizarAfiliacion(afiliacion);
-        return ResponseEntity.ok(ConstantesGenerales.ACTUALIZACION_EXITOSA);
+        return ResponseEntity.ok(afiliacionService.buscarPorId(afiliacion.getNumeroDocumento(), afiliacion.getIdTipoDocumento()));
     }
     
 }

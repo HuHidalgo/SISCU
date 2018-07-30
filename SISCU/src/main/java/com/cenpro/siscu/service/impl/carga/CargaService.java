@@ -9,29 +9,40 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.cenpro.siscu.model.admision.Afiliacion;
-import com.cenpro.siscu.model.mantenimiento.Alumno;
-import com.cenpro.siscu.model.mantenimiento.Alumno.AlumnoBuilder;
-import com.cenpro.siscu.model.mantenimiento.Escuela;
-import com.cenpro.siscu.service.IAlumnoService;
+import com.cenpro.siscu.mapper.ICargaMapper;
+import com.cenpro.siscu.mapper.base.IMantenibleMapper;
+import com.cenpro.siscu.model.carga.Cliente;
+import com.cenpro.siscu.model.carga.Cliente.ClienteBuilder;
 import com.cenpro.siscu.service.ICargaService;
 import com.cenpro.siscu.service.excepcion.CargaArchivoException;
 import com.cenpro.siscu.utilitario.ConstantesExcepciones;
 import com.cenpro.siscu.utilitario.ConstantesFormatosExcelIngresante;
 import com.cenpro.siscu.utilitario.ConstantesFormatosExcelRegular;
 
-@Service
-public class CargaService implements ICargaService
-{
-    private @Autowired IAlumnoService alumnoService;
+import com.cenpro.siscu.service.impl.MantenibleService;
 
-    public void cargarAlumnos(MultipartFile archivoAlumnos, String estamento)
+@Service
+public class CargaService extends MantenibleService<Cliente> implements ICargaService
+{
+	@SuppressWarnings("unused")
+    private ICargaMapper cargaMapper;
+    private static final String CARGAR = "CARGAR";
+    
+    public CargaService(@Qualifier("ICargaMapper") IMantenibleMapper<Cliente> mapper)
     {
-        List<Alumno> alumnos = new ArrayList<>();
+        super(mapper);
+        this.cargaMapper = (ICargaMapper) mapper;
+    }
+
+    public List<Cliente> cargarAlumnos(MultipartFile archivoAlumnos, String estamento)
+    {
+        List<Cliente> alumnos = new ArrayList<>();
 
         boolean finExcel = false;
         XSSFWorkbook workbook = null;
@@ -52,7 +63,7 @@ public class CargaService implements ICargaService
         {
             XSSFRow row = worksheet.getRow(fila);
 
-            AlumnoBuilder alumno = Alumno.builder();
+            ClienteBuilder alumno = Cliente.builder();
 
             // CODIGO ALUMNO
             Cell codigoAlumno = row.getCell(ConstantesFormatosExcelRegular.COLUMNA_CODIGO_ALUMNO);
@@ -65,7 +76,7 @@ public class CargaService implements ICargaService
             alumno.codigoAlumno(codigoAlumno.getStringCellValue().trim());
 
             // TIPO ALUMNO
-            alumno.tipoAlumno(estamento);
+            alumno.tipoAlumno("R");
 
             // APELLIDO PATERNO
             Cell apellidoPaterno = row.getCell(ConstantesFormatosExcelRegular.COLUMNA_APELLIDO_PATERNO);
@@ -113,17 +124,11 @@ public class CargaService implements ICargaService
             numeroDocumento.setCellType(Cell.CELL_TYPE_STRING);
             alumno.numeroDocumento(numeroDocumento.getStringCellValue().trim());
 
-            // CORREO INSTITUCIONAL
-            Cell correoInstitucional = row.getCell(ConstantesFormatosExcelRegular.COLUMNA_CORREO_INSTITUCIONAL);
-            //System.out.println("correoInstitucional: " + correoInstitucional);
-            correoInstitucional.setCellType(Cell.CELL_TYPE_STRING);
-            alumno.correoInstitucional(correoInstitucional.getStringCellValue().trim());
-
             // CORREO PERSONAL
             Cell correoPersonal = row.getCell(ConstantesFormatosExcelRegular.COLUMNA_CORREO_PERSONAL);
             //System.out.println("correoPersonal: " + correoPersonal);
             correoPersonal.setCellType(Cell.CELL_TYPE_STRING);
-            alumno.correoPersonal(correoPersonal.getStringCellValue().trim());
+            alumno.correo(correoPersonal.getStringCellValue().trim());
 
             // DIRECCION
             Cell direccion = row.getCell(ConstantesFormatosExcelRegular.COLUMNA_DIRECCION);
@@ -165,12 +170,6 @@ public class CargaService implements ICargaService
                 alumno.codigoFacultad(0);
             }
 
-            // DISCAPACIDAD
-            Cell discapacidad = row.getCell(ConstantesFormatosExcelRegular.COLUMNA_DISCAPACIDAD);
-            //System.out.println("discapacidad: " + discapacidad);
-            discapacidad.setCellType(Cell.CELL_TYPE_STRING);
-            alumno.idDiscapacidad(discapacidad.getStringCellValue().trim());
-
             alumnos.add(alumno.build());
             fila++;
         }
@@ -180,25 +179,33 @@ public class CargaService implements ICargaService
             e.printStackTrace();
         }
         System.out.println("FIN LECTURA EXCEL");
-        System.out.println("ALUMNOS: " + alumnos.size());
-        alumnoService.registrarAlumnos(alumnos);
+        System.out.println("ALUMNOS: ");
+        registrarAlumnos(alumnos);
+        return alumnos;
     }
 
 	@Override
-	public void cargarDocentes(MultipartFile archivoDocentes, String estamento) {
+	public List<Cliente> cargarDocentes(MultipartFile archivoDocentes, String estamento) {
 		// TODO Auto-generated method stub
-		
+		return null;
 	}
 
 	@Override
-	public void cargarNoDocentes(MultipartFile archivoNoDocentes, String estamento) {
+	public List<Cliente> cargarNoDocentes(MultipartFile archivoNoDocentes, String estamento) {
 		// TODO Auto-generated method stub
-		
+		return null;
 	}
 
 	@Override
-	public void cargarParticulares(MultipartFile archivoParticulares, String estamento) {
+	public List<Cliente> cargarParticulares(MultipartFile archivoParticulares, String estamento) {
 		// TODO Auto-generated method stub
-		
+		return null;
 	}
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public void registrarAlumnos(List<Cliente> alumnos)
+    {
+        alumnos.stream().forEach(alumno -> this.registrar(alumno, CARGAR));
+    }
 }

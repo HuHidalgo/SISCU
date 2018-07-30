@@ -16,18 +16,19 @@ import lombok.NoArgsConstructor;
 public class Afiliacion
 {
 	//Datos afiliacion
+	private Integer idAfiliacion;
 	private Integer idEstamento;
 	private String descEstamento;
 	private Integer numeroRegistro;
     private String apellidoPaterno;
     private String apellidoMaterno;
     private String nombres;
-    private String tipoDocumento;
-    private String nroDocumento;
+    private String idTipoDocumento;
+    private String numeroDocumento;
     private String idSexo;
     private String sexo;
-    private String idEstadoCivil;
-    private String estadoCivil;
+    private Integer idEstadoCivil;
+    private String descEstadoCivil;
     
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "EST")
     private Date fechaNacimiento;
@@ -37,7 +38,7 @@ public class Afiliacion
     private String idDepartamentoNac;
     private String departamentoNac;
     private Integer idGradoInstruccion;
-    private String gradoInstruccion;
+    private Integer gradoInstruccion;
     private String religion;
     private String ocupacionActual;
     private String direccionActual;
@@ -45,15 +46,18 @@ public class Afiliacion
     private String telefonoFijo;
     private String celular;
     private String correo;
+    
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy HH:mm", timezone = "EST")
+    private Date fechaAfiliacion;
       
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "EST")
     private Date fechaRegistroHC;
     
     //Datos tipo de paciente
     private String codigoAlumno;
-    private String codigoEscuela;
+    private Integer codigoEscuela;
     private String descripcionEscuela;
-    private String codigoFacultad;
+    private Integer codigoFacultad;
     private String descripcionFacultad;
     
     //No docente

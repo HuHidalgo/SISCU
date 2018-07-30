@@ -22,35 +22,42 @@
 							<h3 class="panel-title">Carga de Datos Inicial</h3>
 						</div>
 						<div class="panel-body">
-							<form id="formCargaInicial" class="form-horizontal" role="form" method="POST"
-								enctype="multipart/form-data">
-								<div class="form-group">
-									<div class="group">
-										<label class="control-label col-lg-2">Archivo (.xlsx)</label>
-										<div class="col-lg-4">
-											<input id="uploadfile" name="uploadfile" type="file" class="file form-control"
-												data-show-preview="false">
+							<fieldset class="well">
+								<legend class="well-legend">Carga</legend>
+								<form id="formCargaInicial" class="form-horizontal" role="form" method="POST"
+									enctype="multipart/form-data">
+									<div class="form-group">
+										<div class="group">
+											<label class="control-label col-lg-2">Archivo (.xlsx)</label>
+											<div class="col-lg-4">
+												<input id="uploadfile" name="uploadfile" type="file" class="file form-control"
+													data-show-preview="false">
+											</div>
+										</div>
+										<div class="group">
+											<label class="control-label col-lg-1">Estamento</label>
+											<div class="col-lg-3">
+												<select id="estamentos" class="form-control select2" name="idEstamento">
+													<option value="" disabled="disabled" selected="selected">Seleccione un Estamento</option>
+													<option th:each="estamento : ${estamentos}" th:value="${estamento.idItem}" 
+														th:text="|${estamento.idItem} - ${estamento.descripcionItem}|"></option>
+												</select>
+											</div>
 										</div>
 									</div>
-									<div class="group">
-										<label class="control-label col-lg-1">Estamento</label>
-										<div class="col-lg-3">
-											<select id="estamentos" class="form-control select2" name="idEstamento">
-												<option value="" disabled="disabled" selected="selected">Seleccione un Estamento</option>
-												<option th:each="estamento : ${estamentos}" th:value="${estamento.idItem}" 
-													th:text="|${estamento.idItem} - ${estamento.descripcionItem}|"></option>
-											</select>
+									<div id="botonesForm" class="form-group">
+										<div class=" col-lg-offset-1 col-lg-10 text-center">
+											<button id="cargarInicial" type="submit" class="btn btn-success">
+												<i class="fa fa-floppy-o"></i> Cargar
+											</button>
 										</div>
 									</div>
-								</div>
-								<div id="botonesForm" class="form-group">
-									<div class=" col-lg-offset-1 col-lg-10 text-center">
-										<button id="cargarInicial" type="submit" class="btn btn-success">
-											<i class="fa fa-floppy-o"></i> Cargar
-										</button>
-									</div>
-								</div>
-							</form>
+								</form>
+							</fieldset>
+							<div id="resultadoCargaInicial" class="col-xs-12">
+								<table id="tablaCargaInicial" class="table table-bordered table-condensed nowrap display table-hover">
+								</table>
+							</div>
 						</div>
 					</div>
 				</div>
