@@ -5,6 +5,7 @@ public class ConstantesGenerales
     public static final String REGISTRO_EXITOSO = "Se registró correctamente";
     public static final String ACTUALIZACION_EXITOSA = "Se actualizó correctamente";
     public static final String ELIMINACION_EXITOSA = "Se eliminó correctamente";
+    public static final String CARGA_EXITOSA = "Se cargó correctamente";
 
     /* ESTADO_EXAMEN_MEDICO */
     public static final String ESTADO_NUMERO_REGISTRO_GENERADO = "N";

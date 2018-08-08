@@ -68,7 +68,7 @@
 				</li>
 				
 				<li sec:authorize="hasPermission('1','ALL')" class="xn-openable"><a>
-						<span class="fa fa-wrench"></span><span class="xn-text">Mantenimientos</span>
+						<span class="fa fa-wrench"></span><span class="xn-text">Mantenimiento</span>
 					</a>
 					<ul>
 						<li>
@@ -97,139 +97,7 @@
 						</li>
 					</ul>
 				</li>
-				<!--
-				<li class="hidden"><a th:href="@{/digitador/examenMedico}">
-						<span class="fa fa-hand-paper-o"></span><span>Digitador</span>
-					</a></li>
-				<li sec:authorize="hasPermission('1','ALL') or hasPermission('2','ALL')" class="xn-openable"><a>
-						<span class="fa fa-clipboard"></span><span class="xn-text">Resultados de Laboratorio</span>
-					</a>
-					<ul>
-						<li><a th:href="@{/examenmedico/laboratorio/resultado}">
-								<span class="fa fa-floppy-o"></span><span>Registro</span>
-							</a></li>
-					</ul></li>
-
-				<li sec:authorize="hasPermission('1','ALL') or hasPermission('2','ALL')" class="xn-openable"><a>
-						<span class="fa fa-clipboard"></span><span class="xn-text">Consultas de Laboratorio</span>
-					</a>
-					<ul>
-						<li><a th:href="@{/consulta/administrativa/laboratorio}">
-								<span class="fa fa-search"></span><span>Administrativa</span>
-							</a></li>
-					</ul></li>
-
-				<li sec:authorize="hasPermission('1','ALL') or hasPermission('3','ALL')" class="xn-openable"><a>
-						<span class="fa fa-clipboard"></span> <span class="xn-text">Resultados de Radiología</span>
-					</a>
-					<ul>
-						<li><a th:href="@{/examenmedico/radiologico/tomaRadiologica}">
-								<span class="fa fa-video-camera"></span><span>Toma Radiológica</span>
-							</a></li>
-						<li><a th:href="@{/examenmedico/radiologico/resultado}">
-								<span class="fa fa-floppy-o"></span><span>Registro</span>
-							</a></li>
-					</ul></li>
-
-				<li sec:authorize="hasPermission('1','ALL') or hasPermission('3','ALL')" class="xn-openable"><a>
-						<span class="fa fa-clipboard"></span> <span class="xn-text">Consultas de Radiologia</span>
-					</a>
-					<ul>
-						<li><a th:href="@{/consulta/administrativa/radiologico}">
-								<span class="fa fa-search"></span><span>Administrativa</span>
-							</a></li>
-					</ul></li>
-
-				<!-- registro de triaje --><!--
-				<li sec:authorize="hasPermission('1','ALL') or hasPermission('6','ALL')" class="xn-openable">
-					<a>
-						<span class="fa fa-clipboard"></span> <span class="xn-text">Resultados de Triaje</span>
-					</a>
-					<ul>
-						<li>
-							<a th:href="@{/consulta/atencion/triaje}">
-								<span class="fa fa-floppy-o"></span><span>Registro</span>
-							</a>
-						</li>
-					</ul>
-				</li>
-				<!-- consulta de triaje --><!--
-				<li sec:authorize="hasPermission('1','ALL') or hasPermission('3','ALL')" class="xn-openable">
-					<a>
-						<span class="fa fa-clipboard"></span> <span class="xn-text">Consultas de Triaje</span>
-					</a>
-					<ul>
-						<li>
-							<a th:href="@{/consulta/administrativa/triaje}">
-								<span class="fa fa-search"></span><span>Administrativa</span>
-							</a>
-						</li>
-					</ul>
-				</li>
-
-				<!-- registro de odontologia --><!--
-				<li sec:authorize="hasPermission('1','ALL') or hasPermission('5','ALL')" class="xn-openable"><a>
-						<span class="fa fa-clipboard"></span> <span class="xn-text">Resultados de Odontologia</span>
-					</a>
-					<ul>
-						<li><a th:href="@{/consulta/atencion/odontologia}">
-								<span class="fa fa-floppy-o"></span><span>Registro</span>
-							</a></li>
-					</ul></li>
-
-				<li sec:authorize="hasPermission('1','ALL') or hasPermission('4','ALL')" class="xn-openable"><a>
-						<span class="fa fa-clipboard"></span> <span class="xn-text">Resultados de Psicología</span>
-					</a>
-					<ul>
-						<li><a th:href="@{/consulta/atencion/psicologia}">
-								<span class="fa fa-floppy-o"></span><span>Registro</span>
-							</a></li>
-					</ul></li>
-
-				<li sec:authorize="hasPermission('1','ALL') or hasPermission('4','ALL')" class="xn-openable"><a>
-						<span class="fa fa-clipboard"></span> <span class="xn-text">Consultas de Psicología</span>
-					</a>
-					<ul>
-						<li><a th:href="@{/consulta/administrativa/psicologia}">
-								<span class="fa fa-search"></span><span>Administrativa</span>
-							</a></li>
-					</ul></li>
 				
-				<li sec:authorize="hasPermission('1','ALL') or hasPermission('7','ALL')" class="xn-openable"><a>
-						<span class="fa fa-clipboard"></span> <span class="xn-text">Resultados de Medicina General</span>
-					</a>
-					<ul>
-						<li><a th:href="@{/consulta/atencion/medicinaGeneral}">
-								<span class="fa fa-floppy-o"></span><span>Registro</span>
-							</a></li>
-					</ul></li>
-
-				<li sec:authorize="hasPermission('1','ALL')" class="xn-openable"><a>
-						<span class="fa fa-wrench"></span> <span class="xn-text">Proceso Automático</span>
-					</a>
-					<ul>
-						<li><a th:href="@{/mantenimiento/procesoAutomatico}">
-								<span class="fa fa-wrench"></span>Procesos
-							</a></li>
-					</ul></li>
-
-				<li sec:authorize="hasPermission('1','ALL')" class="xn-openable"><a>
-						<span class="fa fa-file"></span> <span class="xn-text">Reportes</span>
-					</a>
-					<ul>
-						<li><a th:href="@{/reporte/atencion/diaria}">
-								<span class="fa fa-file"></span><span>Atenciones Diarias</span>
-							</a></li>
-						<li class="xn-openable"><a>
-								<span class="fa fa-bell"></span> <span class="xn-text">Examen Médico</span>
-							</a>
-							<ul>
-								<li><a th:href="@{/reporte/detalle/resultado/examenMedico/regular}">
-										<span class="fa fa-file"></span><span>Regulares</span>
-									</a></li>
-							</ul></li>
-					</ul></li>
-				-->
 				<li sec:authorize="hasPermission('1','ALL')" class="xn-openable">
 					<a>
 						<span class="fa fa-unlock-alt"></span> 

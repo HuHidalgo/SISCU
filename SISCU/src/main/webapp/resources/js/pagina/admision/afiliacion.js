@@ -35,6 +35,7 @@ $(document).ready(function() {
 		$registrarAfiliacion : $("#registrarAfiliacion"),
 		$actualizarAfiliacion : $("#actualizarAfiliacion"),
 		$fechaNacimiento : $("#fechaNacimiento"),
+		$edad : $("#edad"),
 		
 		tipoDocumento : "",
 		nroDocumento : ""
@@ -280,16 +281,29 @@ $(document).ready(function() {
 		var fechaNacimiento = $funcionUtil.convertirDeFormatoAFormato(cliente.fechaNacimiento, "YYYY-MM-DD", "DD/MM/YYYY");
 		$local.$fechaNacimiento.data("daterangepicker").setStartDate(fechaNacimiento);
 		$local.$fechaNacimiento.data("daterangepicker").setEndDate(fechaNacimiento);
-		$local.$tipoDocumento = cliente.idTipoDocumento;
-		$local.$nroDocumento = cliente.numeroDocumento;
+		$local.tipoDocumento = cliente.idTipoDocumento;
+		$local.nroDocumento = cliente.numeroDocumento;
 		$funcionUtil.llenarFormulario(cliente, $formAfiliacion);
 		$local.$facultades.trigger("change", [ cliente.codigoEscuela ]);
-		//$local.$departamentosNac.trigger("change", [ cliente.idDistritoNac ]);
+		$local.$departamentosNac.trigger("change", [ cliente.idDistritoNac ]);
 		$local.$estamentos2.trigger("change");
 		//$local.$actualizarAfiliacion.removeClass("hidden");
 		//$local.$registrarAfiliacion.addClass("hidden");
 		$local.$modalAfiliacion.PopupWindow("open");
 	});
+	
+	$local.$fechaNacimiento.on("change", function(event, opcionSeleccionada) {
+		var fechaNac = $(this).val();
+		var hoy = new Date();
+		var cumpleanos = fechaNac.split("/");
+	    edad = hoy.getFullYear() - cumpleanos[2];
+	    var m = (hoy.getMonth()+1) - cumpleanos[1];
+	    if (m < 0 || (m == 0 && hoy.getDate() < cumpleanos[0])) {
+	    	edad--;
+	    }
+	    $local.$edad.val(edad);
+	});
+	   
 
 	//registrar afiliacion
 	$local.$registrarAfiliacion.on("click", function() {

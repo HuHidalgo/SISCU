@@ -5,11 +5,21 @@ $(document).ready(function() {
 		tablaCargaInicial : "",
 		$cargarInicial : $("#cargarInicial"),
 		$estamentos : $("#estamentos"),
-		$uploadfile : $("#uploadfile")
+		$estamentos2 : $("#estamentos2"),
+		$uploadfile : $("#uploadfile"),
+		$divCarga : $("#divCarga"),
+		$divConsulta : $("#divConsulta"),
+		$consultar : $("#consultar"),
+		$cargar : $("#cargar"),
+		$buscarAfiliado : $("#buscarAfiliado"),
+		$tiposDocumento : $("#tiposDocumento")
 	};
 
 	$formCargaInicial = $("#formCargaInicial");
+	$formConsultaInicial = $("#formConsultaInicial");
 	$funcionUtil.crearSelect2($local.$estamentos, "Seleccione un Estamento");
+	$funcionUtil.crearSelect2($local.$estamentos2, "Seleccione un Estamento");
+	$funcionUtil.crearSelect2($local.$tiposDocumento, "Seleccione el tipo de documento");
 	
 	$formCargaInicial.validate({
 		focusCleanup : true,
@@ -57,17 +67,58 @@ $(document).ready(function() {
 				$local.$cargarInicial.attr("disabled", true).find("i").removeClass("fa-floppy-o").addClass("fa-spinner fa-pulse fa-fw");
 				xhr.setRequestHeader("X-CSRF-TOKEN", $variableUtil.csrf);
 			},
-			success : function(alumnos) {
+			statusCode : {
+				400 : function(response) {
+					$funcionUtil.limpiarMensajesDeError($formCargaInicial);
+					$funcionUtil.mostrarMensajeDeError(response.responseJSON, $formCargaInicial);
+				}
+			},
+			success : function(response) {
+				/*
 				if (alumnos.length == 0) {
 					$funcionUtil.notificarException("No se cargaron los datos", "fa-exclamation-circle", "Información", "info");
 					return;
-				}
-				$local.tablaCargaInicial.rows.add(alumnos).draw();
+				}*/
+				$funcionUtil.notificarException(response, "fa-check", "Aviso", "success");
+				//$local.tablaCargaInicial.rows.add(alumnos).draw();
 			},
 			error : function(response) {
 			},
 			complete : function(response) {
 				$local.$cargarInicial.attr("disabled", false).find("i").addClass("fa-floppy-o").removeClass("fa-spinner fa-pulse fa-fw");
+			}
+		});
+	});
+	
+	$local.$buscarAfiliado.on("click", function() {
+		if (!$formCargaInicial.valid()) {
+			return;
+		}
+		var consultarDatos = $formCargaInicial.serializeJSON();
+		console.log(consultarDatos);
+		/*
+		 if ($funcionUtil.camposVacios($formCriterioConsultaAdmision)) {
+			$funcionUtil.notificarException($variableUtil.camposVacios, "fa-exclamation-circle", "Información", "info");
+			return;
+		}*/
+				 
+		$.ajax({
+			type : "GET",
+			url : $variableUtil.root + "admision/afiliacion/consulta?accion=buscarPorEstamento",
+			data : consultarDatos,
+			beforeSend : function() {
+				$local.tablaCargaInicial.clear().draw();
+				$local.$buscarAfiliado.attr("disabled", true).find("i").removeClass("fa-search").addClass("fa-spinner fa-pulse fa-fw");
+			},
+			success : function(afiliacion) {
+				if (afiliacion.length == 0) {
+					$funcionUtil.notificarException($variableUtil.busquedaSinResultados, "fa-exclamation-circle", "Información", "info");
+					return;
+				}
+				$local.tablaCargaInicial.rows.add(afiliacion).draw();
+			},
+			complete : function() {
+				$local.$buscarAfiliado.attr("disabled", false).find("i").addClass("fa-search").removeClass("fa-spinner fa-pulse fa-fw");
 			}
 		});
 	});
@@ -154,5 +205,15 @@ $(document).ready(function() {
 	$local.$tablaCargaInicial.find("thead").on('change', 'select', function() {
 		var val = $.fn.dataTable.util.escapeRegex($(this).val());
 		$local.tablaCargaInicial.column($(this).parent().index() + ':visible').search(val ? '^' + val + '$' : '', true, false).draw();
+	});
+	
+	$local.$consultar.on("click", function() {
+		$local.$divCarga.addClass("hidden");
+		$local.$divConsulta.removeClass("hidden");
+	});
+	
+	$local.$cargar.on("click", function() {
+		$local.$divCarga.removeClass("hidden");
+		$local.$divConsulta.addClass("hidden");			
 	});
 });

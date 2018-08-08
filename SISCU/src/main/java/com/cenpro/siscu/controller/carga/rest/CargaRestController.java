@@ -3,6 +3,7 @@ package com.cenpro.siscu.controller.carga.rest;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,23 +14,26 @@ import org.springframework.web.multipart.MultipartFile;
 import com.cenpro.siscu.model.carga.Cliente;
 import com.cenpro.siscu.service.ICargaService;
 
+import com.cenpro.siscu.utilitario.ConstantesGenerales;
+
 @RequestMapping("/carga")
 public @RestController class CargaRestController
 {
     private @Autowired ICargaService cargaService;
 
     @PostMapping(value = "/inicial/uploadfile/{estamento}", params = "accion=cargar")
-    public List<Cliente> cargasIniciales(@RequestParam("uploadfile") MultipartFile file, @PathVariable String estamento){
+    public ResponseEntity<?> cargasIniciales(@RequestParam("uploadfile") MultipartFile file, @PathVariable String estamento){
         if (estamento.equals("1"))
-            return cargaService.cargarAlumnos(file, estamento);
+            cargaService.cargarAlumnos(file, estamento);
          else
         	 if (estamento.equals("2"))
-                 return cargaService.cargarDocentes(file, estamento);
+                 cargaService.cargarDocentes(file, estamento);
               else
             	  if (estamento.equals("3"))
-            		  return cargaService.cargarNoDocentes(file, estamento);
+            		  cargaService.cargarNoDocentes(file, estamento);
                   else
-                	  return cargaService.cargarParticulares(file, estamento);                	 	
+                	  cargaService.cargarParticulares(file, estamento);                	 	
+        return ResponseEntity.ok(ConstantesGenerales.CARGA_EXITOSA);
     }	
     
     @PostMapping(value = "/periodica/uploadfile/{estamento}", params = "accion=cargar")

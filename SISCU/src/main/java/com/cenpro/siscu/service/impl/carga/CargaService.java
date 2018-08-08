@@ -40,7 +40,7 @@ public class CargaService extends MantenibleService<Cliente> implements ICargaSe
         this.cargaMapper = (ICargaMapper) mapper;
     }
 
-    public List<Cliente> cargarAlumnos(MultipartFile archivoAlumnos, String estamento)
+    public void cargarAlumnos(MultipartFile archivoAlumnos, String estamento)
     {
         List<Cliente> alumnos = new ArrayList<>();
 
@@ -181,31 +181,27 @@ public class CargaService extends MantenibleService<Cliente> implements ICargaSe
         System.out.println("FIN LECTURA EXCEL");
         System.out.println("ALUMNOS: ");
         registrarAlumnos(alumnos);
-        return alumnos;
     }
 
 	@Override
-	public List<Cliente> cargarDocentes(MultipartFile archivoDocentes, String estamento) {
+	public void cargarDocentes(MultipartFile archivoDocentes, String estamento) {
 		// TODO Auto-generated method stub
-		return null;
 	}
 
 	@Override
-	public List<Cliente> cargarNoDocentes(MultipartFile archivoNoDocentes, String estamento) {
+	public void cargarNoDocentes(MultipartFile archivoNoDocentes, String estamento) {
 		// TODO Auto-generated method stub
-		return null;
 	}
 
 	@Override
-	public List<Cliente> cargarParticulares(MultipartFile archivoParticulares, String estamento) {
+	public void cargarParticulares(MultipartFile archivoParticulares, String estamento) {
 		// TODO Auto-generated method stub
-		return null;
 	}
 
     @Override
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public void registrarAlumnos(List<Cliente> alumnos)
+    public void registrarAlumnos(List<Cliente> pacientes)
     {
-        alumnos.stream().forEach(alumno -> this.registrar(alumno, CARGAR));
+    	pacientes.stream().forEach(paciente -> this.registrar(paciente, CARGAR));
     }
 }
