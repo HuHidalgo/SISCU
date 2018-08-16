@@ -9,7 +9,7 @@ $(document).ready(function() {
 			tipoDocumento : {
 				required : true
 			},
-			numeroDocumento : {
+			nroDocumento : {
 				required : true
 			}
 		},
@@ -20,7 +20,7 @@ $(document).ready(function() {
 			tipoDocumento : {
 				required : "Ingrese el Tipo de Documento."
 			},
-			numeroDocumento : {
+			nroDocumento : {
 				required : "Ingrese Número de Documento."
 			}
 		}

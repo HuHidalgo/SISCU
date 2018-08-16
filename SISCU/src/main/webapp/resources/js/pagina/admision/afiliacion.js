@@ -18,7 +18,7 @@ $(document).ready(function() {
 		$afiliar : $("#afiliar"),
 		$facultades : $("#facultades"),
 		$escuelas : $("#escuelas"),
-		$actualizarAfiliacion : $("#actualizarAfiliacion"),
+		//$actualizarAfiliacion : $("#actualizarAfiliacion"),
 
 		// Para Actualizacion de Resultado
 		$modalAfiliacion : $("#modalAfiliacion"),
@@ -89,7 +89,7 @@ $(document).ready(function() {
 				if (row.fechaAfiliacion == null)
 					return $variableUtil.botonAfiliar;
 				else
-					return $variableUtil.botonActualizar //+ " " + $variableUtil.botonEliminar;
+					return $variableUtil.botonActualizar; //+ " " + $variableUtil.botonEliminar;
 			}
 		}, {
 			"targets" : 1,
@@ -147,12 +147,7 @@ $(document).ready(function() {
 			return;
 		}
 		var consultarDatos = $formCriterioConsultaAdmision.serializeJSON();
-		/*
-		 if ($funcionUtil.camposVacios($formCriterioConsultaAdmision)) {
-			$funcionUtil.notificarException($variableUtil.camposVacios, "fa-exclamation-circle", "Información", "info");
-			return;
-		}*/
-				 
+		
 		$.ajax({
 			type : "GET",
 			url : $variableUtil.root + "admision/afiliacion/consulta?accion=buscarPorEstamento",
@@ -407,33 +402,7 @@ $(document).ready(function() {
 			return false;
 		}
 	});
-/*
-	$local.$estamentos.on("change", function() {
-		var opcion = $(this).val();
-		switch (opcion) {
-		case "1":
-			$local.$divCodigoAlumno.removeClass("hidden");
-			$local.$divNroDocumento.addClass("hidden");
-			$local.$codigoAlumno.val("");
-			break;
-		case "2":
-			$local.$divCodigoAlumno.addClass("hidden");
-			$local.$divNroDocumento.removeClass("hidden");
-			break;
-		case "3":
-			$local.$divCodigoAlumno.addClass("hidden");
-			$local.$divNroDocumento.removeClass("hidden");
-			break;
-		case "4":
-			$local.$divCodigoAlumno.addClass("hidden");
-			$local.$divNroDocumento.removeClass("hidden");
-			break;
-		case "5":
-			$local.$divCodigoAlumno.addClass("hidden");
-			$local.$divNroDocumento.removeClass("hidden");			
-		}
-	});
-	*/
+	
 	$local.$estamentos2.on("change", function() {
 		var opcion = $(this).val();
 		switch (opcion) {

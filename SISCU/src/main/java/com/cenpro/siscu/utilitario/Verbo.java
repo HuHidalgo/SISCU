@@ -22,7 +22,7 @@ public class Verbo
     public static final String GET_SBC = "GET_SBC";
     public static final String GETS_IMS = "GETS_IMS";
     public static final String GET_INST = "GET_INST";
-    public static final String GETS_CONCEPTO_CUENTA = "GETS_CONCEPTO_CUENTA";
+    public static final String GET_PACIENTE = "GET_PACIENTE";
     public static final String INSERT = "INSERT";
     public static final String INSERT_SBC = "INSERT_SBC";
     public static final String INSERT_COMISION = "INSERT_COMISION";

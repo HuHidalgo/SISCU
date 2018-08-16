@@ -8,6 +8,7 @@ import org.apache.ibatis.mapping.StatementType;
 
 import com.cenpro.siscu.mapper.base.IMantenibleMapper;
 import com.cenpro.siscu.model.admision.Afiliacion;
+import com.cenpro.siscu.model.criterio.CriterioBusquedaEstamento;
 import com.cenpro.siscu.model.parametro.Parametro;
 
 public interface IAfiliacionMapper extends IMantenibleMapper<Afiliacion>
@@ -44,4 +45,6 @@ public interface IAfiliacionMapper extends IMantenibleMapper<Afiliacion>
             + "#{userAudit, jdbcType = VARCHAR, mode = IN})}" })
     @Options(statementType = StatementType.CALLABLE)
     public List<Afiliacion> mantener(Parametro parametro);
+    
+    public List<Afiliacion> buscarPorNroDocumento(CriterioBusquedaEstamento criterioBusqueda);
 }

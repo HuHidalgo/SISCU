@@ -92,6 +92,7 @@ public class Cliente
     private String tipoAlumno;
     
     private int edad;
+	private Integer idEstamento;
     private String descripcionFacultad;
     private String descripcionSexo;
     private String descripcionTipoDocumento;

@@ -3,19 +3,16 @@
 <head>
 </head>
 <body>
-	<div id="modalAfiliacion" class="row" th:fragment="modalAfiliacion" th:with="tipo=${tipo}">
+	<div id="modalAfiliado" class="row" th:fragment="modalAfiliado" th:with="tipo=${tipo}">
 		<fieldset class="well">
 			<legend class="well-legend"></legend>
-			<form id="formAfiliacion" class="form-horizontal" role="form">
-				<th:block th:replace="~{template/fragments/admision/modalAfiliacion :: ${tipo}}?:~{}">
+			<form id="formAfiliado" class="form-horizontal" role="form">
+				<th:block th:replace="~{template/fragments/carga/modalAfiliado :: ${tipo}}?:~{}">
 				</th:block>
 				<div id="botonesForm" class="form-group">
 					<div class="col-lg-12 text-center">
-						<button id="registrarAfiliacion" type="button" class="btn btn-success">
+						<button id="registrarAfiliado" type="button" class="btn btn-success">
 							<i class="fa fa-floppy-o"></i> Registrar
-						</button>
-						<button id="actualizarAfiliacion" type="button" class="btn btn-primary hidden">
-							<i class="fa fa-pencil-square"></i> Actualizar
 						</button>
 					</div>
 				</div>
@@ -23,7 +20,7 @@
 		</fieldset>
 	</div>
 
-	<th:block th:fragment="afiliacion">
+	<th:block th:fragment="afiliado">
 		<fieldset class="well">
 			<legend class="well-legend">Datos de Afiliación</legend>
 				<div class="form-group">
@@ -52,7 +49,7 @@
 						<div class="col-lg-4">
 							<select id="tiposDocumento2" class="form-control select2 elemento-desactivable" name="idTipoDocumento">
 								<option value="" disabled="disabled" selected="selected">Seleccione un Tipo de Documento</option>
-								<option th:each="tipoDocumento : ${tiposDocumento}" th:value="${tipoDocumento.idItem}"
+								<option th:each="tipoDocumento : ${tiposDocumento2}" th:value="${tipoDocumento.idItem}"
 									th:text="|${tipoDocumento.idItem} - ${tipoDocumento.abreviatura}|"></option>
 							</select>
 						</div>
@@ -78,9 +75,9 @@
 					<div class="group">
 						<label class="col-lg-2 control-label">Estado Civil</label>
 						<div class="col-lg-4">
-							<select id="estados" class="form-control select2" name="idEstadoCivil">
+							<select id="estadosCiviles" class="form-control select2" name="idEstadoCivil">
 								<option value="" disabled="disabled" selected="selected">Seleccione Estado civil</option>
-								<option th:each="estado : ${estados}" th:value="${estado.idItem}" 
+								<option th:each="estado : ${estadosCiviles}" th:value="${estado.idItem}" 
 										th:text="|${estado.idItem} - ${estado.descripcionItem}|"></option>
 							</select>
 						</div>
@@ -187,9 +184,9 @@
 					<div class="group">
 						<label class="col-lg-2 control-label">Estamento</label>
 						<div class="col-lg-4">
-							<select id="estamentos2" class="form-control select2" name="idEstamento">
+							<select id="estamentos3" class="form-control select2" name="idEstamento">
 								<option value="" disabled="disabled" selected="selected">Seleccione un Estamento</option>
-								<option th:each="estamento : ${estamentos2}" th:value="${estamento.idItem}" 
+								<option th:each="estamento : ${estamentos3}" th:value="${estamento.idItem}" 
 									th:text="|${estamento.idItem} - ${estamento.descripcionItem}|"></option>
 							</select>
 						</div>

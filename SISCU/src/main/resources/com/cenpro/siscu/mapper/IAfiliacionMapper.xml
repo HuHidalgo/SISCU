@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cenpro.siscu.mapper.IAfiliacionMapper">
+	
+	<select id="buscarPorNroDocumento" resultType="Afiliacion">
+		SELECT 
+			cliente.vTipoDocumento						AS idTipoDocumento,
+			cliente.vNumeroDocumento					AS numeroDocumento,
+            cliente.vNombres							AS nombres,
+            cliente.vApellidoPaterno					AS apellidoPaterno,
+            cliente.vApellidoMaterno					AS apellidoMaterno,
+            <if test="idEstamento == 1">
+            	cliente.vCodigoAlumno 					AS codigoAlumno,
+        	</if>
+        	<if test="idEstamento == 1 or idEstamento == 2">
+            	cliente.nCodigoFacultad					AS codigoFacultad,
+            	facultad.vDescripcion					AS descripcionFacultad,
+            	escuela.nCodigoEscuela					AS codigoEscuela,
+            	escuela.vDescripcion					AS descripcionEscuela,
+        	</if>
+        	<if test="idEstamento == 3">
+            	cliente.nCodigoFacultad 				AS codigoFacultad,
+            	facultad.vDescripcion					AS descripcionFacultad,
+            	cliente.vDptoTrabajo	 				AS dptoTrabajo,
+        	</if>
+            cliente.vDireccion 							AS direccionActual,
+            cliente.dFechaNacimiento					AS fechaNacimiento,
+			(YEAR(CURDATE()) - YEAR(dFechaNacimiento))	AS edad,
+            cliente.vCorreo								AS correo,
+            cliente.vTelefonoFijo 						AS telefonoFijo,
+            cliente.vTelefonoMovil 						AS celular,
+            sexo.vIdItem								AS idSexo,
+            sexo.vDescripcionItem						AS sexo,
+            afiliar.dFechaAdicion						AS fechaAfiliacion,
+            afiliar.nIdEstadoCivil						AS idEstadoCivil,
+            afiliar.vIdDepartamentoNac					AS idDepartamentoNac,
+            afiliar.vIdDistritoNac						AS idDistritoNac,
+            afiliar.nIdGradoInstruccion					AS idGradoInstruccion,
+            afiliar.vReligion							AS religion,
+            afiliar.vOcupacionActual					AS ocupacionActual,
+            afiliar.vDistritoProcedencia				AS distritoProcedencia,
+            afiliar.vNombreEmergencia					AS nombreEmerg,
+            afiliar.vTelefonoEmergencia					AS telefonoEmerg,
+            afiliar.vDireccionEmergencia				AS direccionEmerg,
+            #{idEstamento}								AS idEstamento,
+            (SELECT vDescripcionItem
+			 FROM maemultitabladet
+			 WHERE nIdTabla = 4 AND 
+					vIdItem = idEstamento)				AS descEstamento
+		FROM maeafiliacion afiliar
+		
+		<if test="idEstamento == 1">
+           	RIGHT JOIN maealumno cliente				ON (cliente.vNumeroDocumento = afiliar.vNumeroDocumento
+           												AND cliente.vTipoDocumento = afiliar.vTipoDocumento)
+           	INNER JOIN maefacultad facultad				ON	(cliente.nCodigoFacultad = facultad.nCodigoFacultad)
+			INNER JOIN maeescuela escuela				ON	(cliente.nCodigoEscuela = escuela.nCodigoEscuela
+														AND cliente.nCodigoFacultad = escuela.nCodigoFacultad)
+       	</if>
+		<if test="idEstamento == 2">
+           	RIGHT JOIN maedocente cliente				ON (cliente.vNumeroDocumento = afiliar.vNumeroDocumento
+           												AND cliente.vTipoDocumento = afiliar.vTipoDocumento)
+           	INNER JOIN maefacultad facultad				ON	(cliente.nCodigoFacultad = facultad.nCodigoFacultad)
+			INNER JOIN maeescuela escuela				ON	(cliente.nCodigoEscuela = escuela.nCodigoEscuela
+														AND cliente.nCodigoFacultad = escuela.nCodigoFacultad)
+       	</if>
+       	<if test="idEstamento == 3">
+           	RIGHT JOIN maeadministrativo cliente		ON (cliente.vNumeroDocumento = afiliar.vNumeroDocumento
+           												AND cliente.vTipoDocumento = afiliar.vTipoDocumento)
+           	INNER JOIN maefacultad facultad				ON	(cliente.nCodigoFacultad = facultad.nCodigoFacultad)
+       	</if>
+       	<if test="idEstamento == 4">
+           	RIGHT JOIN maeparticular cliente			ON (cliente.vNumeroDocumento = afiliar.vNumeroDocumento
+           												AND cliente.vTipoDocumento = afiliar.vTipoDocumento)
+       	</if>
+			INNER JOIN maemultitabladet sexo 			ON cliente.vIdSexo = sexo.vIdItem
+			
+		<where>
+        	cliente.vTipoDocumento = #{tipoDocumento}	AND
+			cliente.vNumeroDocumento = #{nroDocumento};
+        </where>
+	</select>
+
+</mapper>

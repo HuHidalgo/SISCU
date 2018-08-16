@@ -15,7 +15,8 @@ public enum Dato
     Usuario("Codigo_de_Usuario = #usuario.idUsuario"),
     
     Ninguno("");
-    private final String nombre;
+
+	private final String nombre;
 
     private Dato(String nombre)
     {

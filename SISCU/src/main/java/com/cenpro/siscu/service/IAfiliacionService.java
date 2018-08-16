@@ -16,4 +16,6 @@ public interface IAfiliacionService extends IMantenibleService<Afiliacion>
     public List<Afiliacion> registrarAfiliacion(Afiliacion afiliacion);
     
     public void actualizarAfiliacion(Afiliacion afiliacion);
+    
+    //public List<Afiliacion> buscarPorNroDocumento( CriterioBusquedaEstamento criterioBusquedaEstamento);
 }

@@ -2,6 +2,7 @@ package com.cenpro.siscu.service.impl.admision;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -20,8 +21,8 @@ import com.cenpro.siscu.utilitario.Verbo;
 @Service
 public class AfiliacionService extends MantenibleService<Afiliacion> implements IAfiliacionService
 {
-    @SuppressWarnings("unused")
-    private IAfiliacionMapper afiliacionMapper;
+    //@SuppressWarnings("unused")
+    private @Autowired IAfiliacionMapper afiliacionMapper;
 
     public AfiliacionService(@Qualifier("IAfiliacionMapper") IMantenibleMapper<Afiliacion> mapper)
     {
@@ -35,14 +36,17 @@ public class AfiliacionService extends MantenibleService<Afiliacion> implements 
         return this.buscar(new Afiliacion(), Verbo.GETS);
     }
 
+    @Override
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public List<Afiliacion> buscarPorNroDocumento(CriterioBusquedaEstamento criterioBusquedaEstamento)
     {
+    	return this.afiliacionMapper.buscarPorNroDocumento(criterioBusquedaEstamento);
+    	/*
     	Afiliacion afiliar = Afiliacion.builder().idEstamento(criterioBusquedaEstamento.getIdEstamento()).
     											idTipoDocumento(criterioBusquedaEstamento.getTipoDocumento()).
     											numeroDocumento(criterioBusquedaEstamento.getNroDocumento()).build();
     			
-        return this.buscar(afiliar, Verbo.GET);
+        return this.buscar(afiliar, Verbo.GET);*/
     }
     
     @Transactional(propagation = Propagation.REQUIRES_NEW)

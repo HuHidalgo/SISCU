@@ -15,26 +15,28 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.cenpro.siscu.mapper.IAfiliacionMapper;
 import com.cenpro.siscu.mapper.ICargaMapper;
 import com.cenpro.siscu.mapper.base.IMantenibleMapper;
-import com.cenpro.siscu.model.carga.Cliente;
-import com.cenpro.siscu.model.carga.Cliente.ClienteBuilder;
+import com.cenpro.siscu.model.admision.Afiliacion;
+import com.cenpro.siscu.model.admision.Afiliacion.AfiliacionBuilder;
+import com.cenpro.siscu.model.criterio.CriterioBusquedaEstamento;
 import com.cenpro.siscu.service.ICargaService;
 import com.cenpro.siscu.service.excepcion.CargaArchivoException;
 import com.cenpro.siscu.utilitario.ConstantesExcepciones;
 import com.cenpro.siscu.utilitario.ConstantesFormatosExcelIngresante;
 import com.cenpro.siscu.utilitario.ConstantesFormatosExcelRegular;
-
+import com.cenpro.siscu.utilitario.Verbo;
 import com.cenpro.siscu.service.impl.MantenibleService;
 
 @Service
-public class CargaService extends MantenibleService<Cliente> implements ICargaService
+public class CargaService extends MantenibleService<Afiliacion> implements ICargaService
 {
 	@SuppressWarnings("unused")
     private ICargaMapper cargaMapper;
     private static final String CARGAR = "CARGAR";
     
-    public CargaService(@Qualifier("ICargaMapper") IMantenibleMapper<Cliente> mapper)
+    public CargaService(@Qualifier("ICargaMapper") IMantenibleMapper<Afiliacion> mapper)
     {
         super(mapper);
         this.cargaMapper = (ICargaMapper) mapper;
@@ -42,7 +44,7 @@ public class CargaService extends MantenibleService<Cliente> implements ICargaSe
 
     public void cargarAlumnos(MultipartFile archivoAlumnos, String estamento)
     {
-        List<Cliente> alumnos = new ArrayList<>();
+        List<Afiliacion> alumnos = new ArrayList<>();
 
         boolean finExcel = false;
         XSSFWorkbook workbook = null;
@@ -63,7 +65,10 @@ public class CargaService extends MantenibleService<Cliente> implements ICargaSe
         {
             XSSFRow row = worksheet.getRow(fila);
 
-            ClienteBuilder alumno = Cliente.builder();
+            AfiliacionBuilder alumno = Afiliacion.builder();
+            
+            // TIPO DE PACIENTE (ESTAMENTO)
+            alumno.idEstamento(Integer.parseInt(estamento));
 
             // CODIGO ALUMNO
             Cell codigoAlumno = row.getCell(ConstantesFormatosExcelRegular.COLUMNA_CODIGO_ALUMNO);
@@ -76,7 +81,7 @@ public class CargaService extends MantenibleService<Cliente> implements ICargaSe
             alumno.codigoAlumno(codigoAlumno.getStringCellValue().trim());
 
             // TIPO ALUMNO
-            alumno.tipoAlumno("R");
+            //alumno.tipoAlumno("R");
 
             // APELLIDO PATERNO
             Cell apellidoPaterno = row.getCell(ConstantesFormatosExcelRegular.COLUMNA_APELLIDO_PATERNO);
@@ -134,7 +139,7 @@ public class CargaService extends MantenibleService<Cliente> implements ICargaSe
             Cell direccion = row.getCell(ConstantesFormatosExcelRegular.COLUMNA_DIRECCION);
             //System.out.println("direccion: " + direccion);
             direccion.setCellType(Cell.CELL_TYPE_STRING);
-            alumno.direccion(direccion.getStringCellValue().trim());
+            alumno.direccionActual(direccion.getStringCellValue().trim());
 
             // TELEFONO FIJO
             Cell telefonoFijo = row.getCell(ConstantesFormatosExcelRegular.COLUMNA_TELEFONO_FIJO);
@@ -146,7 +151,7 @@ public class CargaService extends MantenibleService<Cliente> implements ICargaSe
             Cell telefonoMovil = row.getCell(ConstantesFormatosExcelRegular.COLUMNA_TELEFONO_MOVIL);
             //System.out.println("telefonoMovil: " + telefonoMovil);
             telefonoMovil.setCellType(Cell.CELL_TYPE_STRING);
-            alumno.telefonoMovil(telefonoMovil.getStringCellValue().trim());
+            alumno.celular(telefonoMovil.getStringCellValue().trim());
 
             // CODIGO ESCUELA
             Cell codigoEscuela = row.getCell(ConstantesFormatosExcelRegular.COLUMNA_CODIGO_ESCUELA);
@@ -200,8 +205,16 @@ public class CargaService extends MantenibleService<Cliente> implements ICargaSe
 
     @Override
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public void registrarAlumnos(List<Cliente> pacientes)
+    public void registrarAlumnos(List<Afiliacion> pacientes)
     {
     	pacientes.stream().forEach(paciente -> this.registrar(paciente, CARGAR));
     }
+
+	@Override
+	public List<Afiliacion> consultarPorNroDocumento(CriterioBusquedaEstamento criterioBusquedaEstamento) {
+		Afiliacion paciente = Afiliacion.builder().idEstamento(criterioBusquedaEstamento.getIdEstamento()).
+				idTipoDocumento(criterioBusquedaEstamento.getTipoDocumento()).
+				numeroDocumento(criterioBusquedaEstamento.getNroDocumento()).build();
+		return this.buscar(paciente, Verbo.GET_PACIENTE);
+	}
 }
