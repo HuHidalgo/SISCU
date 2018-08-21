@@ -5,10 +5,9 @@ import java.util.List;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.cenpro.siscu.model.admision.Afiliacion;
-import com.cenpro.siscu.model.carga.Cliente;
 import com.cenpro.siscu.model.criterio.CriterioBusquedaEstamento;
 
-public interface ICargaService
+public interface ICargaInicialService
 {
 	public void cargarAlumnos(MultipartFile archivoAlumnos, String estamento);
     

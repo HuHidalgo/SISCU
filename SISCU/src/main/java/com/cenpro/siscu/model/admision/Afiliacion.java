@@ -38,7 +38,7 @@ public class Afiliacion
     private String idDepartamentoNac;
     private String departamentoNac;
     private Integer idGradoInstruccion;
-    private Integer gradoInstruccion;
+    private String gradoInstruccion;
     private String religion;
     private String ocupacionActual;
     private String direccionActual;

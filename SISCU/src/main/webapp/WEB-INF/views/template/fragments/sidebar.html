@@ -31,11 +31,25 @@
 						<span class="xn-text">Carga de Datos</span>
 					</a>
 					<ul>
-						<li>
-							<a th:href="@{/carga/inicial}">
+						<li sec:authorize="hasPermission('1','ALL')" class="xn-openable">
+							<a>
 								<span class="fa fa-upload"></span>
-								<span>Carga Inicial</span>
+								<span class="xn-text">Carga Inicial</span>
 							</a>
+							<ul>
+								<li>
+									<a th:href="@{/carga/inicial}">
+										<span class="fa fa-upload"></span>
+										<span>Cargar</span>
+									</a>
+								</li>
+								<li>
+									<a th:href="@{/carga/registrarAtendidos}">
+										<span class="fa fa-user-plus"></span>
+										<span>Registrar Atendidos</span>
+									</a>
+								</li>
+							</ul>
 						</li>
 						<li>
 							<a th:href="@{/carga/periodica}">

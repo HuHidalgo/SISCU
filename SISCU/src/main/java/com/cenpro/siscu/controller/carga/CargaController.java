@@ -19,8 +19,13 @@ public @Controller class CargaController
     @GetMapping("/carga/inicial")
     public String irPaginaCargaInicial(ModelMap model)
     {
-        //model.addAttribute("tiposAlumno", multiTabDetService.buscarPorIdTabla(MultiTablaUtil.TABLA_TIPO_ALUMNO));
     	model.addAttribute("estamentos", multiTabDetService.buscarPorIdTabla(MultiTablaUtil.TABLA_ESTAMENTOS));
+        return "seguras/carga/inicial/cargarDatos";
+    }
+    
+    @GetMapping("/carga/registrarAtendidos")
+    public String irPaginaRegistrarAtendidos(ModelMap model)
+    {
     	model.addAttribute("estamentos2", multiTabDetService.buscarPorIdTabla(MultiTablaUtil.TABLA_ESTAMENTOS));
     	model.addAttribute("estamentos3", multiTabDetService.buscarPorIdTabla(MultiTablaUtil.TABLA_ESTAMENTOS));
     	model.addAttribute("tiposDocumento", multiTabDetService.buscarPorIdTabla(MultiTablaUtil.TABLA_TIPO_DOCUMENTO));
@@ -30,7 +35,7 @@ public @Controller class CargaController
     	model.addAttribute("grados", multiTabDetService.buscarPorIdTabla(MultiTablaUtil.TABLA_GRADO_INSTRUCCION));
     	model.addAttribute("departamentosNac", multiTabDetService.buscarPorIdTabla(MultiTablaUtil.TABLA_DEPARTAMENTOS));
     	model.addAttribute("facultades", facultadService.buscarTodos());
-        return "seguras/carga/inicial";
+        return "seguras/carga/inicial/registrarAtendidos";
     }
     
     @GetMapping("/carga/periodica")

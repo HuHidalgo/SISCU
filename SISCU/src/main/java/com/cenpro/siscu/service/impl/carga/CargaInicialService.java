@@ -15,13 +15,12 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.cenpro.siscu.mapper.IAfiliacionMapper;
-import com.cenpro.siscu.mapper.ICargaMapper;
+import com.cenpro.siscu.mapper.ICargaInicialMapper;
 import com.cenpro.siscu.mapper.base.IMantenibleMapper;
 import com.cenpro.siscu.model.admision.Afiliacion;
 import com.cenpro.siscu.model.admision.Afiliacion.AfiliacionBuilder;
 import com.cenpro.siscu.model.criterio.CriterioBusquedaEstamento;
-import com.cenpro.siscu.service.ICargaService;
+import com.cenpro.siscu.service.ICargaInicialService;
 import com.cenpro.siscu.service.excepcion.CargaArchivoException;
 import com.cenpro.siscu.utilitario.ConstantesExcepciones;
 import com.cenpro.siscu.utilitario.ConstantesFormatosExcelIngresante;
@@ -30,16 +29,16 @@ import com.cenpro.siscu.utilitario.Verbo;
 import com.cenpro.siscu.service.impl.MantenibleService;
 
 @Service
-public class CargaService extends MantenibleService<Afiliacion> implements ICargaService
+public class CargaInicialService extends MantenibleService<Afiliacion> implements ICargaInicialService
 {
 	@SuppressWarnings("unused")
-    private ICargaMapper cargaMapper;
+    private ICargaInicialMapper cargaInicialMapper;
     private static final String CARGAR = "CARGAR";
     
-    public CargaService(@Qualifier("ICargaMapper") IMantenibleMapper<Afiliacion> mapper)
+    public CargaInicialService(@Qualifier("ICargaMapper") IMantenibleMapper<Afiliacion> mapper)
     {
         super(mapper);
-        this.cargaMapper = (ICargaMapper) mapper;
+        this.cargaInicialMapper = (ICargaInicialMapper) mapper;
     }
 
     public void cargarAlumnos(MultipartFile archivoAlumnos, String estamento)
@@ -174,6 +173,56 @@ public class CargaService extends MantenibleService<Afiliacion> implements ICarg
                 e.printStackTrace();
                 alumno.codigoFacultad(0);
             }
+            
+            // ESTADO CIVIL
+            Cell estadoCivil = row.getCell(ConstantesFormatosExcelRegular.COLUMNA_ESTADO_CIVIL);
+            estadoCivil.setCellType(Cell.CELL_TYPE_STRING);
+            alumno.descEstadoCivil(estadoCivil.getStringCellValue().trim());
+            
+            // DEPARTAMENTO DE NACIMIENTO
+            Cell departamentoNac = row.getCell(ConstantesFormatosExcelRegular.COLUMNA_DEPARTAMENTO_NAC);
+            departamentoNac.setCellType(Cell.CELL_TYPE_STRING);
+            alumno.departamentoNac(departamentoNac.getStringCellValue().trim());
+            
+            // DISTRITO DE NACIMIENTO
+            Cell distritoNac = row.getCell(ConstantesFormatosExcelRegular.COLUMNA_DISTRITO_NAC);
+            distritoNac.setCellType(Cell.CELL_TYPE_STRING);
+            alumno.distritoNac(distritoNac.getStringCellValue().trim());
+            
+            // GRADO INSTRUCCION
+            Cell gradoIntruccion = row.getCell(ConstantesFormatosExcelRegular.COLUMNA_GRADO_INSTRUCCION);
+            gradoIntruccion.setCellType(Cell.CELL_TYPE_STRING);
+            alumno.gradoInstruccion(gradoIntruccion.getStringCellValue().trim());
+            
+            // RELIGION
+            Cell religion = row.getCell(ConstantesFormatosExcelRegular.COLUMNA_RELIGION);
+            religion.setCellType(Cell.CELL_TYPE_STRING);
+            alumno.religion(religion.getStringCellValue().trim());
+            
+            // OCUPACION ACTUAL
+            Cell ocupacionActual = row.getCell(ConstantesFormatosExcelRegular.COLUMNA_OCUPACION_ACTUAL);
+            ocupacionActual.setCellType(Cell.CELL_TYPE_STRING);
+            alumno.ocupacionActual(ocupacionActual.getStringCellValue().trim());
+            
+            // DISTRITO DE PROCEDENCIA
+            Cell distritoProc = row.getCell(ConstantesFormatosExcelRegular.COLUMNA_DISTRITO_PROCE);
+            distritoProc.setCellType(Cell.CELL_TYPE_STRING);
+            alumno.distritoProcedencia(distritoProc.getStringCellValue().trim());
+            
+            // NOMBRE EMERGENCIA
+            Cell nombreEmergencia = row.getCell(ConstantesFormatosExcelRegular.COLUMNA_NOMBRE_EMERGENCIA);
+            nombreEmergencia.setCellType(Cell.CELL_TYPE_STRING);
+            alumno.nombreEmerg(nombreEmergencia.getStringCellValue().trim());
+            
+            // TELEFONO EMERGENCIA
+            Cell telefonoEmergencia = row.getCell(ConstantesFormatosExcelRegular.COLUMNA_TELEFONO_EMERGENCIA);
+            telefonoEmergencia.setCellType(Cell.CELL_TYPE_STRING);
+            alumno.telefonoEmerg(telefonoEmergencia.getStringCellValue().trim());
+            
+            // DIRECCION EMERGENCIA
+            Cell direccionEmergencia = row.getCell(ConstantesFormatosExcelRegular.COLUMNA_DIRECCION_EMERGENCIA);
+            direccionEmergencia.setCellType(Cell.CELL_TYPE_STRING);
+            alumno.direccionEmerg(direccionEmergencia.getStringCellValue().trim());
 
             alumnos.add(alumno.build());
             fila++;

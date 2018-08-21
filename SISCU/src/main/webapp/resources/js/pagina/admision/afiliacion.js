@@ -306,7 +306,6 @@ $(document).ready(function() {
 			return;
 		}
 		var afiliacion = $formAfiliacion.serializeJSON();
-		console.log(afiliacion);
 		afiliacion.fechaNacimiento = $local.$fechaNacimiento.data("daterangepicker").startDate.format('YYYY-MM-DD');
 		$.ajax({
 			type : "POST",
@@ -395,14 +394,15 @@ $(document).ready(function() {
 			}
 		});
 	});
-
+/*
 	$formAfiliacion.find("input").keypress(function(event) {
 		if (event.which == 13) {
-			$local.$buscar.trigger("click");
+			$local.$registrarAfiliacion.trigger("click");
+			$local.$actualizarAfiliacion.trigger("click");
 			return false;
 		}
 	});
-	
+	*/
 	$local.$estamentos2.on("change", function() {
 		var opcion = $(this).val();
 		switch (opcion) {

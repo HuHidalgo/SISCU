@@ -21,16 +21,7 @@
 				<div class="col-md-12 col-sm-12 col-xs-12">
 					<div class="panel panel-default">
 						<div class="panel-heading">
-							<div class="col-lg-12 text-right">
-								<h3 class="panel-title">Carga de Datos Inicial</h3>
-								<button id="consultar" type="button" class="btn btn-primary">
-									<i class="fa fa-book"></i> Consultar
-								</button>
-								<button id="cargar" type="button" class="btn btn-success">
-									<i class="fa fa-upload"></i> Cargar
-								</button>
-							</div>
-							
+							<h3 class="panel-title">Carga inicial de Datos</h3>
 						</div>
 						<div id="divCarga" class="panel-body">
 							<fieldset class="well">
@@ -55,7 +46,7 @@
 											</div>
 										</div>
 									</div>
-									<div id="botonesForm" class="form-group">
+									<div class="form-group">
 										<div class="col-lg-12 text-center">
 											<button id="cargarInicial" type="button" class="btn btn-success">
 												<i class="fa fa-floppy-o"></i> Cargar
@@ -65,63 +56,10 @@
 								</form>
 							</fieldset>
 						</div>
-						<div id="divConsulta" class="panel-body hidden">
-							<fieldset class="well">
-								<legend class="well-legend"></legend>
-								<form id="formConsultaInicial" class="form-horizontal" role="form" method="POST" enctype="multipart/form-data">
-									<div class="form-group">										
-										<div class="group">
-											<label class="control-label col-lg-1">Estamento</label>
-											<div class="col-lg-3">
-												<select id="estamentos2" class="form-control select2" name="idEstamento">
-													<option value="" disabled="disabled" selected="selected">Seleccione un Estamento</option>
-													<option th:each="estamento : ${estamentos2}" th:value="${estamento.idItem}" 
-														th:text="|${estamento.idItem} - ${estamento.descripcionItem}|"></option>
-												</select>
-											</div>
-										</div>										
-										<div class="group">
-											<label class="control-label col-lg-2">Tipo de Documento</label>
-											<div class="col-lg-2">
-												<select id="tiposDocumento" class="form-control select2" name="tipoDocumento">
-													<option value="" disabled="disabled" selected="selected">Seleccione un Tipo de Documento</option>
-													<option th:each="tipoDocumento : ${tiposDocumento}" th:value="${tipoDocumento.idItem}"
-														th:text="|${tipoDocumento.idItem} - ${tipoDocumento.abreviatura}|"></option>
-												</select>
-											</div>
-										</div>
-										
-										<div class="group">
-											<div class="group">
-												<label class="control-label col-lg-1">Nro. Documento</label>
-												<div class="col-lg-2">
-													<input id="nroDocumento" type="text" name="nroDocumento" class="form-control numbersOnly" maxlength="12"
-														autocomplete="off" />
-												</div>
-											</div>
-										</div>
-									</div>
-									<div id="botonesForm" class="form-group">
-										<div class="col-lg-12 text-center">
-											<button id="buscarAfiliado" type="button" class="btn btn-primary">
-												<i class="fa fa-search"></i> Buscar
-											</button>
-										</div>
-									</div>									
-								</form>
-							</fieldset>
-							<div id="resultadoCargaInicial" class="col-xs-12">
-								<table id="tablaCargaConsulta" class="table table-bordered table-condensed nowrap display table-hover">
-								</table>
-							</div>
-						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-		<th:block 
-			th:replace="~{template/fragments/carga/modalAfiliado :: modalAfiliado(tipo=afiliado)}?:~{}">
-		</th:block>
 	</th:block>
 
 	<th:block layout:fragment="script">
@@ -140,8 +78,7 @@
 		<script th:src="@{/resources/js/jquery/moment.min.js}"></script>
 		<script th:src="@{/resources/js/jquery/daterangepicker.js}"></script>
 		<script th:src="@{/resources/js/util/formularioUtil.js}"></script>
-		<script th:src="@{/resources/js/pagina/carga/inicial/inicial.js}"></script>
-		<script th:src="@{/resources/js/pagina/carga/inicial/inicialFormulario.js}"></script>
+		<script th:src="@{/resources/js/pagina/carga/inicial/cargarDatos.js}"></script>
 	</th:block>
 </body>
 </html>
