@@ -143,7 +143,7 @@ $(document).ready(function() {
 			return;
 		}
 		var consultarDatos = $formConsultaInicial.serializeJSON();
-				 
+		console.log(consultarDatos);
 		$.ajax({
 			type : "GET",
 			url : $variableUtil.root + "carga/registrarAtendidos?accion=buscarPorEstamento",
