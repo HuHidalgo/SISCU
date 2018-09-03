@@ -29,6 +29,7 @@ public class ConstantesFormatosExcelRegular
     public static final int COLUMNA_NOMBRE_EMERGENCIA = 21;
     public static final int COLUMNA_TELEFONO_EMERGENCIA = 22;
     public static final int COLUMNA_DIRECCION_EMERGENCIA = 23;
+    public static final int COLUMNA_DEPARTAMENTO_TRABAJO = 8;
 
     private ConstantesFormatosExcelRegular()
     {
