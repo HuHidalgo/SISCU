@@ -26,7 +26,12 @@ public @RestController class AfiliacionRestController
 
     @GetMapping(value = "/consulta", params = "accion=buscarPorEstamento")
     public List<Afiliacion> buscarPorEstamento(CriterioBusquedaEstamento criterioBusquedaEstamento){
-        return this.afiliacionService.buscarPorNroDocumento(criterioBusquedaEstamento);
+    	if (this.afiliacionService.buscarPorNroDocumento(criterioBusquedaEstamento).size() != 0) {
+    		return this.afiliacionService.buscarPorNroDocumento(criterioBusquedaEstamento);
+    	}
+    	else {
+    		return this.afiliacionService.buscarPorNroDocumentoNoAfiliado(criterioBusquedaEstamento);
+    	}
     }
     
     @Audit(accion = Accion.Registro, comentario = Comentario.Registro)
@@ -45,6 +50,7 @@ public @RestController class AfiliacionRestController
     @PutMapping
     public ResponseEntity<?> actualizarAfiliacion(@RequestBody Afiliacion afiliacion)
     {
+    	//System.out.println(afiliacion);
     	CriterioBusquedaEstamento criterioBusqueda = new CriterioBusquedaEstamento();
     	afiliacionService.actualizarAfiliacion(afiliacion);
     	criterioBusqueda.setIdEstamento(afiliacion.getIdEstamento());

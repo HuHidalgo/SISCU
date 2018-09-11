@@ -19,7 +19,14 @@ $(document).ready(function() {
 		$buscarAfiliado : $("#buscarAfiliado"),
 		$tiposDocumento : $("#tiposDocumento"),
 		$tiposDocumento2 : $("#tiposDocumento2"), 
-
+		$areaTra : $("#areaTra"),
+		numeroRegistroSeleccionado : "",
+		$divCodigoAlumno : $("#divCodigoAlumno"),
+		$divNroDocumento : $("#divNroDocumento"),
+		$divCodAlumno : $("#divCodAlumno"),
+		$divFacultad : $("#divFacultad"),
+		$divEscuela : $("#divEscuela"),
+		$divAreaTrabajo : $("#divAreaTrabajo"),
 		$registrarAfiliado : $("#registrarAfiliado"),
 		$fechaNacimiento : $("#fechaNacimiento"),
 		$edad : $("#edad"),
@@ -72,7 +79,7 @@ $(document).ready(function() {
 		},
 		"ordering" : false,
 		"columnDefs" : [ {
-			"targets" : [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 ],
+			"targets" : [ 1, 2, 3, 4, 5, 6, 7, 8 ],
 			"className" : "all filtrable",
 			"defaultContent" : "-"
 		}, {
@@ -88,9 +95,6 @@ $(document).ready(function() {
 		"columns" : [ {
 			"data" : null,
 			"title" : 'Acción'
-		}, {
-			"data" : 'codigoAlumno',
-			"title" : "Código de Alumno"
 		}, {
 			"data" : function(row) {
 				return $funcionUtil.unirCodigoDescripcion(row.idTipoDocumento, row.numeroDocumento);
@@ -111,16 +115,6 @@ $(document).ready(function() {
 				return row.fechaNacimiento;
 			},
 			"title" : "Fecha de Nacimiento"
-		}, {
-			"data" : function(row) {
-				return $funcionUtil.unirCodigoDescripcion(row.codigoFacultad, row.descripcionFacultad);
-			},
-			"title" : "Facultad"
-		}, {
-			"data" : function(row) {
-				return $funcionUtil.unirCodigoDescripcion(row.codigoEscuela, row.descripcionEscuela);
-			},
-			"title" : "Escuela"
 		}, {
 			"data" : "direccionActual",
 			"title" : 'Dirección'
@@ -143,7 +137,6 @@ $(document).ready(function() {
 			return;
 		}
 		var consultarDatos = $formConsultaInicial.serializeJSON();
-		console.log(consultarDatos);
 		$.ajax({
 			type : "GET",
 			url : $variableUtil.root + "carga/registrarAtendidos?accion=buscarPorEstamento",
@@ -157,7 +150,7 @@ $(document).ready(function() {
 					$funcionUtil.notificarException($variableUtil.busquedaSinResultados, "fa-exclamation-circle", "Información", "info");
 					return;
 				}
-				//console.log(afiliacion[0]);
+				console.log(afiliacion);
 				$local.tablaCargaConsulta.rows.add(afiliacion).draw();
 			},
 			complete : function() {
@@ -182,6 +175,72 @@ $(document).ready(function() {
 		$local.$filaSeleccionada = "";
 	});
 	
+	$local.$facultades.on("change", function(event, opcionSeleccionada) {
+		var codigoFacultad = $(this).val();
+		if (codigoFacultad == null || codigoFacultad == undefined) {
+			$local.$escuelas.find("option:not(:eq(0))").remove();
+			return;
+		}
+		$.ajax({
+			type : "GET",
+			url : $variableUtil.root + "mantenimiento/escuela/facultad/" + codigoFacultad,
+			beforeSend : function(xhr) {
+				$local.$escuelas.find("option:not(:eq(0))").remove();
+				$local.$escuelas.parent().append("<span class='help-block cargando'><i class='fa fa-spinner fa-pulse fa-fw'></i> Cargando Escuelas</span>")
+			},
+			statusCode : {
+				400 : function(response) {
+					$funcionUtil.limpiarMensajesDeError($formAfiliacion);
+					$funcionUtil.mostrarMensajeDeError(response.responseJSON, $formAfiliacion);
+				}
+			},
+			success : function(escuelas) {
+				$.each(escuelas, function(i, escuela) {
+					$local.$escuelas.append($("<option />").val(this.codigoEscuela).text(this.codigoEscuela + " - " + this.descripcion));
+				});
+				if (opcionSeleccionada != null && opcionSeleccionada != undefined) {
+					$local.$escuelas.val(opcionSeleccionada).trigger("change.select2");
+				}
+			},
+			complete : function() {
+				$local.$escuelas.parent().find(".cargando").remove();
+			}
+		});
+	});
+	
+	$local.$departamentosNac.on("change", function(event, opcionSeleccionada) {
+		var codDepartamento = $(this).val();
+		if (codDepartamento == null || codDepartamento == undefined) {
+			$local.$distritosNac.find("option:not(:eq(0))").remove();
+			return;
+		}
+		$.ajax({
+			type : "GET",
+			url : $variableUtil.root + "mantenimiento/multiTabDet/multiTabCab2/" + codDepartamento,
+			beforeSend : function(xhr) {
+				$local.$distritosNac.find("option:not(:eq(0))").remove();
+				$local.$distritosNac.parent().append("<span class='help-block cargando'><i class='fa fa-spinner fa-pulse fa-fw'></i> Cargando Distritos</span>")
+			},
+			statusCode : {
+				400 : function(response) {
+					$funcionUtil.limpiarMensajesDeError($formAfiliacion);
+					$funcionUtil.mostrarMensajeDeError(response.responseJSON, $formAfiliacion);
+				}
+			},
+			success : function(distritos) {
+				$.each(distritos, function(i, distrito) {
+					$local.$distritosNac.append($("<option />").val(this.idItem).text(this.descripcionItem));
+				});
+				if (opcionSeleccionada != null && opcionSeleccionada != undefined) {
+					$local.$distritosNac.val(opcionSeleccionada).trigger("change.select2");
+				}
+			},
+			complete : function() {
+				$local.$distritosNac.parent().find(".cargando").remove();
+			}
+		});
+	});
+	
 	$local.$tablaCargaConsulta.children("tbody").on("click", ".afiliar", function() {
 		console.log("dfd");
 		$local.$filaSeleccionada = $(this).parents("tr");
@@ -199,6 +258,44 @@ $(document).ready(function() {
 		//$local.$registrarAfiliacion.addClass("hidden");
 		$local.$modalAfiliado.PopupWindow("open");
 	});
+	
+	$local.$registrarAfiliado.on("click", function() {
+		if (!$formAfiliado.valid()) {
+			return;
+		}
+		var afiliado = $formAfiliado.serializeJSON();
+		afiliado.fechaNacimiento = $local.$fechaNacimiento.data("daterangepicker").startDate.format('YYYY-MM-DD');
+		$.ajax({
+			type : "POST",
+			url : $variableUtil.root + "carga",
+			data : JSON.stringify(afiliado),
+			beforeSend : function(xhr) {
+				$local.tablaCargaConsulta.clear().draw();
+				$local.$registrarAfiliado.attr("disabled", true).find("i").removeClass("fa-floppy-o").addClass("fa-spinner fa-pulse fa-fw");
+				xhr.setRequestHeader('Content-Type', 'application/json');
+				xhr.setRequestHeader("X-CSRF-TOKEN", $variableUtil.csrf);
+			},
+			statusCode : {
+				400 : function(response) {
+					$funcionUtil.limpiarMensajesDeError($formAfiliado);
+					$funcionUtil.mostrarMensajeDeError(response.responseJSON, $formAfiliado);
+				}
+			},
+			success : function(afiliaciones) {
+				$funcionUtil.notificarException($variableUtil.registroExitoso, "fa-check", "Aviso", "success");
+				var afiliacion = afiliaciones[0];
+				var row = $local.tablaCargaConsulta.row.add(afiliacion).draw();
+				row.show().draw(false);
+				$(row.node()).animateHighlight();
+				$local.$modalAfiliado.PopupWindow("close");
+			},
+			error : function(response) {
+			},
+			complete : function(response) {
+				$local.$registrarAfiliado.attr("disabled", false).find("i").addClass("fa-floppy-o").removeClass("fa-spinner fa-pulse fa-fw");
+			}
+		});
+	});
 
 	$local.$tablaCargaConsulta.find("thead").on('keyup', 'input.filtrable', function() {
 		$local.tablaCargaConsulta.column($(this).parent().index() + ':visible').search(this.value).draw();
@@ -207,5 +304,55 @@ $(document).ready(function() {
 	$local.$tablaCargaConsulta.find("thead").on('change', 'select', function() {
 		var val = $.fn.dataTable.util.escapeRegex($(this).val());
 		$local.tablaCargaConsulta.column($(this).parent().index() + ':visible').search(val ? '^' + val + '$' : '', true, false).draw();
+	});
+	
+	$local.$fechaNacimiento.on("change", function(event, opcionSeleccionada) {
+		var fechaNac = $(this).val();
+		var hoy = new Date();
+		var cumpleanos = fechaNac.split("/");
+	    edad = hoy.getFullYear() - cumpleanos[2];
+	    var m = (hoy.getMonth()+1) - cumpleanos[1];
+	    if (m < 0 || (m == 0 && hoy.getDate() < cumpleanos[0])) {
+	    	edad--;
+	    }
+	    $local.$edad.val(edad);
+	});
+	
+	$local.$estamentos3.on("change", function() {
+		var opcion = $(this).val();
+		switch (opcion) {
+		case "1":
+			$local.$divCodAlumno.removeClass("hidden");
+			$local.$divFacultad.removeClass("hidden");
+			$local.$divEscuela.removeClass("hidden");
+			$local.$divAreaTrabajo.addClass("hidden");
+			//$local.$codAlumno.val("");
+			break;
+		case "2":
+			$local.$divCodAlumno.addClass("hidden");
+			$local.$divFacultad.removeClass("hidden");
+			$local.$divEscuela.removeClass("hidden");
+			$local.$divAreaTrabajo.addClass("hidden");
+			break;
+		case "3":
+			$local.$divCodAlumno.addClass("hidden");
+			$local.$divFacultad.removeClass("hidden");
+			$local.$divEscuela.addClass("hidden");
+			$local.$divAreaTrabajo.removeClass("hidden");
+			$local.$areaTra.val("");
+			break;
+		case "4":
+			$local.$divCodAlumno.addClass("hidden");
+			$local.$divFacultad.addClass("hidden");
+			$local.$divEscuela.addClass("hidden");
+			$local.$divAreaTrabajo.addClass("hidden");
+			break;
+		case "5":
+			$local.$divCodAlumno.addClass("hidden");
+			$local.$divFacultad.addClass("hidden");
+			$local.$divEscuela.addClass("hidden");
+			$local.$divAreaTrabajo.addClass("hidden");
+			break;
+		}
 	});
 });

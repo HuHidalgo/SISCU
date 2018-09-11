@@ -38,7 +38,8 @@ $(document).ready(function() {
 		$edad : $("#edad"),
 		
 		tipoDocumento : "",
-		nroDocumento : ""
+		nroDocumento : "",
+		idAfiliacion: ""
 	};
 
 	// Para Consulta
@@ -157,6 +158,7 @@ $(document).ready(function() {
 				$local.$buscar.attr("disabled", true).find("i").removeClass("fa-search").addClass("fa-spinner fa-pulse fa-fw");
 			},
 			success : function(afiliacion) {
+				console.log(afiliacion[0]);
 				if (afiliacion.length == 0) {
 					$funcionUtil.notificarException($variableUtil.busquedaSinResultados, "fa-exclamation-circle", "Información", "info");
 					return;
@@ -342,9 +344,11 @@ $(document).ready(function() {
 	$local.$tablaConsultaAdmision.children("tbody").on("click", ".actualizar", function() {
 		$local.$filaSeleccionada = $(this).parents("tr");
 		var cliente = $local.tablaConsultaAdmision.row($local.$filaSeleccionada).data();
+		//console.log(cliente);
 		var fechaNacimiento = $funcionUtil.convertirDeFormatoAFormato(cliente.fechaNacimiento, "YYYY-MM-DD", "DD/MM/YYYY");
 		$local.$fechaNacimiento.data("daterangepicker").setStartDate(fechaNacimiento);
 		$local.$fechaNacimiento.data("daterangepicker").setEndDate(fechaNacimiento);
+		$local.$idAfiliacion = cliente.idAfiliacion;
 		$local.$tipoDocumento = cliente.idTipoDocumento;
 		$local.$nroDocumento = cliente.numeroDocumento;
 		$funcionUtil.llenarFormulario(cliente, $formAfiliacion);
@@ -361,7 +365,8 @@ $(document).ready(function() {
 			return;
 		}
 		var afiliacion = $formAfiliacion.serializeJSON();
-		console.log(afiliacion);
+		//console.log(afiliacion);
+		afiliacion.idAfiliacion = $local.$idAfiliacion;
 		afiliacion.fechaNacimiento = $local.$fechaNacimiento.data("daterangepicker").startDate.format('YYYY-MM-DD');
 		$.ajax({
 			type : "PUT",
@@ -424,7 +429,7 @@ $(document).ready(function() {
 			$local.$divFacultad.removeClass("hidden");
 			$local.$divEscuela.addClass("hidden");
 			$local.$divAreaTrabajo.removeClass("hidden");
-			$local.$areaTra.val("");
+			//$local.$areaTra.val("");
 			break;
 		case "4":
 			$local.$divCodAlumno.addClass("hidden");

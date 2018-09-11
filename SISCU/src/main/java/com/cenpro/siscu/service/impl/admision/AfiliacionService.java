@@ -41,12 +41,13 @@ public class AfiliacionService extends MantenibleService<Afiliacion> implements 
     public List<Afiliacion> buscarPorNroDocumento(CriterioBusquedaEstamento criterioBusquedaEstamento)
     {
     	return this.afiliacionMapper.buscarPorNroDocumento(criterioBusquedaEstamento);
-    	/*
-    	Afiliacion afiliar = Afiliacion.builder().idEstamento(criterioBusquedaEstamento.getIdEstamento()).
-    											idTipoDocumento(criterioBusquedaEstamento.getTipoDocumento()).
-    											numeroDocumento(criterioBusquedaEstamento.getNroDocumento()).build();
-    			
-        return this.buscar(afiliar, Verbo.GET);*/
+    }
+    
+    @Override
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public List<Afiliacion> buscarPorNroDocumentoNoAfiliado(CriterioBusquedaEstamento criterioBusquedaEstamento)
+    {
+    	return this.afiliacionMapper.buscarPorNroDocumentoNoAfiliado(criterioBusquedaEstamento);
     }
     
     @Transactional(propagation = Propagation.REQUIRES_NEW)

@@ -11,6 +11,8 @@ public interface IAfiliacionService extends IMantenibleService<Afiliacion>
     
     public List<Afiliacion> buscarPorNroDocumento(CriterioBusquedaEstamento criterioBusquedaEstamento);
     
+    public List<Afiliacion> buscarPorNroDocumentoNoAfiliado(CriterioBusquedaEstamento criterioBusquedaEstamento);
+    
     public List<Afiliacion> buscarPorId(String nroDocumento, String tipoDocumento);
     
     public List<Afiliacion> registrarAfiliacion(Afiliacion afiliacion);

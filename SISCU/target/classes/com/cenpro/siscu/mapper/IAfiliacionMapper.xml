@@ -4,6 +4,7 @@
 	
 	<select id="buscarPorNroDocumento" resultType="Afiliacion">
 		SELECT 
+			cliente.nIdAfiliacion						AS idAfiliacion,
 			cliente.vTipoDocumento						AS idTipoDocumento,
 			cliente.vNumeroDocumento					AS numeroDocumento,
             cliente.vNombres							AS nombres,
@@ -21,7 +22,7 @@
         	<if test="idEstamento == 3">
             	cliente.nCodigoFacultad 				AS codigoFacultad,
             	facultad.vDescripcion					AS descripcionFacultad,
-            	cliente.vDptoTrabajo	 				AS dptoTrabajo,
+            	cliente.vDptoTrabajo	 				AS areaTrabajo,
         	</if>
             cliente.vDireccion 							AS direccionActual,
             cliente.dFechaNacimiento					AS fechaNacimiento,
@@ -50,29 +51,110 @@
 		FROM maeafiliacion afiliar
 		
 		<if test="idEstamento == 1">
-           	RIGHT JOIN maealumno cliente				ON (cliente.vNumeroDocumento = afiliar.vNumeroDocumento
-           												AND cliente.vTipoDocumento = afiliar.vTipoDocumento)
+           	RIGHT JOIN maealumno cliente				ON cliente.nIdAfiliacion = afiliar.nIdAfiliacion
            	INNER JOIN maefacultad facultad				ON	(cliente.nCodigoFacultad = facultad.nCodigoFacultad)
 			INNER JOIN maeescuela escuela				ON	(cliente.nCodigoEscuela = escuela.nCodigoEscuela
 														AND cliente.nCodigoFacultad = escuela.nCodigoFacultad)
        	</if>
 		<if test="idEstamento == 2">
-           	RIGHT JOIN maedocente cliente				ON (cliente.vNumeroDocumento = afiliar.vNumeroDocumento
-           												AND cliente.vTipoDocumento = afiliar.vTipoDocumento)
+           	RIGHT JOIN maedocente cliente				ON cliente.nIdAfiliacion = afiliar.nIdAfiliacion
            	INNER JOIN maefacultad facultad				ON	(cliente.nCodigoFacultad = facultad.nCodigoFacultad)
 			INNER JOIN maeescuela escuela				ON	(cliente.nCodigoEscuela = escuela.nCodigoEscuela
 														AND cliente.nCodigoFacultad = escuela.nCodigoFacultad)
        	</if>
        	<if test="idEstamento == 3">
-           	RIGHT JOIN maeadministrativo cliente		ON (cliente.vNumeroDocumento = afiliar.vNumeroDocumento
-           												AND cliente.vTipoDocumento = afiliar.vTipoDocumento)
+           	RIGHT JOIN maeadministrativo cliente		ON cliente.nIdAfiliacion = afiliar.nIdAfiliacion
            	INNER JOIN maefacultad facultad				ON	(cliente.nCodigoFacultad = facultad.nCodigoFacultad)
        	</if>
        	<if test="idEstamento == 4">
-           	RIGHT JOIN maeparticular cliente			ON (cliente.vNumeroDocumento = afiliar.vNumeroDocumento
-           												AND cliente.vTipoDocumento = afiliar.vTipoDocumento)
+           	RIGHT JOIN maeparticular cliente			ON cliente.nIdAfiliacion = afiliar.nIdAfiliacion
        	</if>
 			INNER JOIN maemultitabladet sexo 			ON cliente.vIdSexo = sexo.vIdItem
+			
+		<where>
+        	cliente.vTipoDocumento = #{tipoDocumento}	AND
+			cliente.vNumeroDocumento = #{nroDocumento};
+        </where>
+	</select>
+	
+	<select id="buscarPorNroDocumentoNoAfiliado" resultType="Afiliacion">
+		SELECT 
+			cliente.vTipoDocumento							AS idTipoDocumento,
+			cliente.vNumeroDocumento						AS numeroDocumento,
+            cliente.vNombres								AS nombres,
+            cliente.vApellidoPaterno						AS apellidoPaterno,
+            cliente.vApellidoMaterno						AS apellidoMaterno,
+            <if test="idEstamento == 1">
+            	cliente.vCodigoAlumno 						AS codigoAlumno,
+        	</if>
+        	<if test="idEstamento == 1 or idEstamento == 2">
+            	cliente.nCodigoFacultad						AS codigoFacultad,
+            	facultad.vDescripcion						AS descripcionFacultad,
+            	escuela.nCodigoEscuela						AS codigoEscuela,
+            	escuela.vDescripcion						AS descripcionEscuela,
+        	</if>
+        	<if test="idEstamento == 3">
+            	cliente.nCodigoFacultad 					AS codigoFacultad,
+            	facultad.vDescripcion						AS descripcionFacultad,
+            	cliente.vDptoTrabajo	 					AS dptoTrabajo,
+        	</if>
+            cliente.vDireccion 								AS direccionActual,
+            cliente.dFechaNacimiento						AS fechaNacimiento,
+			(YEAR(CURDATE()) - YEAR(dFechaNacimiento))		AS edad,
+            cliente.vCorreo									AS correo,
+            cliente.vTelefonoFijo 							AS telefonoFijo,
+            cliente.vTelefonoMovil 							AS celular,
+            sexo.vIdItem									AS idSexo,
+            sexo.vDescripcionItem							AS sexo,
+            null											AS fechaAfiliacion,
+            (SELECT vIdItem
+			 FROM maemultitabladet 
+			 WHERE nIdTabla = 5 AND
+			 vDescripcionItem = cliente.vEstadoCivil)		AS idEstadoCivil,
+            (SELECT vIdItem
+			 FROM maemultitabladet 
+			 WHERE nIdTabla = 7 AND
+			 vDescripcionItem = cliente.vDepartamentoNac) 	AS idDepartamentoNac,
+            (SELECT vIdItem
+			 FROM maemultitabladet 
+			 WHERE nIdTabla = 8 AND
+			 vDescripcionItem = cliente.vDistritoNac) 		AS idDistritoNac,
+            (SELECT vIdItem
+			 FROM maemultitabladet 
+			 WHERE nIdTabla = 6 AND
+			 vDescripcionItem = cliente.vGradoInstruccion)	AS idGradoInstruccion,
+            cliente.vReligion								AS religion,
+            cliente.vOcupacionActual						AS ocupacionActual,
+            cliente.vDistritoProcedencia					AS distritoProcedencia,
+            cliente.vNombreEmergencia						AS nombreEmerg,
+            cliente.vTelefonoEmergencia						AS telefonoEmerg,
+            cliente.vDireccionEmergencia					AS direccionEmerg,
+            #{idEstamento}									AS idEstamento,
+            (SELECT vDescripcionItem
+			 FROM maemultitabladet
+			 WHERE nIdTabla = 4 AND 
+					vIdItem = idEstamento)				AS descEstamento
+		
+		<if test="idEstamento == 1">
+           	FROM maealumnosregulares cliente				
+           		INNER JOIN maefacultad facultad		ON	(cliente.nCodigoFacultad = facultad.nCodigoFacultad)
+				INNER JOIN maeescuela escuela		ON	(cliente.nCodigoEscuela = escuela.nCodigoEscuela
+													AND cliente.nCodigoFacultad = escuela.nCodigoFacultad)
+       	</if>
+		<if test="idEstamento == 2">
+           	FROM maedocentecarga cliente				
+           		INNER JOIN maefacultad facultad		ON	cliente.nCodigoFacultad = facultad.nCodigoFacultad
+				INNER JOIN maeescuela escuela		ON	(cliente.nCodigoEscuela = escuela.nCodigoEscuela
+													AND cliente.nCodigoFacultad = escuela.nCodigoFacultad)
+       	</if>
+       	<if test="idEstamento == 3">
+           	FROM maeadministrativocarga cliente				
+           		INNER JOIN maefacultad facultad		ON cliente.nCodigoFacultad = facultad.nCodigoFacultad
+       	</if>
+       	<if test="idEstamento == 4">
+           	FROM maeparticular cliente				
+       	</if>
+				INNER JOIN maemultitabladet sexo 			ON cliente.vIdSexo = sexo.vIdItem
 			
 		<where>
         	cliente.vTipoDocumento = #{tipoDocumento}	AND

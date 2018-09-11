@@ -15,6 +15,7 @@ public interface IAfiliacionMapper extends IMantenibleMapper<Afiliacion>
 {
     @Select(value = { "{call MANT_AFILIACION ( "
             + "#{verbo, jdbcType = VARCHAR, mode = IN},"
+            + "#{objeto.idAfiliacion, jdbcType = INTEGER, mode = IN},"
             + "#{objeto.idEstamento, jdbcType = INTEGER, mode = IN},"
             + "#{objeto.apellidoPaterno, jdbcType = VARCHAR, mode = IN},"
             + "#{objeto.apellidoMaterno, jdbcType = VARCHAR, mode = IN},"
@@ -47,4 +48,6 @@ public interface IAfiliacionMapper extends IMantenibleMapper<Afiliacion>
     public List<Afiliacion> mantener(Parametro parametro);
     
     public List<Afiliacion> buscarPorNroDocumento(CriterioBusquedaEstamento criterioBusqueda);
+    
+    public List<Afiliacion> buscarPorNroDocumentoNoAfiliado(CriterioBusquedaEstamento criterioBusqueda);
 }

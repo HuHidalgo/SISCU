@@ -9,6 +9,7 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -20,8 +21,10 @@ import com.cenpro.siscu.mapper.base.IMantenibleMapper;
 import com.cenpro.siscu.model.admision.Afiliacion;
 import com.cenpro.siscu.model.admision.Afiliacion.AfiliacionBuilder;
 import com.cenpro.siscu.model.criterio.CriterioBusquedaEstamento;
+import com.cenpro.siscu.model.mantenimiento.Campania;
 import com.cenpro.siscu.service.ICargaInicialService;
 import com.cenpro.siscu.service.excepcion.CargaArchivoException;
+import com.cenpro.siscu.service.excepcion.MantenimientoException;
 import com.cenpro.siscu.utilitario.ConstantesExcepciones;
 import com.cenpro.siscu.utilitario.ConstantesFormatosExcelIngresante;
 import com.cenpro.siscu.utilitario.ConstantesFormatosExcelRegular;
@@ -31,7 +34,7 @@ import com.cenpro.siscu.service.impl.MantenibleService;
 @Service
 public class CargaInicialService extends MantenibleService<Afiliacion> implements ICargaInicialService
 {
-	@SuppressWarnings("unused")
+	//@SuppressWarnings("unused")
     private ICargaInicialMapper cargaInicialMapper;
     private static final String CARGAR = "CARGAR";
     
@@ -41,7 +44,8 @@ public class CargaInicialService extends MantenibleService<Afiliacion> implement
         this.cargaInicialMapper = (ICargaInicialMapper) mapper;
     }
 
-    public void cargarAlumnos(MultipartFile archivoAlumnos, String estamento)
+	//@SuppressWarnings("unlikely-arg-type")
+	public void cargarAlumnos(MultipartFile archivoAlumnos, String estamento)
     {
         List<Afiliacion> alumnos = new ArrayList<>();
 
@@ -71,8 +75,8 @@ public class CargaInicialService extends MantenibleService<Afiliacion> implement
 
             // CODIGO ALUMNO
             Cell codigoAlumno = row.getCell(ConstantesFormatosExcelRegular.COLUMNA_CODIGO_ALUMNO);
-            //System.out.println("codigo ALUMNO: " + codigoAlumno);
-            if (codigoAlumno == null){
+            if (codigoAlumno == null || codigoAlumno.toString() == ""){
+            	System.out.println("codigo ALUMNO2: " + codigoAlumno);
                 finExcel = true;
                 continue;
             }
@@ -211,21 +215,37 @@ public class CargaInicialService extends MantenibleService<Afiliacion> implement
             
             // NOMBRE EMERGENCIA
             Cell nombreEmergencia = row.getCell(ConstantesFormatosExcelRegular.COLUMNA_NOMBRE_EMERGENCIA);
-            nombreEmergencia.setCellType(Cell.CELL_TYPE_STRING);
-            alumno.nombreEmerg(nombreEmergencia.getStringCellValue().trim());
+            if (nombreEmergencia == null) {
+            	alumno.nombreEmerg("");
+            }
+            else {
+	            nombreEmergencia.setCellType(Cell.CELL_TYPE_STRING);
+	            alumno.nombreEmerg(nombreEmergencia.getStringCellValue().trim());
+            }
             
             // TELEFONO EMERGENCIA
             Cell telefonoEmergencia = row.getCell(ConstantesFormatosExcelRegular.COLUMNA_TELEFONO_EMERGENCIA);
-            telefonoEmergencia.setCellType(Cell.CELL_TYPE_STRING);
-            alumno.telefonoEmerg(telefonoEmergencia.getStringCellValue().trim());
+            if (telefonoEmergencia == null) {
+            	alumno.telefonoEmerg("");
+            }
+            else {
+	            telefonoEmergencia.setCellType(Cell.CELL_TYPE_STRING);
+	            alumno.telefonoEmerg(telefonoEmergencia.getStringCellValue().trim());
+            }
             
             // DIRECCION EMERGENCIA
             Cell direccionEmergencia = row.getCell(ConstantesFormatosExcelRegular.COLUMNA_DIRECCION_EMERGENCIA);
-            direccionEmergencia.setCellType(Cell.CELL_TYPE_STRING);
-            alumno.direccionEmerg(direccionEmergencia.getStringCellValue().trim());
-
+            if (direccionEmergencia == null) {
+            	alumno.direccionEmerg("");
+            }
+            else {
+	            direccionEmergencia.setCellType(Cell.CELL_TYPE_STRING);
+	            alumno.direccionEmerg(direccionEmergencia.getStringCellValue().trim());
+            }
             alumnos.add(alumno.build());
             fila++;
+            
+            System.out.println("fila :"+fila);
         }
         try{
             workbook.close();
@@ -802,21 +822,48 @@ public class CargaInicialService extends MantenibleService<Afiliacion> implement
 	}
 
 	@Override
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public void registrarNoDocentes(List<Afiliacion> noDocentes) {
 		noDocentes.stream().forEach(noDocente -> this.registrar(noDocente, CARGAR));
 	}
 
 	@Override
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public void registrarParticulares(List<Afiliacion> particulares) {
 		particulares.stream().forEach(particular -> this.registrar(particular, CARGAR));
 	}
 	
 	@Override
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public List<Afiliacion> consultarPorNroDocumento(CriterioBusquedaEstamento criterioBusquedaEstamento) {
+		/*
 		Afiliacion paciente = Afiliacion.builder().idEstamento(criterioBusquedaEstamento.getIdEstamento()).
 				idTipoDocumento(criterioBusquedaEstamento.getTipoDocumento()).
 				numeroDocumento(criterioBusquedaEstamento.getNroDocumento()).build();
-		return this.buscar(paciente, Verbo.GET_PACIENTE);
+		return this.buscar(paciente, Verbo.GET_PACIENTE);*/
+		return this.cargaInicialMapper.buscarPorNroDocumento(criterioBusquedaEstamento);
 	}
+	
+	/////////////
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
+    public List<Afiliacion> buscarPorId(int idAfiliacion)
+    {
+		Afiliacion afiliado = Afiliacion.builder().idAfiliacion(idAfiliacion).build();
+        return this.buscar(afiliado, Verbo.GET);
+    }
+	
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
+    public int registrarAtendidos(Afiliacion afiliacion)
+    {
+        List<Afiliacion> afiliado = this.registrarAutoIncrementable(afiliacion);
+        if (!afiliado.isEmpty() && afiliado.get(0).getIdAfiliacion() != null)
+        {
+            return afiliado.get(0).getIdAfiliacion();
+        } else
+        {
+            throw new MantenimientoException(ConstantesExcepciones.ERROR_REGISTRO);
+        }
+    }
+	//////////////////////////////
 
 }

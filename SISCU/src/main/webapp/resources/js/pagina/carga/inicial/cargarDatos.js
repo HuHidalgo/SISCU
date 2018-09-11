@@ -1,6 +1,9 @@
 $(document).ready(function() {
 
 	var $local = {		
+		$tablaErroresCarga : $("#tablaErroresCarga"),
+		tablaErroresCarga : "",
+		
 		$cargarInicial : $("#cargarInicial"),
 		$estamentos : $("#estamentos"),				
 		$uploadfile : $("#uploadfile"),
@@ -33,6 +36,49 @@ $(document).ready(function() {
 				required : "Seleccione un Archivo"
 			}
 		}
+	});
+	
+	$local.$tablaErroresCarga.on('xhr.dt', function(e, settings, json, xhr) {
+		switch (xhr.status) {
+		case 500:
+			$local.tablaErroresCarga.clear().draw();
+			break;
+		}
+	});	
+	
+	$local.tablaErroresCarga = $local.$tablaErroresCarga.DataTable({
+		"language" : {
+			"emptyTable" : "No hay datos cargados"
+		},
+		"initComplete" : function() {
+			$local.$tablaErroresCarga.wrap("<div class='table-responsive'></div>");
+			$tablaFuncion.aniadirFiltroDeBusquedaEnEncabezado(this, $local.$tablaErroresCarga);
+		},
+		"ordering" : false,
+		"columnDefs" : [ {
+			"targets" : [ 1 ],
+			"className" : "all filtrable",
+			"defaultContent" : "-"
+		}, {
+			"targets" : 0,
+			"className" : "all dt-center",
+			"render" : function(data, type, row, meta) {
+				if (row.fechaAfiliacion == null)
+					return $variableUtil.botonAfiliar;
+				else
+					return "<label class='label label-success label-size-12'>AFILIADO</label>";
+			}
+		}],
+		"columns" : [ {
+			"data" : null,
+			"title" : 'Fila',
+			"width" : "10%"
+		}, {
+			"data" : function(row) {
+				return $funcionUtil.unirCodigoDescripcion(row.idTipoDocumento, row.numeroDocumento);
+			},
+			"title" : "Descripción"
+		}]
 	});
 	
 	$local.$cargarInicial.on("click", function(e) {
@@ -71,6 +117,5 @@ $(document).ready(function() {
 			}
 		});
 	});
-	
 	
 });

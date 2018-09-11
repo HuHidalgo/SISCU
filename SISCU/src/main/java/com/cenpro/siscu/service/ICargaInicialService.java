@@ -20,7 +20,11 @@ public interface ICargaInicialService
     public void registrarAlumnos(List<Afiliacion> alumnos);
     
     public List<Afiliacion> consultarPorNroDocumento(CriterioBusquedaEstamento criterioBusquedaEstamento);
-
+    /////////////////
+    public int registrarAtendidos(Afiliacion afiliacion);
+    
+    public List<Afiliacion> buscarPorId(int idAfiliacion);
+    /////////////////
 	void registrarParticulares(List<Afiliacion> particulares);
 
 	void registrarNoDocentes(List<Afiliacion> noDocentes);

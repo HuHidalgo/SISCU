@@ -13,6 +13,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.cenpro.siscu.aspecto.anotacion.Audit;
+import com.cenpro.siscu.aspecto.enumeracion.Accion;
+import com.cenpro.siscu.aspecto.enumeracion.Comentario;
 import com.cenpro.siscu.model.admision.Afiliacion;
 import com.cenpro.siscu.model.criterio.CriterioBusquedaEstamento;
 import com.cenpro.siscu.service.IAfiliacionService;
@@ -25,6 +28,14 @@ public @RestController class CargaRestController
 {
     private @Autowired ICargaInicialService cargaInicialService;
     private @Autowired IAfiliacionService afiliacionService;
+    
+    @Audit(accion = Accion.Registro, comentario = Comentario.Registro)
+    @PostMapping
+    public ResponseEntity<?> registrarAfiliado(@RequestBody Afiliacion afiliacion)
+    {
+    	int idAfiliado = cargaInicialService.registrarAtendidos(afiliacion);
+        return ResponseEntity.ok(cargaInicialService.buscarPorId(idAfiliado));
+    }
 
     @PostMapping(value = "/inicial/uploadfile/{estamento}", params = "accion=cargar")
     public ResponseEntity<?> cargasIniciales(@RequestParam("uploadfile") MultipartFile file, @PathVariable String estamento){
