@@ -34,6 +34,7 @@
 												<select id="estamentos" class="form-control select2" name="idEstamento">
 													<option value="" disabled="disabled" selected="selected">Seleccione un Estamento</option>
 													<option th:each="estamento : ${estamentos}" th:value="${estamento.idItem}" 
+														th:if="${estamento.idItem != '4' && estamento.idItem != '5'}"
 														th:text="|${estamento.idItem} - ${estamento.descripcionItem}|"></option>
 												</select>
 											</div>
@@ -55,7 +56,9 @@
 									</div>									
 								</form>
 							</fieldset>
-							<div id="erroresCargaInicial" class="col-xs-12 hidden">
+							<div id="divTotalRegistros">
+							</div>
+							<div id="divErroresCarga" class="col-xs-12 hidden">
 								<table id="tablaErroresCarga" class="table table-bordered table-condensed nowrap display table-hover">
 								</table>
 							</div>

@@ -8,6 +8,9 @@ $(document).ready(function() {
 		$estamentos : $("#estamentos"),				
 		$uploadfile : $("#uploadfile"),
 		
+		$divErroresCarga: $("#divErroresCarga"),
+		$divTotalRegistros: $("#divTotalRegistros")
+		
 	};
 
 	$formCargaInicial = $("#formCargaInicial");
@@ -50,10 +53,8 @@ $(document).ready(function() {
 		"language" : {
 			"emptyTable" : "No hay datos cargados"
 		},
-		"initComplete" : function() {
-			$local.$tablaErroresCarga.wrap("<div class='table-responsive'></div>");
-			$tablaFuncion.aniadirFiltroDeBusquedaEnEncabezado(this, $local.$tablaErroresCarga);
-		},
+		"lengthChange": false,
+		"searching": false,
 		"ordering" : false,
 		"columnDefs" : [ {
 			"targets" : [ 1 ],
@@ -62,22 +63,16 @@ $(document).ready(function() {
 		}, {
 			"targets" : 0,
 			"className" : "all dt-center",
-			"render" : function(data, type, row, meta) {
-				if (row.fechaAfiliacion == null)
-					return $variableUtil.botonAfiliar;
-				else
-					return "<label class='label label-success label-size-12'>AFILIADO</label>";
-			}
 		}],
 		"columns" : [ {
-			"data" : null,
+			"data" : function(row){
+				return "<label class='label label-danger label-size-12'>" + row.fila + "</label>";
+			},
 			"title" : 'Fila',
 			"width" : "10%"
 		}, {
-			"data" : function(row) {
-				return $funcionUtil.unirCodigoDescripcion(row.idTipoDocumento, row.numeroDocumento);
-			},
-			"title" : "Descripción"
+			"data" : "nombreColumna",
+			"title" : "Descripción de Errores: Columnas con valores nulos"
 		}]
 	});
 	
@@ -107,8 +102,17 @@ $(document).ready(function() {
 					$funcionUtil.mostrarMensajeDeError(response.responseJSON, $formCargaInicial);
 				}
 			},
-			success : function(response) {
-				$funcionUtil.notificarException(response, "fa-check", "Aviso", "success");
+			success : function(carga) {
+				console.log(carga);
+				$local.$divTotalRegistros.append($("<h3 align='center'>").text("Total de Registros Cargados : " + carga.totalRegistros));
+				if (carga.errorCarga != 0) {
+					$funcionUtil.notificarException("Hubo un error en la carga", "fa-exclamation-circle", "Información", "warning");
+					$local.$divErroresCarga.removeClass("hidden");
+					$local.tablaErroresCarga.rows.add(carga.errorCarga).draw();
+					//$local.$divAreaTrabajo.addClass("hidden");
+					return;
+				}
+				$funcionUtil.notificarException("Se cargó exitósamente", "fa-check", "Aviso", "success");
 			},
 			error : function(response) {
 			},

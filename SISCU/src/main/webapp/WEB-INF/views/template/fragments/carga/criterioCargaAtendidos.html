@@ -3,16 +3,16 @@
 <head>
 </head>
 <body>
-	<div id="criterioConsultaAtendidos" class="row" th:fragment="criterioConsultaAtendidos" th:with="tipo=${tipo}">
+	<div id="criterioCargaAtendidos" class="row" th:fragment="criterioCargaAtendidos" th:with="tipo=${tipo}">
 		<fieldset class="well">
 			<legend class="well-legend"></legend>
-			<form id="formConsultaInicial" class="form-horizontal" role="form">
-				<th:block th:replace="~{template/fragments/carga/criterioConsultaAtendidos :: ${tipo}}?:~{}">
+			<form id="formCargaAtendidos" class="form-horizontal" role="form">
+				<th:block th:replace="~{template/fragments/carga/criterioCargaAtendidos :: ${tipo}}?:~{}">
 				</th:block>
 				<div class="form-group">
 					<div class="col-lg-12 text-center">
 						<button id="cargarAfiliados" type="button" class="btn btn-success">
-							<i class="fa fa-search"></i> Cargar
+							<i class="fa fa-floppy-o"></i> Cargar
 						</button>
 					</div>
 				</div>

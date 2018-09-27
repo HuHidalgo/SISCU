@@ -78,7 +78,7 @@
 							<select id="estadosCiviles" class="form-control select2" name="idEstadoCivil">
 								<option value="" disabled="disabled" selected="selected">Seleccione Estado civil</option>
 								<option th:each="estado : ${estadosCiviles}" th:value="${estado.idItem}" 
-										th:text="|${estado.idItem} - ${estado.descripcionItem}|"></option>
+										th:text="|${estado.descripcionItem}|"></option>
 							</select>
 						</div>
 					</div>
@@ -127,7 +127,7 @@
 							<select id="grados" class="form-control select2" name="idGradoInstruccion">
 								<option value="" disabled="disabled" selected="selected">Seleccione un Grado de Instrucción</option>
 								<option th:each="grado : ${grados}" th:value="${grado.idItem}" 
-										th:text="|${grado.idItem} - ${grado.descripcionItem}|"></option>
+										th:text="|${grado.descripcionItem}|"></option>
 							</select>
 						</div>
 					</div>

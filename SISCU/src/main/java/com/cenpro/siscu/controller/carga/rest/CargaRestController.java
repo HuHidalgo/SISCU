@@ -17,8 +17,11 @@ import com.cenpro.siscu.aspecto.anotacion.Audit;
 import com.cenpro.siscu.aspecto.enumeracion.Accion;
 import com.cenpro.siscu.aspecto.enumeracion.Comentario;
 import com.cenpro.siscu.model.admision.Afiliacion;
+import com.cenpro.siscu.model.carga.Carga;
+import com.cenpro.siscu.model.carga.ErrorCarga;
 import com.cenpro.siscu.model.criterio.CriterioBusquedaEstamento;
 import com.cenpro.siscu.service.IAfiliacionService;
+import com.cenpro.siscu.service.ICargaAtendidosService;
 import com.cenpro.siscu.service.ICargaInicialService;
 
 import com.cenpro.siscu.utilitario.ConstantesGenerales;
@@ -27,7 +30,7 @@ import com.cenpro.siscu.utilitario.ConstantesGenerales;
 public @RestController class CargaRestController
 {
     private @Autowired ICargaInicialService cargaInicialService;
-    private @Autowired IAfiliacionService afiliacionService;
+    private @Autowired ICargaAtendidosService cargaAtendidosService;
     
     @Audit(accion = Accion.Registro, comentario = Comentario.Registro)
     @PostMapping
@@ -38,18 +41,18 @@ public @RestController class CargaRestController
     }
 
     @PostMapping(value = "/inicial/uploadfile/{estamento}", params = "accion=cargar")
-    public ResponseEntity<?> cargasIniciales(@RequestParam("uploadfile") MultipartFile file, @PathVariable String estamento){
+    public Carga cargasIniciales(@RequestParam("uploadfile") MultipartFile file, @PathVariable String estamento){
         if (estamento.equals("1"))
-            cargaInicialService.cargarAlumnos(file, estamento);
+            return cargaInicialService.cargarAlumnos(file, estamento);
          else
         	 if (estamento.equals("2"))
-                 cargaInicialService.cargarDocentes(file, estamento);
+                 return cargaInicialService.cargarDocentes(file, estamento);
               else
             	  if (estamento.equals("3"))
-            		  cargaInicialService.cargarNoDocentes(file, estamento);
+            		  return cargaInicialService.cargarNoDocentes(file, estamento);
                   else
-                	  cargaInicialService.cargarParticulares(file, estamento);                	 	
-        return ResponseEntity.ok(ConstantesGenerales.CARGA_EXITOSA);
+                	  return cargaInicialService.cargarParticulares(file, estamento);                	 	
+        
     }	
     
     @PostMapping(value = "/periodica/uploadfile/{estamento}", params = "accion=cargar")
@@ -80,8 +83,17 @@ public @RestController class CargaRestController
                 	  cargaInicialService.cargarParticulares(file, estamento);                	 	
     }	
     
-    @GetMapping(value = "/registrarAtendidos", params = "accion=buscarPorEstamento")
-    public List<Afiliacion> consultarCliente(CriterioBusquedaEstamento criterioBusquedaEstamento){
-    	return cargaInicialService.consultarPorNroDocumento(criterioBusquedaEstamento);
+    @PostMapping(value = "/registrarAtendidos/uploadfile/{estamento}", params = "accion=cargar")
+    public Carga cargasAfiliados(@RequestParam("uploadfile") MultipartFile file, @PathVariable String estamento){
+    	if (estamento.equals("1"))
+    		return cargaAtendidosService.cargarAlumnosAfiliados(file, estamento);
+         else
+        	 if (estamento.equals("2"))
+        		 return cargaAtendidosService.cargarDocentesAfiliados(file, estamento);
+              else
+            	  if (estamento.equals("3"))
+            		  return cargaAtendidosService.cargarNoDocentesAfiliados(file, estamento);
+                  else
+                	  return cargaAtendidosService.cargarParticularesAfiliados(file, estamento);  
     }
 }

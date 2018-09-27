@@ -79,6 +79,8 @@ $(document).ready(function() {
 			$tablaFuncion.aniadirFiltroDeBusquedaEnEncabezado(this, $local.$tablaConsultaAdmision);
 		},
 		"ordering" : false,
+		"lengthChange": false,
+		"searching": false,
 		"columnDefs" : [ {
 			"targets" : [ 2, 3, 4, 5, 6 ],
 			"className" : "all filtrable",
@@ -158,7 +160,7 @@ $(document).ready(function() {
 				$local.$buscar.attr("disabled", true).find("i").removeClass("fa-search").addClass("fa-spinner fa-pulse fa-fw");
 			},
 			success : function(afiliacion) {
-				console.log(afiliacion[0]);
+				//console.log(afiliacion[0]);
 				if (afiliacion.length == 0) {
 					$funcionUtil.notificarException($variableUtil.busquedaSinResultados, "fa-exclamation-circle", "Información", "info");
 					return;

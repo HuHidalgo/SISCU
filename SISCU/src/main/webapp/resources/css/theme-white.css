@@ -311,7 +311,7 @@ body.page-container-boxed .page-container {
 }
 
 .x-navigation {
-	background: white;
+	background: #D7BDE2;
 	/* NAV LIST ELEMENT */
 	/* END NAV LIST ELEMENT */
 	/* NAV LIST FIRST ELEMENT */
@@ -520,7 +520,7 @@ body.page-container-boxed .page-container {
 
 .x-navigation.x-navigation-horizontal {
 	height: 50px;
-	background: #fff;
+	background: #D7BDE2;
 	box-shadow: rgb(203, 203, 204) 0.1px 0.3px 4.8px;
 	margin-bottom: 30px;
 }

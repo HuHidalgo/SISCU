@@ -2,6 +2,8 @@ package com.cenpro.siscu.utilitario;
 
 public class ConstantesGenerales
 {
+	public static final String ERROR = "Se encontró un error en la columna";
+	
     public static final String REGISTRO_EXITOSO = "Se registró correctamente";
     public static final String ACTUALIZACION_EXITOSA = "Se actualizó correctamente";
     public static final String ELIMINACION_EXITOSA = "Se eliminó correctamente";

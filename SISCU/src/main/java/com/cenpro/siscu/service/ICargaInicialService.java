@@ -5,29 +5,34 @@ import java.util.List;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.cenpro.siscu.model.admision.Afiliacion;
+import com.cenpro.siscu.model.carga.Carga;
+import com.cenpro.siscu.model.carga.ErrorCarga;
 import com.cenpro.siscu.model.criterio.CriterioBusquedaEstamento;
 
 public interface ICargaInicialService
 {
-	public void cargarAlumnos(MultipartFile archivoAlumnos, String estamento);
+	//CARGA INICIAL
+	public Carga cargarAlumnos(MultipartFile archivoAlumnos, String estamento);
     
-    public void cargarDocentes(MultipartFile archivoDocentes, String estamento);
+    public Carga cargarDocentes(MultipartFile archivoDocentes, String estamento);
     
-    public void cargarNoDocentes(MultipartFile archivoNoDocentes, String estamento);
+    public Carga cargarNoDocentes(MultipartFile archivoNoDocentes, String estamento);
     
-    public void cargarParticulares(MultipartFile archivoParticulares, String estamento);
-	
+    public Carga cargarParticulares(MultipartFile archivoParticulares, String estamento);
+    
+    //REGISTRO A LA BD	
     public void registrarAlumnos(List<Afiliacion> alumnos);
     
+    public void registrarParticulares(List<Afiliacion> particulares);
+
+    public void registrarNoDocentes(List<Afiliacion> noDocentes);
+
+    public void registrarDocentes(List<Afiliacion> docentes);
+
+    //CONSULTA
     public List<Afiliacion> consultarPorNroDocumento(CriterioBusquedaEstamento criterioBusquedaEstamento);
-    /////////////////
+    
     public int registrarAtendidos(Afiliacion afiliacion);
     
     public List<Afiliacion> buscarPorId(int idAfiliacion);
-    /////////////////
-	void registrarParticulares(List<Afiliacion> particulares);
-
-	void registrarNoDocentes(List<Afiliacion> noDocentes);
-
-	void registrarDocentes(List<Afiliacion> docentes);
 }

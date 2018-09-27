@@ -25,10 +25,12 @@
 						</div>
 						<div class="panel-body">
 							<th:block
-								th:replace="~{template/fragments/carga/criterioConsultaAtendidos :: criterioConsultaAtendidos(tipo=registrar)}?:~{}">
+								th:replace="~{template/fragments/carga/criterioCargaAtendidos :: criterioCargaAtendidos(tipo=registrar)}?:~{}">
 							</th:block>
-							<div id="resultadoCargaInicial" class="col-xs-12">
-								<table id="tablaCargaConsulta" class="table table-bordered table-condensed nowrap display table-hover">
+							<div id="divTotalRegistros">
+							</div>
+							<div id="divErroresCarga" class="col-xs-12 hidden">
+								<table id="tablaErroresAfiliados" class="table table-bordered table-condensed nowrap display table-hover">
 								</table>
 							</div>
 						</div>
@@ -36,9 +38,6 @@
 				</div>
 			</div>
 		</div>
-		<th:block 
-			th:replace="~{template/fragments/carga/modalAfiliado :: modalAfiliado(tipo=afiliado)}?:~{}">
-		</th:block>
 	</th:block>
 
 	<th:block layout:fragment="script">

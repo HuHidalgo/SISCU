@@ -8,7 +8,6 @@ import org.apache.ibatis.mapping.StatementType;
 
 import com.cenpro.siscu.mapper.base.IMantenibleMapper;
 import com.cenpro.siscu.model.admision.Afiliacion;
-import com.cenpro.siscu.model.carga.Cliente;
 import com.cenpro.siscu.model.criterio.CriterioBusquedaEstamento;
 import com.cenpro.siscu.model.parametro.Parametro;
 
