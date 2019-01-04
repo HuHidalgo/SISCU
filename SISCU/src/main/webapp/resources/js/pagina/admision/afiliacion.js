@@ -439,7 +439,7 @@ $(document).ready(function() {
 			$local.$divEscuela.addClass("hidden");
 			$local.$divAreaTrabajo.addClass("hidden");
 			break;
-		case "5":
+		default:
 			$local.$divCodAlumno.addClass("hidden");
 			$local.$divFacultad.addClass("hidden");
 			$local.$divEscuela.addClass("hidden");

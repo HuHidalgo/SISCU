@@ -123,20 +123,156 @@ public class CargaAtendidosService extends MantenibleService<Afiliacion> impleme
 
 	@Override
 	public Carga cargarDocentesAfiliados(MultipartFile archivoDocentes, String estamento) {
-		// TODO Auto-generated method stub
-		return null;
+		List<Afiliacion> docentes = new ArrayList<>();
+        List<ErrorCarga> errores = new ArrayList<>();
+        Carga carga = new Carga();
+        boolean finExcel = false;
+        XSSFWorkbook workbook = null;
+        XSSFSheet worksheet = null;
+        int fila = 1;
+
+        try{
+            workbook = new XSSFWorkbook(archivoDocentes.getInputStream());
+        } catch (IOException e){
+            System.out.println("Error: " + e);
+            throw new CargaArchivoException(ConstantesExcepciones.ERROR_LECTURA_ARCHIVO);
+        }
+        worksheet = workbook.getSheetAt(0);
+        worksheet.getRow(3);
+        fila = ConstantesFormatosExcelRegular.CANTIDAD_FILA_INICIO;
+        int fila2 = 0;
+        
+        while (fila <= worksheet.getLastRowNum() && !finExcel)
+        {
+            XSSFRow row = worksheet.getRow(fila);
+
+            AfiliacionBuilder docente = Afiliacion.builder();
+            ErrorCargaBuilder error = ErrorCarga.builder();
+            error.nombreColumna("");
+            
+            // TIPO DE PACIENTE (ESTAMENTO)
+            docente.idEstamento(Integer.parseInt(estamento));
+                                    
+            // TIPO DOCUMENTO
+            Cell tipoDocumento = row.getCell(0);
+            if (tipoDocumento == null || tipoDocumento.toString() == ""){
+            	fila2 = fila +1;
+            	error.fila(fila2);
+            	error.nombreColumna(error.build().getNombreColumna()+ " 'Tipo de Documento' ");
+            	errores.add(error.build());
+                finExcel = true;
+                continue;
+            }
+            else {
+            	tipoDocumento.setCellType(Cell.CELL_TYPE_STRING);
+            	docente.idTipoDocumento(tipoDocumento.getStringCellValue().trim());
+            }            
+
+            // NUMERO DOCUMENTO
+            Cell numeroDocumento = row.getCell(1);
+            if (numeroDocumento == null || numeroDocumento.toString() == ""){
+            	fila2 = fila +1;
+            	error.fila(fila2);
+            	error.nombreColumna(error.build().getNombreColumna()+ " 'Numero de Documento' ");
+            	errores.add(error.build());
+                finExcel = true;
+                continue;
+            }
+            else {
+                numeroDocumento.setCellType(Cell.CELL_TYPE_STRING);
+                docente.numeroDocumento(numeroDocumento.getStringCellValue().trim());
+            }
+            
+            docentes.add(docente.build());
+            fila++;
+        }
+        try{
+            workbook.close();
+        } catch (IOException e){
+            e.printStackTrace();
+        }
+        System.out.println("FIN LECTURA EXCEL");
+        registrarAlumnos(docentes);
+        carga.setErrorCarga(errores);
+        carga.setTotalRegistros(docentes.size());
+        return carga;
 	}
 
 	@Override
 	public Carga cargarNoDocentesAfiliados(MultipartFile archivoNoDocentes, String estamento) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+		List<Afiliacion> noDocentes = new ArrayList<>();
+        List<ErrorCarga> errores = new ArrayList<>();
+        Carga carga = new Carga();
+        boolean finExcel = false;
+        XSSFWorkbook workbook = null;
+        XSSFSheet worksheet = null;
+        int fila = 1;
 
-	@Override
-	public Carga cargarParticularesAfiliados(MultipartFile archivoParticulares, String estamento) {
-		// TODO Auto-generated method stub
-		return null;
+        try{
+            workbook = new XSSFWorkbook(archivoNoDocentes.getInputStream());
+        } catch (IOException e){
+            System.out.println("Error: " + e);
+            throw new CargaArchivoException(ConstantesExcepciones.ERROR_LECTURA_ARCHIVO);
+        }
+        worksheet = workbook.getSheetAt(0);
+        worksheet.getRow(3);
+        fila = ConstantesFormatosExcelRegular.CANTIDAD_FILA_INICIO;
+        int fila2 = 0;
+        
+        while (fila <= worksheet.getLastRowNum() && !finExcel)
+        {
+            XSSFRow row = worksheet.getRow(fila);
+
+            AfiliacionBuilder noDocente = Afiliacion.builder();
+            ErrorCargaBuilder error = ErrorCarga.builder();
+            error.nombreColumna("");
+            
+            // TIPO DE PACIENTE (ESTAMENTO)
+            noDocente.idEstamento(Integer.parseInt(estamento));
+                                    
+            // TIPO DOCUMENTO
+            Cell tipoDocumento = row.getCell(0);
+            if (tipoDocumento == null || tipoDocumento.toString() == ""){
+            	fila2 = fila +1;
+            	error.fila(fila2);
+            	error.nombreColumna(error.build().getNombreColumna()+ " 'Tipo de Documento' ");
+            	errores.add(error.build());
+                finExcel = true;
+                continue;
+            }
+            else {
+            	tipoDocumento.setCellType(Cell.CELL_TYPE_STRING);
+            	noDocente.idTipoDocumento(tipoDocumento.getStringCellValue().trim());
+            }            
+
+            // NUMERO DOCUMENTO
+            Cell numeroDocumento = row.getCell(1);
+            if (numeroDocumento == null || numeroDocumento.toString() == ""){
+            	fila2 = fila +1;
+            	error.fila(fila2);
+            	error.nombreColumna(error.build().getNombreColumna()+ " 'Numero de Documento' ");
+            	errores.add(error.build());
+                finExcel = true;
+                continue;
+            }
+            else {
+                numeroDocumento.setCellType(Cell.CELL_TYPE_STRING);
+                noDocente.numeroDocumento(numeroDocumento.getStringCellValue().trim());
+            }
+            
+            noDocentes.add(noDocente.build());
+            fila++;
+        }
+        try{
+            workbook.close();
+        } catch (IOException e){
+            e.printStackTrace();
+        }
+        System.out.println("FIN LECTURA EXCEL");
+        registrarAlumnos(noDocentes);
+        carga.setErrorCarga(errores);
+        carga.setTotalRegistros(noDocentes.size());
+        return carga;
 	}
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -159,11 +295,4 @@ public class CargaAtendidosService extends MantenibleService<Afiliacion> impleme
 	public void registrarNoDocentes(List<Afiliacion> noDocentes) {
 		noDocentes.stream().forEach(noDocente -> this.registrar(noDocente, CARGAR));
 	}
-
-	@Override
-	@Transactional(propagation = Propagation.REQUIRES_NEW)
-	public void registrarParticulares(List<Afiliacion> particulares) {
-		particulares.stream().forEach(particular -> this.registrar(particular, CARGAR));
-	}	
-
 }

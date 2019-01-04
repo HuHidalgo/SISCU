@@ -14,23 +14,32 @@ import org.springframework.web.bind.annotation.RestController;
 import com.cenpro.siscu.aspecto.anotacion.Audit;
 import com.cenpro.siscu.aspecto.enumeracion.Accion;
 import com.cenpro.siscu.aspecto.enumeracion.Comentario;
+import com.cenpro.siscu.aspecto.enumeracion.Dato;
+import com.cenpro.siscu.aspecto.enumeracion.Tipo;
 import com.cenpro.siscu.model.admision.Afiliacion;
 import com.cenpro.siscu.model.criterio.CriterioBusquedaEstamento;
 import com.cenpro.siscu.service.IAfiliacionService;
 import com.cenpro.siscu.utilitario.ConstantesGenerales;
 
+@Audit(tipo = Tipo.Afiliacion, datos = Dato.Afiliacion)
 @RequestMapping("/admision/afiliacion")
 public @RestController class AfiliacionRestController
 {
     private @Autowired IAfiliacionService afiliacionService;
 
+    @Audit(accion = Accion.Consulta, comentario = Comentario.Consulta)
     @GetMapping(value = "/consulta", params = "accion=buscarPorEstamento")
     public List<Afiliacion> buscarPorEstamento(CriterioBusquedaEstamento criterioBusquedaEstamento){
-    	if (this.afiliacionService.buscarPorNroDocumento(criterioBusquedaEstamento).size() != 0) {
+    	
+    	if (!this.afiliacionService.buscarPorNroDocumento(criterioBusquedaEstamento).isEmpty()) 
     		return this.afiliacionService.buscarPorNroDocumento(criterioBusquedaEstamento);
-    	}
+    	
     	else {
-    		return this.afiliacionService.buscarPorNroDocumentoNoAfiliado(criterioBusquedaEstamento);
+    		if (!this.afiliacionService.buscarPorNroDocumentoNoAfiliado(criterioBusquedaEstamento).isEmpty()) 
+        		return this.afiliacionService.buscarPorNroDocumentoNoAfiliado(criterioBusquedaEstamento);
+        	
+    		else
+    			return null;
     	}
     }
     
@@ -50,7 +59,6 @@ public @RestController class AfiliacionRestController
     @PutMapping
     public ResponseEntity<?> actualizarAfiliacion(@RequestBody Afiliacion afiliacion)
     {
-    	//System.out.println(afiliacion);
     	CriterioBusquedaEstamento criterioBusqueda = new CriterioBusquedaEstamento();
     	afiliacionService.actualizarAfiliacion(afiliacion);
     	criterioBusqueda.setIdEstamento(afiliacion.getIdEstamento());

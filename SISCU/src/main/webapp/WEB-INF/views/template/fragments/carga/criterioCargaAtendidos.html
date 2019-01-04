@@ -62,7 +62,8 @@
 					<select id="estamentos2" class="form-control select2" name="idEstamento" autofocus="autofocus">
 						<option value="" disabled="disabled" selected="selected">Seleccione un Estamento</option>
 						<option th:each="estamento : ${estamentos2}" th:value="${estamento.idItem}" 
-							th:text="|${estamento.idItem} - ${estamento.descripcionItem}|"></option>
+								th:if="${estamento.idItem != '4' && estamento.idItem != '5'}"
+								th:text="|${estamento.idItem} - ${estamento.descripcionItem}|"></option>
 					</select>
 				</div>
 			</div>

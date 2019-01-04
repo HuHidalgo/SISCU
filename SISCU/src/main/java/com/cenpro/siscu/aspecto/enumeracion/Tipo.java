@@ -4,11 +4,11 @@ public enum Tipo
 {
     /*Mantenimiento*/
     Alumno("Alumno"),
+    Afiliacion("Afiliacion"),
     Medico("Médico"),
     MulTabCab("Tabla de Tablas"),
     MulTabDet("Detalle de Tabla de Tablas"),
     Persona("Persona"),
-    Campania("Campaña"),
     
     /*Reporte*/
     RptAutCanal("Reporte de Autorización de Canal"),
@@ -37,7 +37,8 @@ public enum Tipo
     {
         this.nombre = nombre;
     }
-
+    
+    @Override
     public String toString()
     {
         return this.nombre;

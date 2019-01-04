@@ -17,14 +17,10 @@ public interface ICargaAtendidosService
     public Carga cargarDocentesAfiliados(MultipartFile archivoDocentes, String estamento);
       
     public Carga cargarNoDocentesAfiliados(MultipartFile archivoNoDocentes, String estamento);
-      
-    public Carga cargarParticularesAfiliados(MultipartFile archivoParticulares, String estamento);
     
     //REGISTRO A LA BD	
     public void registrarAlumnos(List<Afiliacion> alumnos);
     
-    public void registrarParticulares(List<Afiliacion> particulares);
-
     public void registrarNoDocentes(List<Afiliacion> noDocentes);
 
     public void registrarDocentes(List<Afiliacion> docentes);

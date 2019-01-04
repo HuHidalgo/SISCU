@@ -21,15 +21,18 @@ import com.cenpro.siscu.model.carga.Carga;
 import com.cenpro.siscu.model.carga.ErrorCarga;
 import com.cenpro.siscu.model.criterio.CriterioBusquedaEstamento;
 import com.cenpro.siscu.service.IAfiliacionService;
+import com.cenpro.siscu.service.ICargaActualizarCodigoService;
 import com.cenpro.siscu.service.ICargaAtendidosService;
 import com.cenpro.siscu.service.ICargaInicialService;
-
+import com.cenpro.siscu.service.ICargaPeriodicaService;
 import com.cenpro.siscu.utilitario.ConstantesGenerales;
 
 @RequestMapping("/carga")
 public @RestController class CargaRestController
 {
+    private @Autowired ICargaActualizarCodigoService cargaActualizarCodigoService;
     private @Autowired ICargaInicialService cargaInicialService;
+    private @Autowired ICargaPeriodicaService cargaPeriodicaService;
     private @Autowired ICargaAtendidosService cargaAtendidosService;
     
     @Audit(accion = Accion.Registro, comentario = Comentario.Registro)
@@ -47,40 +50,29 @@ public @RestController class CargaRestController
          else
         	 if (estamento.equals("2"))
                  return cargaInicialService.cargarDocentes(file, estamento);
-              else
-            	  if (estamento.equals("3"))
-            		  return cargaInicialService.cargarNoDocentes(file, estamento);
-                  else
-                	  return cargaInicialService.cargarParticulares(file, estamento);                	 	
+             else
+            	 if (estamento.equals("3"))
+                     return cargaInicialService.cargarNoDocentes(file, estamento);
+                 else
+                	 return cargaInicialService.cargarParticulares(file, estamento);    	 	
         
     }	
     
     @PostMapping(value = "/periodica/uploadfile/{estamento}", params = "accion=cargar")
-    public void cargasPeriodicas(@RequestParam("uploadfile") MultipartFile file, @PathVariable String estamento){
+    public Carga cargasPeriodicas(@RequestParam("uploadfile") MultipartFile file, @PathVariable String estamento){
         if (estamento.equals("1"))
-            cargaInicialService.cargarAlumnos(file, estamento);
+        	return cargaPeriodicaService.cargarAlumnos(file, estamento);
          else
         	 if (estamento.equals("2"))
-                 cargaInicialService.cargarDocentes(file, estamento);
+        		 return cargaPeriodicaService.cargarDocentes(file, estamento);
               else
-            	  if (estamento.equals("3"))
-            		  cargaInicialService.cargarNoDocentes(file, estamento);
-                  else
-                	  cargaInicialService.cargarParticulares(file, estamento);                	 	
+            	 return cargaPeriodicaService.cargarNoDocentes(file, estamento);               	 	
     }	
     
-    @PostMapping(value = "/actualizacion/uploadfile/{estamento}", params = "accion=cargar")
-    public void cargasActualizaciones(@RequestParam("uploadfile") MultipartFile file, @PathVariable String estamento){
-        if (estamento.equals("1"))
-            cargaInicialService.cargarAlumnos(file, estamento);
-         else
-        	 if (estamento.equals("2"))
-                 cargaInicialService.cargarDocentes(file, estamento);
-              else
-            	  if (estamento.equals("3"))
-            		  cargaInicialService.cargarNoDocentes(file, estamento);
-                  else
-                	  cargaInicialService.cargarParticulares(file, estamento);                	 	
+    @PostMapping(value = "/actualizacion/      /{estamento}", params = "accion=cargar")
+    public Carga cargasActualizaciones(@RequestParam("uploadfile") MultipartFile file, @PathVariable String estamento){
+    	
+        return cargaActualizarCodigoService.cargarAlumnos(file, estamento);              	 	
     }	
     
     @PostMapping(value = "/registrarAtendidos/uploadfile/{estamento}", params = "accion=cargar")
@@ -91,9 +83,7 @@ public @RestController class CargaRestController
         	 if (estamento.equals("2"))
         		 return cargaAtendidosService.cargarDocentesAfiliados(file, estamento);
               else
-            	  if (estamento.equals("3"))
-            		  return cargaAtendidosService.cargarNoDocentesAfiliados(file, estamento);
-                  else
-                	  return cargaAtendidosService.cargarParticularesAfiliados(file, estamento);  
+            	  return cargaAtendidosService.cargarNoDocentesAfiliados(file, estamento);
+  
     }
 }

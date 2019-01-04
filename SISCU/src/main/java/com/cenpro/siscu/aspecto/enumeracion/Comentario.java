@@ -7,7 +7,6 @@ public enum Comentario
     Consulta("Se intenta consultar los(as) datos de %s"),
     ConsultaTipoDocumento("Se intenta consultar por Tipo de Documento los(as) datos de %s"),
     ConsultaDetalle("Se intenta consultar el Detalle de los(as) datos de %s"),
-    ConsultaComisiones("Se intenta consultar las Comisiones de los(as) datos de %s"),
     ConsultaNoConciliada("Se intenta consultar las Transacciones No Conciliadas de los(as) datos de %s"),
     Registro("Se intenta registrar el(a) %s %s"),
     Actualizacion("Se intenta actualizar el(a) %s con los datos %s"),
@@ -33,6 +32,7 @@ public enum Comentario
         nombre = s;
     }
 
+    @Override
     public String toString() {
        return this.nombre;
     }  

@@ -96,7 +96,7 @@
         	<if test="idEstamento == 3">
             	cliente.nCodigoFacultad 					AS codigoFacultad,
             	facultad.vDescripcion						AS descripcionFacultad,
-            	cliente.vDptoTrabajo	 					AS dptoTrabajo,
+            	cliente.vDepartamentoTrabajo				AS areaTrabajo,
         	</if>
             cliente.vDireccion 								AS direccionActual,
             cliente.dFechaNacimiento						AS fechaNacimiento,

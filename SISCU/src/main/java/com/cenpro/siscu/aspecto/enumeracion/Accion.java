@@ -2,13 +2,13 @@ package com.cenpro.siscu.aspecto.enumeracion;
 
 public enum Accion
 {
-    Registro("I"),
-    Visita("V"),
-    Actualizacion("U"), 
-    Eliminacion("D"),
-    Consulta("S"),
-    Reporte("R"),
-    Acceso("A"),
+    Registro("Reg"),
+    Visita("Vis"),
+    Actualizacion("Act"), 
+    Eliminacion("Eli"),
+    Consulta("Con"),
+    Reporte("Rep"),
+    Acceso("Acc"),
     Ninguna("");
     
     private final String nombre;       
@@ -17,6 +17,7 @@ public enum Accion
         nombre = s;
     }
 
+    @Override
     public String toString() {
        return this.nombre;
     }   

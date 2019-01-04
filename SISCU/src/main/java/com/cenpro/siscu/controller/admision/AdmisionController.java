@@ -29,7 +29,6 @@ public @Controller class AdmisionController
     @GetMapping("/afiliacion")
     public String irPaginaConsultaAdmision(ModelMap model)
     {
-        ///model.addAttribute(P_CONSULTA_ADMISION, admision);
     	model.addAttribute("estamentos", multiTabDetService.buscarPorIdTabla(MultiTablaUtil.TABLA_ESTAMENTOS));
     	model.addAttribute("estamentos2", multiTabDetService.buscarPorIdTabla(MultiTablaUtil.TABLA_ESTAMENTOS));
     	model.addAttribute("tiposDocumento", multiTabDetService.buscarPorIdTabla(MultiTablaUtil.TABLA_TIPO_DOCUMENTO));

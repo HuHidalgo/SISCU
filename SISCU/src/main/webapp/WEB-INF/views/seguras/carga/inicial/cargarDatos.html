@@ -34,7 +34,7 @@
 												<select id="estamentos" class="form-control select2" name="idEstamento">
 													<option value="" disabled="disabled" selected="selected">Seleccione un Estamento</option>
 													<option th:each="estamento : ${estamentos}" th:value="${estamento.idItem}" 
-														th:if="${estamento.idItem != '4' && estamento.idItem != '5'}"
+														th:if="${estamento.idItem != '5'}"
 														th:text="|${estamento.idItem} - ${estamento.descripcionItem}|"></option>
 												</select>
 											</div>
